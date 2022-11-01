@@ -58,6 +58,9 @@ export default function Header() {
           <Link href="/login">
             <a data-test-id="login">login</a>
           </Link>
+          <Link href="/register">
+            <a data-test-id="register">register</a>
+          </Link>
         </div>
       </nav>
     </header>
