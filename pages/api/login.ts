@@ -4,16 +4,16 @@ import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createSession } from '../../database/sessions';
-import { createUser, getUserByUsername } from '../../database/users';
+import { getUserWithPasswordHashByUsername } from '../../database/users';
 import { createSerialisedRegisterSessionTokenCookie } from '../../utils/cookies';
 
-export type RegisterResponseBody =
+export type LoginResponseBody =
   | { errors: { message: string }[] }
   | { user: { username: string } };
 
 export default async function handler(
   request: NextApiRequest,
-  response: NextApiResponse<RegisterResponseBody>,
+  response: NextApiResponse<LoginResponseBody>,
 ) {
   if (request.method === 'POST') {
     // 1. make sure the data exist
@@ -27,27 +27,30 @@ export default async function handler(
         .status(400)
         .json({ errors: [{ message: 'username or password not provided' }] });
     }
-    // 2. check if the user already exists
-    const user = await getUserByUsername(request.body.username);
+    // 2. get the user by the username
+    const user = await getUserWithPasswordHashByUsername(request.body.username);
 
-    if (user) {
+    if (!user) {
       return response
         .status(401)
-        .json({ errors: [{ message: 'username already exists' }] });
+        .json({ errors: [{ message: 'user not found' }] });
     }
 
-    // 3. hash the password
-    const passwordHash = await bcrypt.hash(request.body.password, 12);
-
-    // 4. sql query to create the record
-    const userWithoutPassword = await createUser(
-      request.body.username,
-      passwordHash,
+    // 3. check if the hash and the password match
+    const isValidPassword = await bcrypt.compare(
+      request.body.password,
+      user.passwordHash,
     );
 
-    // 5. create a session token and serialise a cookie with the token
+    if (!isValidPassword) {
+      return response
+        .status(401)
+        .json({ errors: [{ message: 'password is not valid' }] });
+    }
+
+    // 6. create a session token and serialise a cookie with the token
     const session = await createSession(
-      userWithoutPassword.id,
+      user.id,
       crypto.randomBytes(80).toString('base64'),
     );
 
@@ -58,7 +61,7 @@ export default async function handler(
     response
       .status(200)
       .setHeader('Set-Cookie', serialisedCookie)
-      .json({ user: { username: userWithoutPassword.username } });
+      .json({ user: { username: user.username } });
   } else {
     response.status(401).json({ errors: [{ message: 'Method not allowed' }] });
   }

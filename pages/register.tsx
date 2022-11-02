@@ -3,6 +3,8 @@ import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { getValidSessionByToken } from '../database/sessions';
+import { RegisterResponseBody } from './api/register';
 
 type Props = {
   refreshUserProfile: () => Promise<void>;
@@ -11,6 +13,8 @@ type Props = {
 export default function Register(props: Props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState<{ message: string }[]>([]);
+  const router = useRouter();
 
   async function registerHandler() {
     const registerResponse = await fetch('/api/register', {
@@ -54,7 +58,20 @@ export default function Register(props: Props) {
         <meta name="description" content="Register new users" />
       </Head>
       <h1>Register</h1>
-
+      {errors.map((error) => {
+        return (
+          <p
+            css={css`
+              background-color: red;
+              color: white;
+              padding: 5px;
+            `}
+            key={error.message}
+          >
+            ERROR: {error.message}
+          </p>
+        );
+      })}
       <label>
         username
         <input
@@ -85,7 +102,7 @@ export default function Register(props: Props) {
   );
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+/* export async function getServerSideProps(context: GetServerSidePropsContext) {
   const token = context.req.cookies.sessionToken;
 
   if (token && (await getValidSessionByToken(token))) {
@@ -101,3 +118,4 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     props: {},
   };
 }
+ */
