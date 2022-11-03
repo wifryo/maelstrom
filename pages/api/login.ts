@@ -48,7 +48,7 @@ export default async function handler(
         .json({ errors: [{ message: 'password is not valid' }] });
     }
 
-    // 6. create a session token and serialise a cookie with the token
+    // 5. create a session token and serialise a cookie with the token
     const session = await createSession(
       user.id,
       crypto.randomBytes(80).toString('base64'),

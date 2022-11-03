@@ -1,10 +1,7 @@
 import { css } from '@emotion/react';
 import Head from 'next/head';
+import { User } from '../database/users';
 import Header from './Header';
-
-type ChildrenProps = {
-  children: JSX.Element;
-};
 
 const mainStyles = css`
   min-height: calc(100vh - 5rem);
@@ -13,14 +10,22 @@ const mainStyles = css`
   padding-top: 5rem;
 `;
 
-export default function Layout(props: ChildrenProps) {
+type Props = {
+  user?: User;
+};
+
+type ChildrenProps = {
+  children: JSX.Element;
+};
+
+export default function Layout(props: Props & ChildrenProps) {
   return (
     <>
       <Head>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
+      <Header user={props.user} />
 
       <main css={mainStyles}>{props.children}</main>
     </>

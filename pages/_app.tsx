@@ -4,9 +4,28 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { css, Global } from '@emotion/react';
 import { AppProps } from 'next/app';
+import { useCallback, useEffect, useState } from 'react';
 import Layout from '../components/Layout';
+import { User } from '../database/users';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [user, setUser] = useState<User>();
+
+  const refreshUserProfile = useCallback(async () => {
+    const profileResponse = await fetch('/api/profile');
+    const profileResponseBody = await profileResponse.json();
+
+    if ('errors' in profileResponseBody) {
+      setUser(undefined);
+    } else {
+      setUser(profileResponseBody.user);
+    }
+  }, []);
+
+  useEffect(() => {
+    refreshUserProfile().catch(() => console.log('fetch api failed'));
+  }, [refreshUserProfile]);
+
   return (
     <>
       <Global
@@ -75,8 +94,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           }
         `}
       />
-      <Layout>
-        <Component {...pageProps} />
+      <Layout user={user}>
+        <Component {...pageProps} refreshUserProfile={refreshUserProfile} />
       </Layout>
     </>
   );

@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import Link from 'next/link';
+import { User } from '../database/users';
 
 const navigationStyles = css`
   width: 100%;
@@ -41,7 +42,16 @@ const authenticationStyles = css`
   }
 `;
 
-export default function Header() {
+type Props = {
+  user?: User;
+};
+
+function Anchor({ children, ...restProps }: any) {
+  // using a instead of Link since we want to force a full refresh
+  return <a {...restProps}>{children}</a>;
+}
+
+export default function Header(props: Props) {
   return (
     <header>
       <nav css={navigationStyles}>
@@ -52,15 +62,38 @@ export default function Header() {
           <Link href="/about">
             <a data-test-id="about">about</a>
           </Link>
+          <Link href="/private-profile">
+            <a data-test-id="profile">profile</a>
+          </Link>
         </div>
         <div css={logoStyles}>tapestry</div>
         <div css={authenticationStyles}>
-          <Link href="/login">
+          {/* <Link href="/login">
             <a data-test-id="login">login</a>
           </Link>
           <Link href="/register">
             <a data-test-id="register">register</a>
           </Link>
+          <Link href="/logout">
+            <a data-test-id="logout">logout</a>
+          </Link> */}
+
+          {props.user && props.user.username}
+          {props.user ? (
+            <Anchor
+              css={css`
+                margin-left: 10px;
+              `}
+              href="/logout"
+            >
+              Logout
+            </Anchor>
+          ) : (
+            <>
+              <Link href="/login">Login</Link>
+              <Link href="/register">Register</Link>
+            </>
+          )}
         </div>
       </nav>
     </header>
