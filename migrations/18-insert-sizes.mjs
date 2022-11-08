@@ -18,7 +18,7 @@ export async function down(sql) {
       DELETE FROM
         sizes
       WHERE
-        size = ${size.name}
+        name = ${size.name}
     `;
   }
 }

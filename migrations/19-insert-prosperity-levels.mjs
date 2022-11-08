@@ -18,7 +18,7 @@ export async function down(sql) {
       DELETE FROM
         prosperity_levels
       WHERE
-        size = ${prosperityLevel.name}
+        name = ${prosperityLevel.name}
     `;
   }
 }
