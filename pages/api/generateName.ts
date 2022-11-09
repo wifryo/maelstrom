@@ -50,7 +50,10 @@ export default async function handler(
       prompt: generatePrompt(request.body.prompt),
       temperature: 0.6,
     });
-    response.status(200).json({ result: completion.data.choices[0].text });
+    if (completion.data.choices[0]) {
+      response.status(200).json({ result: completion.data.choices[0].text });
+    }
+    return;
   }
   return response.status(400).json({ message: 'Method Not Allowed' });
 }
