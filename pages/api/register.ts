@@ -16,7 +16,7 @@ export default async function handler(
   response: NextApiResponse<RegisterResponseBody>,
 ) {
   if (request.method === 'POST') {
-    // 1. make sure the data exist
+    // 1. make sure the data exists
     if (
       typeof request.body.username !== 'string' ||
       typeof request.body.password !== 'string' ||
@@ -43,6 +43,7 @@ export default async function handler(
     const userWithoutPassword = await createUser(
       request.body.username,
       passwordHash,
+      10,
     );
 
     // 5. create a session token and serialise a cookie with the token

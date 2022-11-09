@@ -27,9 +27,10 @@ export default function UserProfile(props: Props) {
         <meta name="description" content="Biography of the person" />
       </Head>
       <h1>Personal Information</h1>
-      id: {props.user.id} username: {props.user.username}
+      id: {props.user.id} username: {props.user.username} remaining credits:
+      {props.user.credits}
       <hr />
-      THIS IS NOT FUNCTIONAL BUT AN EXAMPLE
+      NOT FUNCTIONAL:
       <br />
       <button>Delete User</button>
     </>
