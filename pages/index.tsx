@@ -2,26 +2,34 @@ import { GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
 import {
-  FirstName,
-  getFirstNames,
-  getLastNames,
-  LastName,
-} from '../database/names';
+  CharacterClass,
+  getCharacterClasses,
+  getOrigins,
+  getProsperityLevels,
+  getSizes,
+  Origin,
+  ProsperityLevel,
+  Size,
+} from '../database/lists';
 import styles from './index.module.css';
 
 type Props = {
-  firstNames: FirstName[];
-  lastNames: LastName[];
+  characterClasses: CharacterClass[];
+  origins: Origin[];
+  sizes: Size[];
+  prosperityLevels: ProsperityLevel[];
 };
 
 export default function Home(props: Props) {
   const [generatedNameInput, setGeneratedNameInput] = useState('');
   const [generatedNameResult, setGeneratedNameResult] = useState();
   const [retrievedNameResult, setRetrievedNameResult] = useState();
+  const [generatedBackstoryResult, setGeneratedBackstoryResult] = useState();
+  const [generatedBackstoryInput, setGeneratedBackstoryInput] = useState('');
 
   async function nameGeneratorSubmit(event) {
     event.preventDefault();
-    const response = await fetch('/api/generateName', {
+    const response = await fetch('/api/names/generate-name', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -40,6 +48,20 @@ export default function Home(props: Props) {
     });
     const data = await response.json();
     setRetrievedNameResult(data);
+  }
+
+  async function backstoryGeneratorSubmit(event) {
+    event.preventDefault();
+    const response = await fetch('/api/backstories/generate-backstory', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt: generatedBackstoryInput }),
+    });
+    const data = await response.json();
+    setGeneratedBackstoryResult(data.result);
+    setGeneratedBackstoryInput('');
   }
 
   return (
@@ -69,15 +91,32 @@ export default function Home(props: Props) {
             <input type="submit" value="Generate names" />
           </form>
           <div className={styles.result}>{retrievedNameResult}</div>
+
+          <h3>External API backstory generator</h3>
+          <form onSubmit={backstoryGeneratorSubmit}>
+            <select>
+              {props.characterClasses.map((characterClass: CharacterClass) => (
+                <option key={characterClass.id}>{characterClass.name}</option>
+              ))}
+            </select>
+            <select>
+              {props.origins.map((origins: Origin) => (
+                <option key={origins.id}>{origins.name}</option>
+              ))}
+            </select>
+
+            <input
+              name="animal"
+              placeholder="Elvish Wizard named Elf Wizardson"
+              value={generatedBackstoryInput}
+              onChange={(e) => setGeneratedBackstoryInput(e.target.value)}
+            />
+            <input type="submit" value="Generate backstory" />
+          </form>
+          <div className={styles.result}>{generatedBackstoryResult}</div>
         </main>
       </div>
-
-      {props.firstNames.map((firstName: FirstName) => {
-        return <div key={firstName.id}>name: {firstName.firstName}</div>;
-      })}
-      {props.lastNames.map((lastName: LastName) => {
-        return <div key={lastName.id}>name: {lastName.lastName}</div>;
-      })}
+      <div>test</div>
     </>
   );
 }
@@ -85,18 +124,17 @@ export default function Home(props: Props) {
 export async function getServerSideProps(): Promise<
   GetServerSidePropsResult<Props>
 > {
-  const firstNames = await getFirstNames();
-  const lastNames = await getLastNames();
+  const characterClasses = await getCharacterClasses();
+  const origins = await getOrigins();
+  const sizes = await getSizes();
+  const prosperityLevels = await getProsperityLevels();
+
   return {
-    // Anything that you write in this props object
-    // will become the props that are passed to
-    // the `Animals` page component above
     props: {
-      // First prop, containing all animals
-      firstNames: firstNames,
-      lastNames: lastNames,
-      // Second prop, example
-      // abc: 123,
+      characterClasses: characterClasses,
+      origins: origins,
+      sizes: sizes,
+      prosperityLevels: prosperityLevels,
     },
   };
 }

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Configuration, OpenAIApi } from 'openai';
-import { getValidSessionByToken } from '../../database/sessions';
+import { getValidSessionByToken } from '../../../database/sessions';
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
