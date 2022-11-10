@@ -8,7 +8,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 function generatePrompt(prompt: Text) {
-  return `Generate a brief backstory for a D&D adventurer.
+  return `Generate a brief, original backstory for a D&D adventurer.
 
 Prompt: Human Paladin named Crudd Stonechump
 Backstory: Crudd Stonechump was born in Winterholme to innkeepers. He always had a strong sense of justice, and became a paladin when he was of age.
@@ -48,7 +48,7 @@ export default async function handler(
     const completion = await openai.createCompletion({
       model: 'text-davinci-002',
       prompt: generatePrompt(request.body.prompt),
-      temperature: 0.8,
+      temperature: 0.9,
       max_tokens: 50,
     });
     if (completion.data.choices[0]) {

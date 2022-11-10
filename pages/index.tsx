@@ -1,6 +1,6 @@
 import { GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   CharacterClass,
   getCharacterClasses,
@@ -23,11 +23,15 @@ type Props = {
 export default function Home(props: Props) {
   const [generatedNameInput, setGeneratedNameInput] = useState('');
   const [generatedNameResult, setGeneratedNameResult] = useState();
-  const [retrievedNameResult, setRetrievedNameResult] = useState();
+  const [retrievedNameResult, setRetrievedNameResult] = useState('Grabnart');
   const [generatedBackstoryResult, setGeneratedBackstoryResult] = useState();
   const [generatedBackstoryInput, setGeneratedBackstoryInput] = useState('');
+  const [selectedCharacterClass, setSelectedCharacterClass] =
+    useState('Barbarian');
+  const [selectedOrigin, setSelectedOrigin] = useState('Dragonborn');
+  const [retrievedBackstoryResult, setRetrievedBackstoryResult] = useState();
 
-  async function nameGeneratorSubmit(event) {
+  async function nameGeneratorSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     const response = await fetch('/api/names/generate-name', {
       method: 'POST',
@@ -41,7 +45,7 @@ export default function Home(props: Props) {
     setGeneratedNameInput('');
   }
 
-  async function nameRetrieverSubmit(event) {
+  async function nameRetrieverSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     const response = await fetch('/api/names', {
       method: 'GET',
@@ -50,74 +54,87 @@ export default function Home(props: Props) {
     setRetrievedNameResult(data);
   }
 
-  async function backstoryGeneratorSubmit(event) {
+  async function backstoryGeneratorSubmit(event: React.SyntheticEvent) {
+    const backstoryInput = `${selectedOrigin} ${selectedCharacterClass} named ${retrievedNameResult}`;
     event.preventDefault();
     const response = await fetch('/api/backstories/generate-backstory', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ prompt: generatedBackstoryInput }),
+      body: JSON.stringify({ prompt: backstoryInput }),
     });
     const data = await response.json();
     setGeneratedBackstoryResult(data.result);
     setGeneratedBackstoryInput('');
   }
 
+  async function backstoryRetrieverSubmit(event: React.SyntheticEvent) {
+    event.preventDefault();
+    const response = await fetch('/api/backstories', {
+      method: 'GET',
+    });
+    const data = await response.json();
+    setRetrievedBackstoryResult(data);
+  }
+
   return (
-    <>
-      <div>
-        <Head>
-          <title>Home</title>
-          <meta name="description" content="tapestry" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+    <div>
+      <Head>
+        <title>Home</title>
+        <meta name="description" content="tapestry" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-        <main className={styles.main}>
-          <h3>External API name generator</h3>
-          <form onSubmit={nameGeneratorSubmit}>
-            <input
-              name="animal"
-              placeholder="Enter a theme, e.g. 'dwarven', 'smelly', 'powerful'"
-              value={generatedNameInput}
-              onChange={(e) => setGeneratedNameInput(e.target.value)}
-            />
-            <input type="submit" value="Generate names" />
-          </form>
-          <div className={styles.result}>{generatedNameResult}</div>
+      <main className={styles.main}>
+        <h3>External API name generator</h3>
+        <form onSubmit={nameGeneratorSubmit}>
+          <input
+            name="animal"
+            placeholder="Enter a theme, e.g. 'dwarven', 'smelly', 'powerful'"
+            value={generatedNameInput}
+            onChange={(e) => setGeneratedNameInput(e.target.value)}
+          />
+          <input type="submit" value="Generate names" />
+        </form>
+        <div className={styles.result}>{generatedNameResult}</div>
 
-          <h3>Internal database name generator</h3>
-          <form onSubmit={nameRetrieverSubmit}>
-            <input type="submit" value="Generate names" />
-          </form>
-          <div className={styles.result}>{retrievedNameResult}</div>
+        <h3>Internal database name generator</h3>
+        <form onSubmit={nameRetrieverSubmit}>
+          <input type="submit" value="Generate names" />
+        </form>
+        <div className={styles.result}>{retrievedNameResult}</div>
 
-          <h3>External API backstory generator</h3>
-          <form onSubmit={backstoryGeneratorSubmit}>
-            <select>
-              {props.characterClasses.map((characterClass: CharacterClass) => (
-                <option key={characterClass.id}>{characterClass.name}</option>
-              ))}
-            </select>
-            <select>
-              {props.origins.map((origins: Origin) => (
-                <option key={origins.id}>{origins.name}</option>
-              ))}
-            </select>
+        <h3>External API backstory generator</h3>
+        <form onSubmit={backstoryGeneratorSubmit}>
+          <select
+            value={selectedCharacterClass}
+            onChange={(event) => setSelectedCharacterClass(event.target.value)}
+          >
+            {props.characterClasses.map((characterClass: CharacterClass) => (
+              <option key={characterClass.id}>{characterClass.name}</option>
+            ))}
+          </select>
+          <select
+            value={selectedOrigin}
+            onChange={(event) => setSelectedOrigin(event.target.value)}
+          >
+            {props.origins.map((origins: Origin) => (
+              <option key={origins.id}>{origins.name}</option>
+            ))}
+          </select>
 
-            <input
-              name="animal"
-              placeholder="Elvish Wizard named Elf Wizardson"
-              value={generatedBackstoryInput}
-              onChange={(e) => setGeneratedBackstoryInput(e.target.value)}
-            />
-            <input type="submit" value="Generate backstory" />
-          </form>
-          <div className={styles.result}>{generatedBackstoryResult}</div>
-        </main>
-      </div>
-      <div>test</div>
-    </>
+          <input type="submit" value="Generate backstory" />
+        </form>
+        <div className={styles.result}>{generatedBackstoryResult}</div>
+
+        <h3>Internal database backstory generator</h3>
+        <form onSubmit={backstoryRetrieverSubmit}>
+          <input type="submit" value="Generate backstory" />
+        </form>
+        <div className={styles.result}>{retrievedBackstoryResult}</div>
+      </main>
+    </div>
   );
 }
 
