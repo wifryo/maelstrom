@@ -25,11 +25,17 @@ export default function Home(props: Props) {
   const [generatedNameResult, setGeneratedNameResult] = useState();
   const [retrievedNameResult, setRetrievedNameResult] = useState('Grabnart');
   const [generatedBackstoryResult, setGeneratedBackstoryResult] = useState();
-  const [generatedBackstoryInput, setGeneratedBackstoryInput] = useState('');
   const [selectedCharacterClass, setSelectedCharacterClass] =
     useState('Barbarian');
-  const [selectedOrigin, setSelectedOrigin] = useState('Dragonborn');
+  const [selectedBackstoryOrigin, setSelectedBackstoryOrigin] =
+    useState('Dragonborn');
   const [retrievedBackstoryResult, setRetrievedBackstoryResult] = useState();
+  const [selectedSettlementProsperity, setSelectedSettlementProsperity] =
+    useState('Average');
+  const [selectedSettlementSize, setSelectedSettlementSize] = useState('Town');
+  const [selectedSettlementOrigin, setSelectedSettlementOrigin] =
+    useState('Human');
+  const [generatedSettlementResult, setGeneratedSettlementResult] = useState();
 
   async function nameGeneratorSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -42,7 +48,6 @@ export default function Home(props: Props) {
     });
     const data = await response.json();
     setGeneratedNameResult(data.result);
-    setGeneratedNameInput('');
   }
 
   async function nameRetrieverSubmit(event: React.SyntheticEvent) {
@@ -55,7 +60,7 @@ export default function Home(props: Props) {
   }
 
   async function backstoryGeneratorSubmit(event: React.SyntheticEvent) {
-    const backstoryInput = `${selectedOrigin} ${selectedCharacterClass} named ${retrievedNameResult}`;
+    const backstoryInput = `${selectedBackstoryOrigin} ${selectedCharacterClass} named ${retrievedNameResult}`;
     event.preventDefault();
     const response = await fetch('/api/backstories/generate-backstory', {
       method: 'POST',
@@ -66,7 +71,6 @@ export default function Home(props: Props) {
     });
     const data = await response.json();
     setGeneratedBackstoryResult(data.result);
-    setGeneratedBackstoryInput('');
   }
 
   async function backstoryRetrieverSubmit(event: React.SyntheticEvent) {
@@ -75,8 +79,25 @@ export default function Home(props: Props) {
       method: 'GET',
     });
     const data = await response.json();
-    setRetrievedBackstoryResult(data);
+    const backstory = data[0].backstory;
+    setRetrievedBackstoryResult(backstory);
   }
+
+  async function settlementGeneratorSubmit(event: React.SyntheticEvent) {
+    const backstoryInput = `${selectedSettlementProsperity} ${selectedSettlementOrigin} ${selectedSettlementSize}`;
+    event.preventDefault();
+    const response = await fetch('/api/settlements/generate-settlement', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt: backstoryInput }),
+    });
+    const data = await response.json();
+    setGeneratedSettlementResult(data.result);
+  }
+
+  async function saveGeneratedNameToProfile() {}
 
   return (
     <div>
@@ -90,18 +111,17 @@ export default function Home(props: Props) {
         <h3>External API name generator</h3>
         <form onSubmit={nameGeneratorSubmit}>
           <input
-            name="animal"
-            placeholder="Enter a theme, e.g. 'dwarven', 'smelly', 'powerful'"
+            placeholder="Enter an adjective"
             value={generatedNameInput}
             onChange={(e) => setGeneratedNameInput(e.target.value)}
           />
-          <input type="submit" value="Generate names" />
+          <input type="submit" value="Generate name" />
         </form>
         <div className={styles.result}>{generatedNameResult}</div>
-
+        <button onSubmit={saveGeneratedNameToProfile}>Save to profile</button>
         <h3>Internal database name generator</h3>
         <form onSubmit={nameRetrieverSubmit}>
-          <input type="submit" value="Generate names" />
+          <input type="submit" value="Generate name" />
         </form>
         <div className={styles.result}>{retrievedNameResult}</div>
 
@@ -116,8 +136,8 @@ export default function Home(props: Props) {
             ))}
           </select>
           <select
-            value={selectedOrigin}
-            onChange={(event) => setSelectedOrigin(event.target.value)}
+            value={selectedBackstoryOrigin}
+            onChange={(event) => setSelectedBackstoryOrigin(event.target.value)}
           >
             {props.origins.map((origins: Origin) => (
               <option key={origins.id}>{origins.name}</option>
@@ -133,6 +153,41 @@ export default function Home(props: Props) {
           <input type="submit" value="Generate backstory" />
         </form>
         <div className={styles.result}>{retrievedBackstoryResult}</div>
+
+        <h3>External API settlement generator</h3>
+        <form onSubmit={settlementGeneratorSubmit}>
+          <select
+            value={selectedSettlementSize}
+            onChange={(event) => setSelectedSettlementSize(event.target.value)}
+          >
+            {props.sizes.map((size: Size) => (
+              <option key={size.id}>{size.name}</option>
+            ))}
+          </select>
+          <select
+            value={selectedSettlementOrigin}
+            onChange={(event) =>
+              setSelectedSettlementOrigin(event.target.value)
+            }
+          >
+            {props.origins.map((origins: Origin) => (
+              <option key={origins.id}>{origins.name}</option>
+            ))}
+          </select>
+          <select
+            value={selectedSettlementProsperity}
+            onChange={(event) =>
+              setSelectedSettlementProsperity(event.target.value)
+            }
+          >
+            {props.prosperityLevels.map((prosperityLevel: ProsperityLevel) => (
+              <option key={prosperityLevel.id}>{prosperityLevel.name}</option>
+            ))}
+          </select>
+
+          <input type="submit" value="Generate settlement" />
+        </form>
+        <div className={styles.result}>{generatedSettlementResult}</div>
       </main>
     </div>
   );

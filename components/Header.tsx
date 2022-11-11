@@ -56,7 +56,7 @@ export default function Header(props: Props) {
     <header>
       <nav css={navigationStyles}>
         <div>
-          <Link href="/generators">
+          <Link href="/">
             <a data-test-id="generators">generators</a>
           </Link>
           <Link href="/about">
@@ -66,18 +66,8 @@ export default function Header(props: Props) {
             <a data-test-id="profile">profile</a>
           </Link>
         </div>
-        <div css={logoStyles}>tapestry</div>
-        <div css={authenticationStyles}>
-          {/* <Link href="/login">
-            <a data-test-id="login">login</a>
-          </Link>
-          <Link href="/register">
-            <a data-test-id="register">register</a>
-          </Link>
-          <Link href="/logout">
-            <a data-test-id="logout">logout</a>
-          </Link> */}
 
+        <div css={authenticationStyles}>
           {props.user && props.user.username}
           {props.user ? (
             <Anchor

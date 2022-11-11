@@ -8,18 +8,16 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 function generatePrompt(prompt: Text) {
-  return `Generate an original name for a D&D adventurer.
+  return `Generate a brief description for a settlement in a D&D campaign.
 
-Theme: absurd
-Name: Grubblington Pip
-Theme: dwarven
-Name: Beard Stonecrunch
-Theme: human
-Name: Ben Jerdles
-Theme: elven
-Name: Elf Leafsson
-Theme: ${prompt}
-Name:`;
+Prompt: Wealthy human hamlet
+Settlement: Gradholme is a hamlet in the foothills of the Grendlechip Range. Populated mostly by human merchants who trade in the nearby city of Krankentown, Gradholme is a wealthy place with many expensive houses. The gossip in the hamlet is that a werewolf has been spotted nearby.
+Prompt: Poor dwarf city
+Settlement: Boatmurdered is an underground dwarven city that has seen better days. After a long war against the neighbouring Elven city-state of Elfborough, the city's economy was left in tatters. However, after an armistice with the Elves was signed, the inhabitants feel hopeful for the future.
+Prompt: Average elf town
+Settlement: Plethdorius is an elvish town of average prosperity. Its economy is based primarily on the trade of magical herbs harvested from the nearby woods. The inhabitants are tolerant of outsiders.
+Prompt: ${prompt}
+Settlement:`;
 }
 
 export default async function handler(
@@ -50,7 +48,8 @@ export default async function handler(
     const completion = await openai.createCompletion({
       model: 'text-davinci-002',
       prompt: generatePrompt(request.body.prompt),
-      temperature: 0.6,
+      temperature: 0.9,
+      max_tokens: 100,
     });
     if (completion.data.choices[0]) {
       response.status(200).json({ result: completion.data.choices[0].text });

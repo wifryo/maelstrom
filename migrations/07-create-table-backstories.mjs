@@ -6,6 +6,7 @@ export async function up(sql) {
       origin_id integer REFERENCES origins (id) ON DELETE CASCADE,
       firstName_id integer REFERENCES first_names (id) ON DELETE CASCADE,
       lastName_id integer REFERENCES last_names (id) ON DELETE CASCADE,
+      backstory text,
 			verified boolean NOT NULL
       )
   `;
