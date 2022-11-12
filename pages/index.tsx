@@ -1,4 +1,4 @@
-import { GetServerSidePropsResult } from 'next';
+import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import {
@@ -11,6 +11,7 @@ import {
   ProsperityLevel,
   Size,
 } from '../database/lists';
+import { getUserBySessionToken, User } from '../database/users';
 import styles from './index.module.css';
 
 type Props = {
@@ -18,6 +19,7 @@ type Props = {
   origins: Origin[];
   sizes: Size[];
   prosperityLevels: ProsperityLevel[];
+  userId: number;
 };
 
 export default function Home(props: Props) {
@@ -97,7 +99,20 @@ export default function Home(props: Props) {
     setGeneratedSettlementResult(data.result);
   }
 
-  async function saveGeneratedNameToProfile() {}
+  async function saveGeneratedNameToProfile(event: React.SyntheticEvent) {
+    event.preventDefault();
+    const id = props.userId;
+
+    const response = await fetch(`/api/users/names/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId: id, firstNameId: 1, lastNameId: 1 }),
+    });
+    const data = await response.json();
+    console.log(data);
+  }
 
   return (
     <div>
@@ -118,12 +133,14 @@ export default function Home(props: Props) {
           <input type="submit" value="Generate name" />
         </form>
         <div className={styles.result}>{generatedNameResult}</div>
-        <button onSubmit={saveGeneratedNameToProfile}>Save to profile</button>
         <h3>Internal database name generator</h3>
         <form onSubmit={nameRetrieverSubmit}>
           <input type="submit" value="Generate name" />
         </form>
         <div className={styles.result}>{retrievedNameResult}</div>
+        <form onSubmit={saveGeneratedNameToProfile}>
+          <input type="submit" value="Save to profile" />
+        </form>
 
         <h3>External API backstory generator</h3>
         <form onSubmit={backstoryGeneratorSubmit}>
@@ -193,13 +210,25 @@ export default function Home(props: Props) {
   );
 }
 
-export async function getServerSideProps(): Promise<
-  GetServerSidePropsResult<Props>
-> {
+export async function getServerSideProps(
+  context: GetServerSidePropsContext,
+): Promise<GetServerSidePropsResult<Props>> {
   const characterClasses = await getCharacterClasses();
   const origins = await getOrigins();
   const sizes = await getSizes();
   const prosperityLevels = await getProsperityLevels();
+  const token = context.req.cookies.sessionToken;
+  const user = token && (await getUserBySessionToken(token));
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login?returnTo=/private-profile',
+        permanent: false,
+      },
+    };
+  }
+  const userId = user.id;
 
   return {
     props: {
@@ -207,6 +236,7 @@ export async function getServerSideProps(): Promise<
       origins: origins,
       sizes: sizes,
       prosperityLevels: prosperityLevels,
+      userId,
     },
   };
 }
