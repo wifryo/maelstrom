@@ -23,9 +23,6 @@ type Props = {
 };
 
 export default function Home(props: Props) {
-  const [generatedNameInput, setGeneratedNameInput] = useState('');
-  const [generatedNameResult, setGeneratedNameResult] = useState();
-  const [retrievedNameResult, setRetrievedNameResult] = useState('Grabnart');
   const [generatedBackstoryResult, setGeneratedBackstoryResult] = useState();
   const [selectedCharacterClass, setSelectedCharacterClass] =
     useState('Barbarian');
@@ -38,6 +35,9 @@ export default function Home(props: Props) {
   const [selectedSettlementOrigin, setSelectedSettlementOrigin] =
     useState('Human');
   const [generatedSettlementResult, setGeneratedSettlementResult] = useState();
+
+  const [generatedNameInput, setGeneratedNameInput] = useState('');
+  const [generatedNameResult, setGeneratedNameResult] = useState();
 
   async function nameGeneratorSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -52,13 +52,38 @@ export default function Home(props: Props) {
     setGeneratedNameResult(data.result);
   }
 
+  const [retrievedNameResult, setRetrievedNameResult] = useState('Grabnart');
+  const [retrievedFirstNameId, setRetrievedFirstNameId] = useState();
+  const [retrievedLastNameId, setRetrievedLastNameId] = useState();
+
   async function nameRetrieverSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     const response = await fetch('/api/names', {
       method: 'GET',
     });
+    const fullName = await response.json();
+    setRetrievedNameResult(`${fullName.firstName} ${fullName.lastName}`);
+    setRetrievedFirstNameId(fullName.firstNameId);
+    setRetrievedLastNameId(fullName.lastNameId);
+  }
+
+  async function saveGeneratedNameToProfile(event: React.SyntheticEvent) {
+    event.preventDefault();
+    const id = props.userId;
+
+    const response = await fetch(`/api/users/names/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: id,
+        firstNameId: retrievedFirstNameId,
+        lastNameId: retrievedLastNameId,
+      }),
+    });
     const data = await response.json();
-    setRetrievedNameResult(data);
+    console.log(data);
   }
 
   async function backstoryGeneratorSubmit(event: React.SyntheticEvent) {
@@ -97,21 +122,6 @@ export default function Home(props: Props) {
     });
     const data = await response.json();
     setGeneratedSettlementResult(data.result);
-  }
-
-  async function saveGeneratedNameToProfile(event: React.SyntheticEvent) {
-    event.preventDefault();
-    const id = props.userId;
-
-    const response = await fetch(`/api/users/names/${id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ userId: id, firstNameId: 1, lastNameId: 1 }),
-    });
-    const data = await response.json();
-    console.log(data);
   }
 
   return (

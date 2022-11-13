@@ -16,7 +16,6 @@ export async function getRandomBackstory() {
   SELECT * FROM backstories
   ORDER BY RANDOM()
   LIMIT 1`;
-  console.log(backstory);
   if (backstory[0]) {
     return backstory;
   }

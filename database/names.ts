@@ -17,32 +17,18 @@ export type FullName = {
   lastName: string;
 };
 
-export async function getFirstNames() {
-  const firstNames = await sql<FirstName[]>`
-  SELECT * FROM first_names
-  `;
-  return firstNames;
-}
-
-export async function getLastNames() {
-  const lastNames = await sql<LastName[]>`
-  SELECT * FROM last_names
-  `;
-  return lastNames;
-}
-
-export async function getRandomName() {
-  let fullName;
+export async function getRandomFirstName() {
   const firstName = await sql<FirstName[]>`
-  SELECT first_name FROM first_names
+  SELECT * FROM first_names
   ORDER BY RANDOM()
   LIMIT 1`;
+  return firstName[0];
+}
+
+export async function getRandomLastName() {
   const lastName = await sql<LastName[]>`
-  SELECT last_name FROM last_names
+  SELECT * FROM last_names
   ORDER BY RANDOM()
   LIMIT 1`;
-  if (firstName[0] && lastName[0]) {
-    fullName = `${firstName[0].firstName} ${lastName[0].lastName}`;
-  }
-  return fullName;
+  return lastName[0];
 }

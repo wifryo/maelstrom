@@ -1,10 +1,20 @@
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
+import React from 'react';
 import { getUserBySessionToken, User } from '../database/users';
 
 type Props = {
   user?: User;
 };
+
+async function getSavedNames(event: React.SyntheticEvent, id: number) {
+  event.preventDefault();
+  const response = await fetch(`/api/users/names/${id}`, {
+    method: 'GET',
+  });
+  const data = await response.json();
+  console.log(data);
+}
 
 export default function UserProfile(props: Props) {
   if (!props.user) {
@@ -30,9 +40,11 @@ export default function UserProfile(props: Props) {
       id: {props.user.id} username: {props.user.username} remaining credits:
       {props.user.credits}
       <hr />
-      NOT FUNCTIONAL:
+      BLUNCTIONAL
       <br />
-      <button>Delete User</button>
+      <button onClick={(event) => getSavedNames(event, props.user.id)}>
+        getSavedNames
+      </button>
     </>
   );
 }

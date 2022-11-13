@@ -26,28 +26,21 @@ export default async function handler(
 
   const userId = Number(request.query.userId);
 
-  // TODO: check if the id matches current user
-  /* if (!animalId) {
-    return response.status(404).json({ message: 'Not a valid Id' });
-  } */
+  // GET retrieves saved names
+  if (request.method === 'GET') {
+    const savedNames = await getSavedNamesByIdAndValidSessionToken(
+      userId,
+      session.token,
+    );
 
-  //TODO: get saved names
-  /*   if (request.method === 'GET') {
-    // no validation example
-    // const animal = await getAnimalById(animalId);
-
-    // TODO add an example of a query that requires session token validation
-    const animal = await getSavedNamesByIdAndValidSessionToken();
-
-    // check if animal exists on the database
-    if (!animal) {
+    if (!savedNames) {
       return response
         .status(404)
-        .json({ message: 'Not a valid Id or not a valid session token' });
+        .json({ message: 'No saved names or invalid session token' });
     }
 
-    return response.status(200).json(animal);
-  } */
+    return response.status(200).json(savedNames);
+  }
 
   // TODO: edit saved names
   /* if (request.method === 'PUT') {

@@ -1,5 +1,5 @@
 import { sql } from './connect';
-import { FullName } from './names';
+import { FirstName, FullName } from './names';
 
 export type SavedName = {
   id: number | null;
@@ -45,11 +45,24 @@ export async function getSavedNamesByIdAndValidSessionToken(
   token: string | undefined,
 ) {
   if (!token) return undefined;
-  const [savedName] = await sql<SavedName[]>`
+  const fullNames = await sql<FullName[]>`
     SELECT
-
+      first_names.id as first_name_id,
+      last_names.id as last_name_id,
+      first_names.first_name as first_name,
+      last_names.last_name as last_name_id
+    FROM
+      last_names,
+      first_names
+    INNER JOIN
+      saved_names ON first_names.id = saved_names.first_name_id
+    INNER JOIN
+      saved_names ON last_names.id = saved_names.last_name_id
+    WHERE
+      saved_names.user_id = ${id}
     `;
-  return savedName;
+  console.log(fullNames);
+  return fullNames;
 }
 
 export async function deleteSavedNameById(

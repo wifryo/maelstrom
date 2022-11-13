@@ -1,5 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getRandomName } from '../../database/names';
+import {
+  FullName,
+  getRandomFirstName,
+  getRandomLastName,
+} from '../../database/names';
 import { getValidSessionByToken } from '../../database/sessions';
 
 export default async function handler(
@@ -20,8 +24,15 @@ export default async function handler(
   }
 
   if (request.method === 'GET') {
-    const name = await getRandomName();
-    return response.status(200).json(name);
+    const firstName = await getRandomFirstName();
+    const lastName = await getRandomLastName();
+    const fullName: FullName = {
+      firstNameId: firstName?.id,
+      lastNameId: lastName?.id,
+      firstName: firstName?.firstName,
+      lastName: lastName?.lastName,
+    };
+    return response.status(200).json(fullName);
   }
 
   return response.status(400).json({ message: 'Method Not Allowed' });
