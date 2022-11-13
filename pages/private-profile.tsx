@@ -1,22 +1,25 @@
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
-import React from 'react';
+import React, { useState } from 'react';
+import { FirstName, LastName } from '../database/names';
 import { getUserBySessionToken, User } from '../database/users';
 
 type Props = {
   user?: User;
 };
 
-async function getSavedNames(event: React.SyntheticEvent, id: number) {
-  event.preventDefault();
-  const response = await fetch(`/api/users/names/${id}`, {
-    method: 'GET',
-  });
-  const data = await response.json();
-  console.log(data);
-}
-
 export default function UserProfile(props: Props) {
+  const [retrievedSavedNames, setRetrievedSavedNames] = useState();
+  async function getSavedNames(event: React.SyntheticEvent, id: number) {
+    event.preventDefault();
+    const response = await fetch(`/api/users/names/${id}`, {
+      method: 'GET',
+    });
+    const data = await response.json();
+    console.log(data);
+    setRetrievedSavedNames(data);
+  }
+
   if (!props.user) {
     return (
       <>
@@ -45,6 +48,9 @@ export default function UserProfile(props: Props) {
       <button onClick={(event) => getSavedNames(event, props.user.id)}>
         getSavedNames
       </button>
+      {retrievedSavedNames[0].map((firstName) => {
+        return <div key={firstName.firstNameId}>{firstName.firstName}</div>;
+      })}
     </>
   );
 }
