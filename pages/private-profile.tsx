@@ -1,4 +1,3 @@
-import { deflate } from 'node:zlib';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
@@ -10,7 +9,9 @@ type Props = {
 };
 
 export default function UserProfile(props: Props) {
-  const [retrievedSavedNames, setRetrievedSavedNames] = useState([]);
+  const [retrievedSavedNames, setRetrievedSavedNames] = useState([
+    [{ firstNameId: 0, firstName: '', lastNameId: 0, lastName: '' }],
+  ]);
 
   async function getSavedNames(id: number) {
     const response = await fetch(`/api/users/names/${id}`, {
