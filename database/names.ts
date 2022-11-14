@@ -12,8 +12,8 @@ export type LastName = {
 
 export type FullName = {
   firstNameId: number;
-  lastNameId: number;
   firstName: string;
+  lastNameId: number;
   lastName: string;
 };
 

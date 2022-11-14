@@ -1,7 +1,8 @@
+import { deflate } from 'node:zlib';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
-import React, { useState } from 'react';
-import { FirstName, LastName } from '../database/names';
+import React, { useEffect, useState } from 'react';
+import { FullName } from '../database/names';
 import { getUserBySessionToken, User } from '../database/users';
 
 type Props = {
@@ -9,9 +10,9 @@ type Props = {
 };
 
 export default function UserProfile(props: Props) {
-  const [retrievedSavedNames, setRetrievedSavedNames] = useState();
-  async function getSavedNames(event: React.SyntheticEvent, id: number) {
-    event.preventDefault();
+  const [retrievedSavedNames, setRetrievedSavedNames] = useState([]);
+
+  async function getSavedNames(id: number) {
     const response = await fetch(`/api/users/names/${id}`, {
       method: 'GET',
     });
@@ -19,6 +20,12 @@ export default function UserProfile(props: Props) {
     console.log(data);
     setRetrievedSavedNames(data);
   }
+
+  useEffect(() => {
+    getSavedNames(props.user.id).catch((err) => {
+      console.log(err);
+    });
+  }, []);
 
   if (!props.user) {
     return (
@@ -43,13 +50,9 @@ export default function UserProfile(props: Props) {
       id: {props.user.id} username: {props.user.username} remaining credits:
       {props.user.credits}
       <hr />
-      BLUNCTIONAL
       <br />
-      <button onClick={(event) => getSavedNames(event, props.user.id)}>
-        getSavedNames
-      </button>
-      {retrievedSavedNames[0].map((firstName) => {
-        return <div key={firstName.firstNameId}>{firstName.firstName}</div>;
+      {retrievedSavedNames[0].map((fullName: FullName) => {
+        return <div key={fullName.firstNameId}>{fullName.firstName}</div>;
       })}
     </>
   );
