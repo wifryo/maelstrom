@@ -1,5 +1,5 @@
 import { sql } from './connect';
-import { FirstName, FullName, LastName } from './names';
+import { FullSavedName } from './names';
 
 export type SavedName = {
   id: number | null;
@@ -76,8 +76,9 @@ export async function getSavedNamesByIdAndValidSessionToken(
   token: string | undefined,
 ) {
   if (!token) return undefined;
-  const fullNames = await sql<FullName[]>`
+  const fullSavedNames = await sql<FullSavedName[]>`
     SELECT
+      saved_names.id AS id,
       first_names.id AS first_name_id,
       first_names.first_name AS first_name,
       last_names.id AS last_name_id,
@@ -91,8 +92,8 @@ export async function getSavedNamesByIdAndValidSessionToken(
       first_names.id = saved_names.first_name_id AND
       last_names.id = saved_names.last_name_id
     `;
-  console.log(fullNames);
-  return [fullNames];
+  console.log(fullSavedNames);
+  return [fullSavedNames];
 }
 
 export async function deleteSavedNameById(
@@ -106,5 +107,3 @@ export async function deleteSavedNameById(
     `;
   return savedName;
 }
-
-////temp

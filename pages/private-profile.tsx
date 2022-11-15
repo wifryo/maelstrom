@@ -1,7 +1,8 @@
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
-import { FullName } from '../database/names';
+import { Fragment, useEffect, useState } from 'react';
+import { FullSavedName } from '../database/names';
+import { deleteSavedNameById } from '../database/savedNames';
 import { getUserBySessionToken, User } from '../database/users';
 
 type Props = {
@@ -23,6 +24,9 @@ export default function UserProfile(props: Props) {
   }
 
   useEffect(() => {
+    if (!props.user?.id) {
+      return;
+    }
     getSavedNames(props.user.id).catch((err) => {
       console.log(err);
     });
@@ -52,8 +56,18 @@ export default function UserProfile(props: Props) {
       {props.user.credits}
       <hr />
       <br />
-      {retrievedSavedNames[0].map((fullName: FullName) => {
-        return <div key={fullName.firstNameId}>{fullName.firstName}</div>;
+      {retrievedSavedNames[0].map((fullSavedName: FullSavedName) => {
+        return (
+          <Fragment
+            key={`${fullSavedName.firstNameId}_${fullSavedName.lastNameId}`}
+          >
+            <div>
+              {fullSavedName.id} {fullSavedName.firstName}{' '}
+              {fullSavedName.lastName}
+            </div>
+            {/* <button onClick={() => deleteSavedNameById(fullName.id)}></button> */}
+          </Fragment>
+        );
       })}
     </>
   );

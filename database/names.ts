@@ -17,6 +17,14 @@ export type FullName = {
   lastName: string;
 };
 
+export type FullSavedName = {
+  id: number;
+  firstNameId: number;
+  firstName: string;
+  lastNameId: number;
+  lastName: string;
+};
+
 export async function getRandomFirstName() {
   const firstName = await sql<FirstName[]>`
   SELECT * FROM first_names
