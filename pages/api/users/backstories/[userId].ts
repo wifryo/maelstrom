@@ -1,10 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import {
-  createSavedNameById,
-  deleteSavedNameById,
-  getSavedNamesByIdAndValidSessionToken,
-  SavedName,
-} from '../../../../database/savedNames';
+  Backstory,
+  createSavedBackstoryById,
+  getBackstoriesByIdAndValidSessionToken,
+} from '../../../../database/backstories';
 import { getValidSessionByToken } from '../../../../database/sessions';
 
 // POST adds name to user's profile

@@ -92,7 +92,6 @@ export async function getSavedNamesByIdAndValidSessionToken(
       first_names.id = saved_names.first_name_id AND
       last_names.id = saved_names.last_name_id
     `;
-  console.log(fullSavedNames);
   return [fullSavedNames];
 }
 
@@ -102,8 +101,11 @@ export async function deleteSavedNameById(
 ) {
   if (!token) return undefined;
   const [savedName] = await sql<SavedName[]>`
-    SELECT
-
+    DELETE FROM
+      saved_names
+    WHERE
+      id = ${id}
+    RETURNING *
     `;
   return savedName;
 }

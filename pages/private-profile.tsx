@@ -2,7 +2,6 @@ import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { Fragment, useEffect, useState } from 'react';
 import { FullSavedName } from '../database/names';
-import { deleteSavedNameById } from '../database/savedNames';
 import { getUserBySessionToken, User } from '../database/users';
 
 type Props = {
@@ -11,16 +10,28 @@ type Props = {
 
 export default function UserProfile(props: Props) {
   const [retrievedSavedNames, setRetrievedSavedNames] = useState([
-    [{ firstNameId: 0, firstName: '', lastNameId: 0, lastName: '' }],
+    { id: 0, firstNameId: 0, firstName: '', lastNameId: 0, lastName: '' },
   ]);
 
   async function getSavedNames(id: number) {
     const response = await fetch(`/api/users/names/${id}`, {
       method: 'GET',
     });
-    const data = await response.json();
-    console.log(data);
-    setRetrievedSavedNames(data);
+    const savedNames = await response.json();
+    console.log(savedNames);
+    setRetrievedSavedNames(savedNames[0]);
+  }
+
+  async function deleteSavedName(id: number) {
+    console.log(`id passed to frontend function: ${id}`);
+    const response = await fetch(`/api/savedNames/${id}`, {
+      method: 'DELETE',
+    });
+    const deletedSavedName = await response.json();
+    const filteredSavedNames = retrievedSavedNames.filter((savedName) => {
+      return savedName.id !== deletedSavedName.id;
+    });
+    setRetrievedSavedNames(filteredSavedNames);
   }
 
   useEffect(() => {
@@ -56,7 +67,7 @@ export default function UserProfile(props: Props) {
       {props.user.credits}
       <hr />
       <br />
-      {retrievedSavedNames[0].map((fullSavedName: FullSavedName) => {
+      {retrievedSavedNames.map((fullSavedName: FullSavedName) => {
         return (
           <Fragment
             key={`${fullSavedName.firstNameId}_${fullSavedName.lastNameId}`}
@@ -65,7 +76,9 @@ export default function UserProfile(props: Props) {
               {fullSavedName.id} {fullSavedName.firstName}{' '}
               {fullSavedName.lastName}
             </div>
-            {/* <button onClick={() => deleteSavedNameById(fullName.id)}></button> */}
+            <button onClick={() => deleteSavedName(fullSavedName.id)}>
+              Delete
+            </button>
           </Fragment>
         );
       })}

@@ -23,19 +23,6 @@ type Props = {
 };
 
 export default function Home(props: Props) {
-  const [generatedBackstoryResult, setGeneratedBackstoryResult] = useState();
-  const [selectedCharacterClass, setSelectedCharacterClass] =
-    useState('Barbarian');
-  const [selectedBackstoryOrigin, setSelectedBackstoryOrigin] =
-    useState('Dragonborn');
-  const [retrievedBackstoryResult, setRetrievedBackstoryResult] = useState();
-  const [selectedSettlementProsperity, setSelectedSettlementProsperity] =
-    useState('Average');
-  const [selectedSettlementSize, setSelectedSettlementSize] = useState('Town');
-  const [selectedSettlementOrigin, setSelectedSettlementOrigin] =
-    useState('Human');
-  const [generatedSettlementResult, setGeneratedSettlementResult] = useState();
-
   const [generatedNameInput, setGeneratedNameInput] = useState('');
   const [generatedNameResult, setGeneratedNameResult] = useState();
 
@@ -52,7 +39,7 @@ export default function Home(props: Props) {
     setGeneratedNameResult(data.result);
   }
 
-  const [retrievedNameResult, setRetrievedNameResult] = useState('Grabnart');
+  const [retrievedNameResult, setRetrievedNameResult] = useState('');
   const [retrievedFirstNameId, setRetrievedFirstNameId] = useState();
   const [retrievedLastNameId, setRetrievedLastNameId] = useState();
 
@@ -67,10 +54,9 @@ export default function Home(props: Props) {
     setRetrievedLastNameId(fullName.lastNameId);
   }
 
-  async function saveGeneratedNameToProfile(event: React.SyntheticEvent) {
+  async function saveRetrievedNameToProfile(event: React.SyntheticEvent) {
     event.preventDefault();
     const id = props.userId;
-
     const response = await fetch(`/api/users/names/${id}`, {
       method: 'POST',
       headers: {
@@ -86,6 +72,12 @@ export default function Home(props: Props) {
     console.log(data);
   }
 
+  const [generatedBackstoryResult, setGeneratedBackstoryResult] = useState();
+  const [selectedCharacterClass, setSelectedCharacterClass] =
+    useState('Barbarian');
+  const [selectedBackstoryOrigin, setSelectedBackstoryOrigin] =
+    useState('Dragonborn');
+
   async function backstoryGeneratorSubmit(event: React.SyntheticEvent) {
     const backstoryInput = `${selectedBackstoryOrigin} ${selectedCharacterClass} named ${retrievedNameResult}`;
     event.preventDefault();
@@ -99,6 +91,8 @@ export default function Home(props: Props) {
     const data = await response.json();
     setGeneratedBackstoryResult(data.result);
   }
+  const [retrievedBackstoryResult, setRetrievedBackstoryResult] = useState();
+  const [retrievedBackstoryId, setRetrievedBackstoryId] = useState();
 
   async function backstoryRetrieverSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -106,9 +100,35 @@ export default function Home(props: Props) {
       method: 'GET',
     });
     const data = await response.json();
-    const backstory = data[0].backstory;
-    setRetrievedBackstoryResult(backstory);
+    const backstoryObject = data[0];
+    setRetrievedBackstoryResult(backstoryObject.backstory);
+    setRetrievedBackstoryId(backstoryObject.id);
   }
+
+  async function saveRetrievedBackstoryToProfile(event: React.SyntheticEvent) {
+    event.preventDefault();
+    const id = props.userId;
+
+    const response = await fetch(`/api/users/backstories/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: id,
+        backstoryId: retrievedBackstoryId,
+      }),
+    });
+    const data = await response.json();
+    console.log(data);
+  }
+
+  const [selectedSettlementProsperity, setSelectedSettlementProsperity] =
+    useState('Average');
+  const [selectedSettlementSize, setSelectedSettlementSize] = useState('Town');
+  const [selectedSettlementOrigin, setSelectedSettlementOrigin] =
+    useState('Human');
+  const [generatedSettlementResult, setGeneratedSettlementResult] = useState();
 
   async function settlementGeneratorSubmit(event: React.SyntheticEvent) {
     const backstoryInput = `${selectedSettlementProsperity} ${selectedSettlementOrigin} ${selectedSettlementSize}`;
@@ -122,6 +142,18 @@ export default function Home(props: Props) {
     });
     const data = await response.json();
     setGeneratedSettlementResult(data.result);
+  }
+
+  const [retrievedSettlementResult, setRetrievedSettlementResult] = useState();
+
+  async function settlementRetrieverSubmit(event: React.SyntheticEvent) {
+    event.preventDefault();
+    const response = await fetch('/api/settlements', {
+      method: 'GET',
+    });
+    const data = await response.json();
+    const settlementDescription = data[0].description;
+    setRetrievedSettlementResult(settlementDescription);
   }
 
   return (
@@ -148,8 +180,8 @@ export default function Home(props: Props) {
           <input type="submit" value="Generate name" />
         </form>
         <div className={styles.result}>{retrievedNameResult}</div>
-        <form onSubmit={saveGeneratedNameToProfile}>
-          <input type="submit" value="Save to profile" />
+        <form onSubmit={saveRetrievedNameToProfile}>
+          <input type="submit" value="Save name to profile" />
         </form>
 
         <h3>External API backstory generator</h3>
@@ -180,6 +212,9 @@ export default function Home(props: Props) {
           <input type="submit" value="Generate backstory" />
         </form>
         <div className={styles.result}>{retrievedBackstoryResult}</div>
+        <form onSubmit={saveRetrievedBackstoryToProfile}>
+          <input type="submit" value="Save backstory to profile" />
+        </form>
 
         <h3>External API settlement generator</h3>
         <form onSubmit={settlementGeneratorSubmit}>
@@ -215,6 +250,12 @@ export default function Home(props: Props) {
           <input type="submit" value="Generate settlement" />
         </form>
         <div className={styles.result}>{generatedSettlementResult}</div>
+
+        <h3>Internal database settlement generator</h3>
+        <form onSubmit={settlementRetrieverSubmit}>
+          <input type="submit" value="Generate settlement" />
+        </form>
+        <div className={styles.result}>{retrievedSettlementResult}</div>
       </main>
     </div>
   );
