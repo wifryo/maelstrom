@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { Fragment, useEffect, useState } from 'react';
 import { SavedBackstoryContent } from '../database/backstories';
 import { FullSavedName } from '../database/names';
+import { SavedSettlementContent } from '../database/settlements';
 import { getUserBySessionToken, User } from '../database/users';
 
 type Props = {
@@ -63,7 +64,7 @@ export default function UserProfile(props: Props) {
   }
 
   async function deleteSavedBackstory(id: number) {
-    const response = await fetch(`/api/backstories/${id}`, {
+    const response = await fetch(`/api/savedBackstories/${id}`, {
       method: 'DELETE',
     });
     const deletedSavedBackstory = await response.json();
@@ -80,6 +81,48 @@ export default function UserProfile(props: Props) {
       return;
     }
     getSavedBackstories(props.user.id).catch((err) => {
+      console.log(err);
+    });
+  }, []);
+
+  const [retrievedSavedSettlements, setRetrievedSavedSettlements] = useState([
+    {
+      id: 0,
+      class: '',
+      origin: '',
+      firstName: '',
+      lastName: '',
+      backstory: '',
+      verified: false,
+    },
+  ]);
+
+  async function getSavedSettlements(id: number) {
+    const response = await fetch(`/api/users/settlements/${id}`, {
+      method: 'GET',
+    });
+    const savedSettlements = await response.json();
+    setRetrievedSavedSettlements(savedSettlements[0]);
+  }
+
+  async function deleteSavedSettlement(id: number) {
+    const response = await fetch(`/api/settlements/${id}`, {
+      method: 'DELETE',
+    });
+    const deletedSavedSettlement = await response.json();
+    const filteredSavedSettlements = retrievedSavedSettlements.filter(
+      (savedSettlement) => {
+        return savedSettlement.id !== deletedSavedSettlement.id;
+      },
+    );
+    setRetrievedSavedSettlements(filteredSavedSettlements);
+  }
+
+  useEffect(() => {
+    if (!props.user?.id) {
+      return;
+    }
+    getSavedSettlements(props.user.id).catch((err) => {
       console.log(err);
     });
   }, []);
@@ -140,13 +183,13 @@ export default function UserProfile(props: Props) {
           );
         },
       )}
-      {/* <h2>Saved Settlements</h2>
+      <h2>Saved Settlements</h2>
       <br />
       {retrievedSavedSettlements.map(
         (savedSettlementContent: SavedSettlementContent) => {
           return (
             <Fragment key={savedSettlementContent.id}>
-              <div>{savedSettlementContent.settlement}</div>
+              <div>{savedSettlementContent.description}</div>
               <button
                 onClick={() => deleteSavedSettlement(savedSettlementContent.id)}
               >
@@ -155,7 +198,7 @@ export default function UserProfile(props: Props) {
             </Fragment>
           );
         },
-      )} */}
+      )}
     </>
   );
 }

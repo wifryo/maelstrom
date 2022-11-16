@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { deleteSavedBackstoryById } from '../../../database/backstories';
 import { getValidSessionByToken } from '../../../database/sessions';
+import { deleteSavedSettlementById } from '../../../database/settlements';
 
 export default async function handler(
   request: NextApiRequest,
@@ -17,19 +17,19 @@ export default async function handler(
     return;
   }
 
-  // DELETE removes saved backstory record in join table
+  // DELETE removes saved settlement record in join table
   if (request.method === 'DELETE') {
-    const savedBackstoryId = Number(request.query.savedBackstoryId);
+    const savedSettlementId = Number(request.query.savedSettlementId);
 
-    const deletedSavedBackstory = await deleteSavedBackstoryById(
-      savedBackstoryId,
+    const deletedSavedSettlement = await deleteSavedSettlementById(
+      savedSettlementId,
       request.cookies.sessionToken,
     );
-    if (!deletedSavedBackstory) {
+    if (!deletedSavedSettlement) {
       return response.status(404).json({ message: 'Not a valid Id' });
     }
-    console.log(deletedSavedBackstory);
-    return response.status(200).json(deletedSavedBackstory);
+    console.log(deletedSavedSettlement);
+    return response.status(200).json(deletedSavedSettlement);
   }
 
   return response.status(400).json({ message: 'Method Not Allowed' });

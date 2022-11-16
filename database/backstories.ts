@@ -2,10 +2,10 @@ import { sql } from './connect';
 
 export type Backstory = {
   id: number;
-  class_id: number;
-  origin_id: number;
-  first_name_id: number;
-  last_name_id: number;
+  classId: number;
+  originId: number;
+  firstNameId: number;
+  lastNameId: number;
   backstory: string;
   verified: boolean;
 };
@@ -60,8 +60,8 @@ export async function getSavedBackstoryContentByUserIdAndValidSessionToken(
       backstories.id AS id,
       classes.name AS class,
       origins.name AS origin,
-      first_names.first_name AS first_name,
-      last_names.last_name AS last_name,
+      first_names.first_name AS firstName,
+      last_names.last_name AS lastName,
       backstories.backstory AS backstory,
       backstories.verified AS verified
     FROM
@@ -79,7 +79,6 @@ export async function getSavedBackstoryContentByUserIdAndValidSessionToken(
       backstories.first_name_id = first_names.id AND
       backstories.last_name_id = last_names.id
     `;
-  console.log(savedBackstories);
   return [savedBackstories];
 }
 

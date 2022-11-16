@@ -25,6 +25,17 @@ type Props = {
 export default function Home(props: Props) {
   const [generatedNameInput, setGeneratedNameInput] = useState('');
   const [generatedNameResult, setGeneratedNameResult] = useState();
+  const [fullName, setFullName] = useState({
+    firstNameId: 0,
+    firstName: '',
+    lastNameId: 0,
+    lastName: '',
+  });
+  const [generatedBackstoryResult, setGeneratedBackstoryResult] = useState();
+  const [selectedCharacterClass, setSelectedCharacterClass] =
+    useState('Barbarian');
+  const [selectedBackstoryOrigin, setSelectedBackstoryOrigin] =
+    useState('Dragonborn');
 
   async function nameGeneratorSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -39,19 +50,13 @@ export default function Home(props: Props) {
     setGeneratedNameResult(data.result);
   }
 
-  const [retrievedNameResult, setRetrievedNameResult] = useState('');
-  const [retrievedFirstNameId, setRetrievedFirstNameId] = useState();
-  const [retrievedLastNameId, setRetrievedLastNameId] = useState();
-
   async function nameRetrieverSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     const response = await fetch('/api/names', {
       method: 'GET',
     });
-    const fullName = await response.json();
-    setRetrievedNameResult(`${fullName.firstName} ${fullName.lastName}`);
-    setRetrievedFirstNameId(fullName.firstNameId);
-    setRetrievedLastNameId(fullName.lastNameId);
+    const retrievedName = await response.json();
+    setFullName(retrievedName);
   }
 
   async function saveRetrievedNameToProfile(event: React.SyntheticEvent) {
@@ -64,22 +69,16 @@ export default function Home(props: Props) {
       },
       body: JSON.stringify({
         userId: id,
-        firstNameId: retrievedFirstNameId,
-        lastNameId: retrievedLastNameId,
+        firstNameId: fullName.firstNameId,
+        lastNameId: fullName.lastNameId,
       }),
     });
     const data = await response.json();
     console.log(data);
   }
 
-  const [generatedBackstoryResult, setGeneratedBackstoryResult] = useState();
-  const [selectedCharacterClass, setSelectedCharacterClass] =
-    useState('Barbarian');
-  const [selectedBackstoryOrigin, setSelectedBackstoryOrigin] =
-    useState('Dragonborn');
-
   async function backstoryGeneratorSubmit(event: React.SyntheticEvent) {
-    const backstoryInput = `${selectedBackstoryOrigin} ${selectedCharacterClass} named ${retrievedNameResult}`;
+    const backstoryInput = `${selectedBackstoryOrigin} ${selectedCharacterClass} named ${`${fullName.firstName} ${fullName.lastName}`}`;
     event.preventDefault();
     const response = await fetch('/api/backstories/generate-backstory', {
       method: 'POST',
@@ -91,8 +90,15 @@ export default function Home(props: Props) {
     const data = await response.json();
     setGeneratedBackstoryResult(data.result);
   }
-  const [retrievedBackstoryResult, setRetrievedBackstoryResult] = useState();
-  const [retrievedBackstoryId, setRetrievedBackstoryId] = useState();
+
+  const [backstory, setBackstory] = useState({
+    id: 0,
+    classId: 0,
+    firstNameId: 0,
+    lastNameId: 0,
+    backstory: '',
+    verified: false,
+  });
 
   async function backstoryRetrieverSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -101,26 +107,23 @@ export default function Home(props: Props) {
     });
     const data = await response.json();
     const backstoryObject = data[0];
-    setRetrievedBackstoryResult(backstoryObject.backstory);
-    setRetrievedBackstoryId(backstoryObject.id);
+    console.log(backstoryObject);
+    setBackstory(backstoryObject);
   }
 
   async function saveRetrievedBackstoryToProfile(event: React.SyntheticEvent) {
     event.preventDefault();
     const id = props.userId;
-
-    const response = await fetch(`/api/users/backstories/${id}`, {
+    await fetch(`/api/users/backstories/${id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         userId: id,
-        backstoryId: retrievedBackstoryId,
+        backstoryId: backstory.id,
       }),
     });
-    const data = await response.json();
-    console.log(data);
   }
 
   const [selectedSettlementProsperity, setSelectedSettlementProsperity] =
@@ -145,6 +148,7 @@ export default function Home(props: Props) {
   }
 
   const [retrievedSettlementResult, setRetrievedSettlementResult] = useState();
+  const [retrievedSettlementId, setRetrievedSettlementId] = useState();
 
   async function settlementRetrieverSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -154,6 +158,24 @@ export default function Home(props: Props) {
     const data = await response.json();
     const settlementDescription = data[0].description;
     setRetrievedSettlementResult(settlementDescription);
+    setRetrievedSettlementId(data[0].id);
+  }
+
+  async function saveRetrievedSettlementToProfile(event: React.SyntheticEvent) {
+    event.preventDefault();
+    const id = props.userId;
+    const response = await fetch(`/api/users/settlements/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: id,
+        settlementId: retrievedSettlementId,
+      }),
+    });
+    const data = await response.json();
+    console.log(data);
   }
 
   return (
@@ -175,15 +197,35 @@ export default function Home(props: Props) {
           <input type="submit" value="Generate name" />
         </form>
         <div className={styles.result}>{generatedNameResult}</div>
+
         <h3>Internal database name generator</h3>
         <form onSubmit={nameRetrieverSubmit}>
           <input type="submit" value="Generate name" />
         </form>
-        <div className={styles.result}>{retrievedNameResult}</div>
+
+        <div
+          className={styles.result}
+        >{`${fullName.firstName} ${fullName.lastName}`}</div>
+        {/* <form
+          onSubmit={async () =>
+            await fetch(`/api/users/names/${props.userId}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                userId: props.userId,
+                firstNameId: fullName.firstNameId,
+                lastNameId: fullName.lastNameId,
+              }),
+            })
+          }
+        >
+          <input type="submit" value="Save name to profile" />
+        </form> */}
         <form onSubmit={saveRetrievedNameToProfile}>
           <input type="submit" value="Save name to profile" />
         </form>
-
         <h3>External API backstory generator</h3>
         <form onSubmit={backstoryGeneratorSubmit}>
           <select
@@ -211,7 +253,7 @@ export default function Home(props: Props) {
         <form onSubmit={backstoryRetrieverSubmit}>
           <input type="submit" value="Generate backstory" />
         </form>
-        <div className={styles.result}>{retrievedBackstoryResult}</div>
+        <div className={styles.result}>{backstory.backstory}</div>
         <form onSubmit={saveRetrievedBackstoryToProfile}>
           <input type="submit" value="Save backstory to profile" />
         </form>
@@ -256,6 +298,9 @@ export default function Home(props: Props) {
           <input type="submit" value="Generate settlement" />
         </form>
         <div className={styles.result}>{retrievedSettlementResult}</div>
+        <form onSubmit={saveRetrievedSettlementToProfile}>
+          <input type="submit" value="Save settlement to profile" />
+        </form>
       </main>
     </div>
   );
