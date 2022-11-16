@@ -58,6 +58,14 @@ export default function Home(props: Props) {
     const retrievedName = await response.json();
     setFullName(retrievedName);
   }
+  // temp function - place within return below
+  async function bameRetrieverSubmit() {
+    const response = await fetch('/api/names', {
+      method: 'GET',
+    });
+    const retrievedName = await response.json();
+    setFullName(retrievedName);
+  }
 
   async function saveRetrievedNameToProfile(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -197,12 +205,18 @@ export default function Home(props: Props) {
           <input type="submit" value="Generate name" />
         </form>
         <div className={styles.result}>{generatedNameResult}</div>
-
         <h3>Internal database name generator</h3>
         <form onSubmit={nameRetrieverSubmit}>
           <input type="submit" value="Generate name" />
         </form>
-
+        <h3>Internal database name generator</h3>
+        <form onSubmit={nameRetrieverSubmit}>
+          <input type="submit" value="Generate name" />
+        </form>
+        {/*         temporary button - remove form above and place function below inside
+        button
+ */}{' '}
+        <button onClick={() => bameRetrieverSubmit()}>Generate Name</button>
         <div
           className={styles.result}
         >{`${fullName.firstName} ${fullName.lastName}`}</div>
@@ -248,7 +262,6 @@ export default function Home(props: Props) {
           <input type="submit" value="Generate backstory" />
         </form>
         <div className={styles.result}>{generatedBackstoryResult}</div>
-
         <h3>Internal database backstory generator</h3>
         <form onSubmit={backstoryRetrieverSubmit}>
           <input type="submit" value="Generate backstory" />
@@ -257,7 +270,6 @@ export default function Home(props: Props) {
         <form onSubmit={saveRetrievedBackstoryToProfile}>
           <input type="submit" value="Save backstory to profile" />
         </form>
-
         <h3>External API settlement generator</h3>
         <form onSubmit={settlementGeneratorSubmit}>
           <select
@@ -292,7 +304,6 @@ export default function Home(props: Props) {
           <input type="submit" value="Generate settlement" />
         </form>
         <div className={styles.result}>{generatedSettlementResult}</div>
-
         <h3>Internal database settlement generator</h3>
         <form onSubmit={settlementRetrieverSubmit}>
           <input type="submit" value="Generate settlement" />

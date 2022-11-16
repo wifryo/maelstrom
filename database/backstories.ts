@@ -86,6 +86,8 @@ export async function deleteSavedBackstoryById(
   id: number,
   token: string | undefined,
 ) {
+  console.log('attempting delete');
+  console.log(`id: ${id}`);
   if (!token) return undefined;
   const [savedBackstory] = await sql<SavedBackstory[]>`
     DELETE FROM
@@ -94,5 +96,6 @@ export async function deleteSavedBackstoryById(
       id = ${id}
     RETURNING *
     `;
+  console.log(savedBackstory);
   return savedBackstory;
 }
