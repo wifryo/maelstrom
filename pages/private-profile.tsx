@@ -1,6 +1,7 @@
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { Fragment, useEffect, useState } from 'react';
+import { SavedBackstoryContent } from '../database/backstories';
 import { FullSavedName } from '../database/names';
 import { getUserBySessionToken, User } from '../database/users';
 
@@ -18,12 +19,10 @@ export default function UserProfile(props: Props) {
       method: 'GET',
     });
     const savedNames = await response.json();
-    console.log(savedNames);
     setRetrievedSavedNames(savedNames[0]);
   }
 
   async function deleteSavedName(id: number) {
-    console.log(`id passed to frontend function: ${id}`);
     const response = await fetch(`/api/savedNames/${id}`, {
       method: 'DELETE',
     });
@@ -39,6 +38,48 @@ export default function UserProfile(props: Props) {
       return;
     }
     getSavedNames(props.user.id).catch((err) => {
+      console.log(err);
+    });
+  }, []);
+
+  const [retrievedSavedBackstories, setRetrievedSavedBackstories] = useState([
+    {
+      id: 0,
+      class: '',
+      origin: '',
+      firstName: '',
+      lastName: '',
+      backstory: '',
+      verified: false,
+    },
+  ]);
+
+  async function getSavedBackstories(id: number) {
+    const response = await fetch(`/api/users/backstories/${id}`, {
+      method: 'GET',
+    });
+    const savedBackstories = await response.json();
+    setRetrievedSavedBackstories(savedBackstories[0]);
+  }
+
+  async function deleteSavedBackstory(id: number) {
+    const response = await fetch(`/api/backstories/${id}`, {
+      method: 'DELETE',
+    });
+    const deletedSavedBackstory = await response.json();
+    const filteredSavedBackstories = retrievedSavedBackstories.filter(
+      (savedBackstory) => {
+        return savedBackstory.id !== deletedSavedBackstory.id;
+      },
+    );
+    setRetrievedSavedBackstories(filteredSavedBackstories);
+  }
+
+  useEffect(() => {
+    if (!props.user?.id) {
+      return;
+    }
+    getSavedBackstories(props.user.id).catch((err) => {
       console.log(err);
     });
   }, []);
@@ -66,6 +107,7 @@ export default function UserProfile(props: Props) {
       id: {props.user.id} username: {props.user.username} remaining credits:
       {props.user.credits}
       <hr />
+      <h2>Saved Names</h2>
       <br />
       {retrievedSavedNames.map((fullSavedName: FullSavedName) => {
         return (
@@ -82,13 +124,44 @@ export default function UserProfile(props: Props) {
           </Fragment>
         );
       })}
+      <h2>Saved Backstories</h2>
+      <br />
+      {retrievedSavedBackstories.map(
+        (savedBackstoryContent: SavedBackstoryContent) => {
+          return (
+            <Fragment key={savedBackstoryContent.id}>
+              <div>{savedBackstoryContent.backstory}</div>
+              <button
+                onClick={() => deleteSavedBackstory(savedBackstoryContent.id)}
+              >
+                Delete
+              </button>
+            </Fragment>
+          );
+        },
+      )}
+      {/* <h2>Saved Settlements</h2>
+      <br />
+      {retrievedSavedSettlements.map(
+        (savedSettlementContent: SavedSettlementContent) => {
+          return (
+            <Fragment key={savedSettlementContent.id}>
+              <div>{savedSettlementContent.settlement}</div>
+              <button
+                onClick={() => deleteSavedSettlement(savedSettlementContent.id)}
+              >
+                Delete
+              </button>
+            </Fragment>
+          );
+        },
+      )} */}
     </>
   );
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const token = context.req.cookies.sessionToken;
-
   const user = token && (await getUserBySessionToken(token));
 
   if (!user) {

@@ -1,12 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import {
-  Backstory,
   createSavedBackstoryById,
-  getBackstoriesByIdAndValidSessionToken,
+  deleteSavedBackstoryById,
+  getSavedBackstoryContentByUserIdAndValidSessionToken,
+  SavedBackstory,
 } from '../../../../database/backstories';
 import { getValidSessionByToken } from '../../../../database/sessions';
-
-// POST adds name to user's profile
 
 export default async function handler(
   request: NextApiRequest,
@@ -25,70 +24,24 @@ export default async function handler(
 
   const userId = Number(request.query.userId);
 
-  // GET retrieves saved names
+  // GET retrieves saved backstories
   if (request.method === 'GET') {
-    const savedNames = await getSavedNamesByIdAndValidSessionToken(
-      userId,
-      session.token,
-    );
+    const savedBackstories =
+      await getSavedBackstoryContentByUserIdAndValidSessionToken(
+        userId,
+        session.token,
+      );
 
-    if (!savedNames) {
+    if (!savedBackstories) {
       return response
         .status(404)
-        .json({ message: 'No saved names or invalid session token' });
+        .json({ message: 'No saved backstories or invalid session token' });
     }
 
-    return response.status(200).json(savedNames);
+    return response.status(200).json(savedBackstories);
   }
 
-  // TODO: edit saved names
-  /* if (request.method === 'PUT') {
-    // NOT getting the id from the body since is already on the query
-    const firstName = request.body?.firstName;
-    const accessory = request.body?.accessory;
-    const type = request.body?.type;
-
-    // Check all the information to create the animal exists
-    if (!(firstName && accessory && type)) {
-      return response
-        .status(400)
-        .json({ message: 'property firstName, accessory or type missing' });
-    }
-
-    // TODO: add type checking to the api
-
-    // Create the animal using the database util function
-    const newAnimal = await updateAnimalById(
-      animalId,
-      firstName,
-      type,
-      accessory,
-    );
-
-    if (!newAnimal) {
-      return response.status(404).json({ message: 'Not a valid Id' });
-    }
-
-    // response with the new created animal
-    return response.status(200).json(newAnimal);
-  } */
-
-  // moved to /api/savedNames/[savedNameId].ts
-  /* if (request.method === 'DELETE') {
-    const savedNameId = Number(request.query.savedNameId);
-    console.log('savednameID:');
-    console.log(savedNameId);
-    const deletedSavedName = await deleteSavedNameById(
-      savedNameId,
-      request.cookies.sessionToken,
-    );
-    if (!deletedSavedName) {
-      return response.status(404).json({ message: 'Not a valid Id' });
-    }
-    console.log(deletedSavedName);
-    return response.status(200).json(deletedSavedName);
-  } */
-
+  // POST creates new saved name entry
   if (request.method === 'POST') {
     if (!request.cookies.sessionToken) {
       response
@@ -96,30 +49,27 @@ export default async function handler(
         .json({ errors: [{ message: 'No session token passed' }] });
       return;
     }
-    const nameToSave: SavedName = {
+    const backstoryToSave: SavedBackstory = {
       id: null,
       userId: request.body?.userId,
-      firstNameId: request.body?.firstNameId,
-      lastNameId: request.body?.lastNameId,
+      backstoryId: request.body?.backstoryId,
     };
 
-    // Check all the information to create the saved name exists
-    if (
-      !(nameToSave.userId && nameToSave.firstNameId && nameToSave.lastNameId)
-    ) {
+    // Check all the information to create the saved backstory exists
+    if (!(backstoryToSave.userId && backstoryToSave.backstoryId)) {
       return response
         .status(400)
         .json({ message: 'property or type missing from post request' });
     }
 
-    // Create the saved name using the database util function
-    const newSavedName = await createSavedNameById(
-      nameToSave,
+    // Create the saved backstory using the database util function
+    const newSavedBackstory = await createSavedBackstoryById(
+      backstoryToSave,
       request.cookies.sessionToken,
     );
 
-    // Response with the newly created saved name
-    return response.status(200).json(newSavedName);
+    // Response with the newly created saved backstory
+    return response.status(200).json(newSavedBackstory);
   }
 
   return response.status(400).json({ message: 'Method Not Allowed' });

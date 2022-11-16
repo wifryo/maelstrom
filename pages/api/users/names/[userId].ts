@@ -7,8 +7,6 @@ import {
 } from '../../../../database/savedNames';
 import { getValidSessionByToken } from '../../../../database/sessions';
 
-// POST adds name to user's profile
-
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse,
@@ -90,6 +88,7 @@ export default async function handler(
     return response.status(200).json(deletedSavedName);
   } */
 
+  // POST adds name to user's profile
   if (request.method === 'POST') {
     if (!request.cookies.sessionToken) {
       response
