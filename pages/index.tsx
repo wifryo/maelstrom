@@ -198,9 +198,7 @@ export default function Home(props: Props) {
           <input type="submit" value="Generate name" />
         </form>
         <div className={styles.result}>{generatedNameResult}</div>
-
         <h3>Internal database name generator</h3>
-
         <button
           onClick={async () => {
             const response = await fetch('/api/names', {
@@ -253,9 +251,21 @@ export default function Home(props: Props) {
               <option key={origins.id}>{origins.name}</option>
             ))}
           </select>
-
           <input type="submit" value="Generate backstory" />
         </form>
+        {/*               button to be changed to generate backstory button
+         */}{' '}
+        <button
+          onClick={async () => {
+            const response = await fetch('/api/names', {
+              method: 'GET',
+            });
+            const retrievedName = await response.json();
+            setFullName(retrievedName);
+          }}
+        >
+          GenerateName
+        </button>
         <div className={styles.result}>{generatedBackstoryResult}</div>
         <h3>Internal database backstory generator</h3>
         <form onSubmit={backstoryRetrieverSubmit}>

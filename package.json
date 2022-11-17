@@ -13,8 +13,9 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@fontsource/roboto": "^4.5.8",
-    "@mui/icons-material": "^5.10.9",
-    "@mui/material": "^5.10.11",
+    "@mui/icons-material": "^5.10.14",
+    "@mui/material": "^5.10.14",
+    "@mui/styled-engine-sc": "^5.10.14",
     "@types/bcrypt": "^5.0.0",
     "@types/cookie": "^0.5.1",
     "@types/dotenv-safe": "^8.1.2",
@@ -32,7 +33,8 @@
     "postgres": "^3.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "sharp": "^0.31.1"
+    "sharp": "^0.31.1",
+    "styled-components": "^5.3.6"
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.19.1",
