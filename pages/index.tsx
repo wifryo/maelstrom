@@ -50,16 +50,9 @@ export default function Home(props: Props) {
     setGeneratedNameResult(data.result);
   }
 
-  async function nameRetrieverSubmit(event: React.SyntheticEvent) {
+  // maybe delete if not needed - could be useful to combine with other retrieval functions
+  async function retrieveName(event: React.SyntheticEvent) {
     event.preventDefault();
-    const response = await fetch('/api/names', {
-      method: 'GET',
-    });
-    const retrievedName = await response.json();
-    setFullName(retrievedName);
-  }
-  // temp function - place within return below
-  async function bameRetrieverSubmit() {
     const response = await fetch('/api/names', {
       method: 'GET',
     });
@@ -205,18 +198,20 @@ export default function Home(props: Props) {
           <input type="submit" value="Generate name" />
         </form>
         <div className={styles.result}>{generatedNameResult}</div>
+
         <h3>Internal database name generator</h3>
-        <form onSubmit={nameRetrieverSubmit}>
-          <input type="submit" value="Generate name" />
-        </form>
-        <h3>Internal database name generator</h3>
-        <form onSubmit={nameRetrieverSubmit}>
-          <input type="submit" value="Generate name" />
-        </form>
-        {/*         temporary button - remove form above and place function below inside
-        button
- */}{' '}
-        <button onClick={() => bameRetrieverSubmit()}>Generate Name</button>
+
+        <button
+          onClick={async () => {
+            const response = await fetch('/api/names', {
+              method: 'GET',
+            });
+            const retrievedName = await response.json();
+            setFullName(retrievedName);
+          }}
+        >
+          GenerateName
+        </button>
         <div
           className={styles.result}
         >{`${fullName.firstName} ${fullName.lastName}`}</div>
