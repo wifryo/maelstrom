@@ -57,7 +57,7 @@ export async function getSavedBackstoryContentByUserIdAndValidSessionToken(
   if (!token) return undefined;
   const savedBackstories = await sql<SavedBackstoryContent[]>`
     SELECT
-      backstories.id AS id,
+      saved_backstories.id AS id,
       classes.name AS class,
       origins.name AS origin,
       first_names.first_name AS firstName,

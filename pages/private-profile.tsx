@@ -173,7 +173,9 @@ export default function UserProfile(props: Props) {
         (savedBackstoryContent: SavedBackstoryContent) => {
           return (
             <Fragment key={savedBackstoryContent.id}>
-              <div>{savedBackstoryContent.backstory}</div>
+              <div>
+                {savedBackstoryContent.id} {savedBackstoryContent.backstory}
+              </div>
               <button
                 onClick={() => deleteSavedBackstory(savedBackstoryContent.id)}
               >

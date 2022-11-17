@@ -54,7 +54,7 @@ export async function getSavedSettlementContentByUserIdAndValidSessionToken(
   if (!token) return undefined;
   const savedSettlements = await sql<SavedSettlementContent[]>`
     SELECT
-      settlements.id AS id,
+      saved_settlements.id AS id,
       sizes.name AS size,
       prosperity_levels.name AS prosperity,
       origins.name AS origin,
