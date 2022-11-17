@@ -12,7 +12,6 @@ import {
   Size,
 } from '../database/lists';
 import { getUserBySessionToken, User } from '../database/users';
-import styles from './index.module.css';
 
 type Props = {
   characterClasses: CharacterClass[];
@@ -187,7 +186,8 @@ export default function Home(props: Props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
+      <h1>Generators</h1>
+      <main>
         <h3>External API name generator</h3>
         <form onSubmit={nameGeneratorSubmit}>
           <input
@@ -197,7 +197,7 @@ export default function Home(props: Props) {
           />
           <input type="submit" value="Generate name" />
         </form>
-        <div className={styles.result}>{generatedNameResult}</div>
+        <div>{generatedNameResult}</div>
         <h3>Internal database name generator</h3>
         <button
           onClick={async () => {
@@ -210,9 +210,7 @@ export default function Home(props: Props) {
         >
           GenerateName
         </button>
-        <div
-          className={styles.result}
-        >{`${fullName.firstName} ${fullName.lastName}`}</div>
+        <div>{`${fullName.firstName} ${fullName.lastName}`}</div>
         {/* <form
           onSubmit={async () =>
             await fetch(`/api/users/names/${props.userId}`, {
@@ -266,12 +264,12 @@ export default function Home(props: Props) {
         >
           GenerateName
         </button>
-        <div className={styles.result}>{generatedBackstoryResult}</div>
+        <div>{generatedBackstoryResult}</div>
         <h3>Internal database backstory generator</h3>
         <form onSubmit={backstoryRetrieverSubmit}>
           <input type="submit" value="Generate backstory" />
         </form>
-        <div className={styles.result}>{backstory.backstory}</div>
+        <div>{backstory.backstory}</div>
         <form onSubmit={saveRetrievedBackstoryToProfile}>
           <input type="submit" value="Save backstory to profile" />
         </form>
@@ -308,12 +306,12 @@ export default function Home(props: Props) {
 
           <input type="submit" value="Generate settlement" />
         </form>
-        <div className={styles.result}>{generatedSettlementResult}</div>
+        <div>{generatedSettlementResult}</div>
         <h3>Internal database settlement generator</h3>
         <form onSubmit={settlementRetrieverSubmit}>
           <input type="submit" value="Generate settlement" />
         </form>
-        <div className={styles.result}>{retrievedSettlementResult}</div>
+        <div>{retrievedSettlementResult}</div>
         <form onSubmit={saveRetrievedSettlementToProfile}>
           <input type="submit" value="Save settlement to profile" />
         </form>

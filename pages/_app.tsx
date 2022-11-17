@@ -1,12 +1,10 @@
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
 import { css, Global } from '@emotion/react';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { AppProps } from 'next/app';
 import { useCallback, useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import { User } from '../database/users';
+import { customTheme } from '../styles/customtheme';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [user, setUser] = useState<User>();
@@ -27,7 +25,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [refreshUserProfile]);
 
   return (
-    <>
+    <ThemeProvider theme={customTheme}>
+      <CssBaseline />
       <Global
         styles={css`
           *,
@@ -35,7 +34,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           *::after {
             box-sizing: border-box;
           }
-          @font-face {
+          /* @font-face {
             font-family: 'Ubuntu-Bold';
             src: url('../fonts/Ubuntu/Ubuntu-Bold.ttf') format('truetype');
           }
@@ -68,36 +67,20 @@ function MyApp({ Component, pageProps }: AppProps) {
           @font-face {
             font-family: 'Ubuntu-Regular';
             src: url('../fonts/Ubuntu/Ubuntu-Regular.ttf') format('truetype');
-          }
+          }*/
 
           body {
             height: 100vh;
             background-color: #25201d;
             color: #faf9f7;
-            font-family: 'Ubuntu-Regular', sans-serif;
-            font-size: 16px;
             margin: 0;
-          }
-
-          h1 {
-            font-size: 2.25rem;
-            margin: 0.75rem 0 0 0;
-            font-family: 'Ubuntu-Bold', sans-serif;
-            color: #faf9f7;
-          }
-
-          h2 {
-            font-size: 1.25rem;
-            margin: 1.5rem 0 0 0;
-            font-family: 'Ubuntu-Italic', sans-serif;
-            color: #faf9f7;
           }
         `}
       />
       <Layout user={user}>
         <Component {...pageProps} refreshUserProfile={refreshUserProfile} />
       </Layout>
-    </>
+    </ThemeProvider>
   );
 }
 
