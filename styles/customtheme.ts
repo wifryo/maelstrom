@@ -1,67 +1,52 @@
-import { red } from '@mui/material/colors';
+import { blueGrey, grey, red } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 
 export const customTheme = createTheme({
   palette: {
     primary: {
-      main: '#e7dcda',
+      main: '#263238',
     },
     secondary: {
-      main: '#A57B78',
+      main: '#c4e0a4',
     },
     error: {
       main: red.A400,
     },
-    info: {
-      main: '#000',
-    },
     text: {
       primary: '#000',
+    },
+    background: {
+      default: '#ffffff',
     },
   },
   typography: {
     htmlFontSize: 16,
-    fontFamily: "'Libertinage', 'Roboto', 'sans-serif'",
-    fontSize: 14,
+    fontFamily: "'Libertinage', 'Ubuntu', 'sans-serif'",
+    fontSize: 16,
     h1: {
-      fontFamily: "'Chaucer', 'Roboto', 'sans-serif'",
-      fontSize: '2rem',
+      fontFamily: "'Chaucer', 'Ubuntu', 'sans-serif'",
+      fontSize: '5rem',
     },
     h2: {
-      fontFamily: "'Libertinage', 'Roboto', 'sans-serif'",
-      fontSize: '1.25rem',
-      fontWeight: 700,
+      fontFamily: "'Libertinage', 'Ubuntu', 'sans-serif'",
+      fontSize: '1.5rem',
+      fontWeight: 500,
     },
     h3: {
-      fontFamily: "'Libertinage', 'Roboto', 'sans-serif'",
+      fontFamily: "'Libertinage', 'Ubuntu', 'sans-serif'",
       fontSize: '1rem',
     },
     h4: undefined,
     h5: undefined,
-    h6: undefined,
+    h6: {
+      fontFamily: "'Libertinage', 'Ubuntu', 'sans-serif'",
+      fontSize: '1rem',
+    },
+
     button: {
-      fontFamily: "'Libertinage', 'Roboto', 'sans-serif'",
+      fontFamily: "'Roboto', 'Ubuntu', 'sans-serif'",
       fontSize: '1rem',
       lineHeight: 1,
     },
   },
 });
-
-/* customTheme.shadows.push(
-  '5px 7px 7px -5px rgba(165, 123, 120, 0.8), 5px 7px 7px -5px rgba(165, 123, 120, 0.8), 5px 7px 7px -5px rgba(165, 123, 120, 0.8)',
-  '5px 7px 7px -5px rgba(165, 123, 120, 0.8), 5px 7px 7px -5px rgba(165, 123, 120, 0.8), 5px 7px 7px -5px rgba(231,220,218, 0.8)',
-);
-
-customTheme.typography.h1 = {
-  fontSize: '1.5rem',
-  lineHeight: 3,
-  '@media (min-width:600px)': {
-    fontSize: '1.5rem',
-    lineHeight: 3,
-  },
-  [customTheme.breakpoints.up('md')]: {
-    fontSize: '2rem',
-    lineHeight: 3,
-  },
-};
- */

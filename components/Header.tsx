@@ -28,15 +28,10 @@ const navigationStyles = css`
   }
 `;
 
-const logoStyles = css`
-  justify-self: center;
-`;
-
 const authenticationStyles = css`
   position: relative;
   display: block;
   cursor: pointer;
-
   :hover > div {
     display: block;
   }
@@ -56,7 +51,7 @@ export default function Header(props: Props) {
     <header>
       <nav css={navigationStyles}>
         <div>
-          <Link href="/">
+          <Link href="/generators">
             <a data-test-id="generators">generators</a>
           </Link>
           <Link href="/about">
@@ -76,12 +71,12 @@ export default function Header(props: Props) {
               `}
               href="/logout"
             >
-              Logout
+              logout
             </Anchor>
           ) : (
             <>
-              <Link href="/login">Login</Link>
-              <Link href="/register">Register</Link>
+              <Link href="/login">login</Link>
+              <Link href="/register">register</Link>
             </>
           )}
         </div>

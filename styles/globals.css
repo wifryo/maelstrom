@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'Chaucer';
-  src: url('../public/fonts/titles/Chaucer.otf');
+  src: url('../public/fonts//Chaucer.otf');
 }
 
 @font-face {
   font-family: 'Libertinage';
-  src: url('../public/fonts/text/Libertinage.ttf');
+  src: url('../public/fonts/Libertinage.ttf');
 }
