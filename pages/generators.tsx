@@ -1,4 +1,6 @@
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
 import React, { useState } from 'react';
@@ -186,37 +188,37 @@ export default function Generators(props: Props) {
         <meta name="description" content="tapestry" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <h1>Generators</h1>
-      <br />
-      <main>
-        <Typography variant="h2">External API name generator</Typography>
+      <Box display="flex" justifyContent="center">
         <br />
-        <form onSubmit={nameGeneratorSubmit}>
-          <input
-            placeholder="Enter an adjective"
-            value={generatedNameInput}
-            onChange={(e) => setGeneratedNameInput(e.target.value)}
-          />
-          <input type="submit" value="Generate name" />
-        </form>
-        <h3>{generatedNameResult}</h3>
-        <Typography variant="h2">Internal database name generator</Typography>
-        <br />
-        <Button
-          variant="outlined"
-          onClick={async () => {
-            const response = await fetch('/api/names', {
-              method: 'GET',
-            });
-            const retrievedName = await response.json();
-            setFullName(retrievedName);
-          }}
-        >
-          Generate Name
-        </Button>
-        <h3>{`${fullName.firstName} ${fullName.lastName}`}</h3>
-        {/* <form
+        <main>
+          <Typography variant="h1">Generators</Typography>
+          <Typography variant="h2">External API name generator</Typography>
+          <br />
+          <form onSubmit={nameGeneratorSubmit}>
+            <input
+              placeholder="Enter an adjective"
+              value={generatedNameInput}
+              onChange={(e) => setGeneratedNameInput(e.target.value)}
+            />
+            <input type="submit" value="Generate name" />
+          </form>
+          <h3>{generatedNameResult}</h3>
+          <Typography variant="h2">Internal database name generator</Typography>
+          <br />
+          <Button
+            variant="outlined"
+            onClick={async () => {
+              const response = await fetch('/api/names', {
+                method: 'GET',
+              });
+              const retrievedName = await response.json();
+              setFullName(retrievedName);
+            }}
+          >
+            Generate Name
+          </Button>
+          <h3>{`${fullName.firstName} ${fullName.lastName}`}</h3>
+          {/* <form
           onSubmit={async () =>
             await fetch(`/api/users/names/${props.userId}`, {
               method: 'POST',
@@ -233,101 +235,114 @@ export default function Generators(props: Props) {
         >
           <input type="submit" value="Save name to profile" />
         </form> */}
-        <form onSubmit={saveRetrievedNameToProfile}>
-          <input type="submit" value="Save name to profile" />
-        </form>
-        <Typography variant="h2">External API backstory generator</Typography>
-        <br />
-        <form onSubmit={backstoryGeneratorSubmit}>
-          <select
-            value={selectedCharacterClass}
-            onChange={(event) => setSelectedCharacterClass(event.target.value)}
+          <form onSubmit={saveRetrievedNameToProfile}>
+            <input type="submit" value="Save name to profile" />
+          </form>
+          <Typography variant="h2">External API backstory generator</Typography>
+          <br />
+          <form onSubmit={backstoryGeneratorSubmit}>
+            <select
+              value={selectedCharacterClass}
+              onChange={(event) =>
+                setSelectedCharacterClass(event.target.value)
+              }
+            >
+              {props.characterClasses.map((characterClass: CharacterClass) => (
+                <option key={characterClass.id}>{characterClass.name}</option>
+              ))}
+            </select>
+            <select
+              value={selectedBackstoryOrigin}
+              onChange={(event) =>
+                setSelectedBackstoryOrigin(event.target.value)
+              }
+            >
+              {props.origins.map((origins: Origin) => (
+                <option key={origins.id}>{origins.name}</option>
+              ))}
+            </select>
+            <input type="submit" value="Generate backstory" />
+          </form>
+          <Button
+            variant="outlined"
+            onClick={async () => {
+              const response = await fetch('/api/names', {
+                method: 'GET',
+              });
+              const retrievedName = await response.json();
+              setFullName(retrievedName);
+            }}
           >
-            {props.characterClasses.map((characterClass: CharacterClass) => (
-              <option key={characterClass.id}>{characterClass.name}</option>
-            ))}
-          </select>
-          <select
-            value={selectedBackstoryOrigin}
-            onChange={(event) => setSelectedBackstoryOrigin(event.target.value)}
-          >
-            {props.origins.map((origins: Origin) => (
-              <option key={origins.id}>{origins.name}</option>
-            ))}
-          </select>
-          <input type="submit" value="Generate backstory" />
-        </form>
-        <Button
-          variant="outlined"
-          onClick={async () => {
-            const response = await fetch('/api/names', {
-              method: 'GET',
-            });
-            const retrievedName = await response.json();
-            setFullName(retrievedName);
-          }}
-        >
-          Generate Name
-        </Button>
-        <div>{generatedBackstoryResult}</div>
-        <Typography variant="h2">
-          Internal database backstory generator
-        </Typography>
-        <br />
-        <form onSubmit={backstoryRetrieverSubmit}>
-          <input type="submit" value="Generate backstory" />
-        </form>
-        <div>{backstory.backstory}</div>
-        <form onSubmit={saveRetrievedBackstoryToProfile}>
-          <input type="submit" value="Save backstory to profile" />
-        </form>
-        <Typography variant="h2">External API settlement generator</Typography>
-        <br />
-        <form onSubmit={settlementGeneratorSubmit}>
-          <select
-            value={selectedSettlementSize}
-            onChange={(event) => setSelectedSettlementSize(event.target.value)}
-          >
-            {props.sizes.map((size: Size) => (
-              <option key={size.id}>{size.name}</option>
-            ))}
-          </select>
-          <select
-            value={selectedSettlementOrigin}
-            onChange={(event) =>
-              setSelectedSettlementOrigin(event.target.value)
-            }
-          >
-            {props.origins.map((origins: Origin) => (
-              <option key={origins.id}>{origins.name}</option>
-            ))}
-          </select>
-          <select
-            value={selectedSettlementProsperity}
-            onChange={(event) =>
-              setSelectedSettlementProsperity(event.target.value)
-            }
-          >
-            {props.prosperityLevels.map((prosperityLevel: ProsperityLevel) => (
-              <option key={prosperityLevel.id}>{prosperityLevel.name}</option>
-            ))}
-          </select>
+            Generate Name
+          </Button>
+          <div>{generatedBackstoryResult}</div>
+          <Typography variant="h2">
+            Internal database backstory generator
+          </Typography>
+          <br />
+          <form onSubmit={backstoryRetrieverSubmit}>
+            <input type="submit" value="Generate backstory" />
+          </form>
+          <div>{backstory.backstory}</div>
+          <form onSubmit={saveRetrievedBackstoryToProfile}>
+            <input type="submit" value="Save backstory to profile" />
+          </form>
+          <Typography variant="h2">
+            External API settlement generator
+          </Typography>
+          <br />
+          <form onSubmit={settlementGeneratorSubmit}>
+            <select
+              value={selectedSettlementSize}
+              onChange={(event) =>
+                setSelectedSettlementSize(event.target.value)
+              }
+            >
+              {props.sizes.map((size: Size) => (
+                <option key={size.id}>{size.name}</option>
+              ))}
+            </select>
+            <select
+              value={selectedSettlementOrigin}
+              onChange={(event) =>
+                setSelectedSettlementOrigin(event.target.value)
+              }
+            >
+              {props.origins.map((origins: Origin) => (
+                <option key={origins.id}>{origins.name}</option>
+              ))}
+            </select>
+            <select
+              value={selectedSettlementProsperity}
+              onChange={(event) =>
+                setSelectedSettlementProsperity(event.target.value)
+              }
+            >
+              {props.prosperityLevels.map(
+                (prosperityLevel: ProsperityLevel) => (
+                  <option key={prosperityLevel.id}>
+                    {prosperityLevel.name}
+                  </option>
+                ),
+              )}
+            </select>
 
-          <input type="submit" value="Generate settlement" />
-        </form>
-        <div>{generatedSettlementResult}</div>
-        <Typography variant="h2">
-          Internal database settlement generator
-        </Typography>
-        <br />
-        <form onSubmit={settlementRetrieverSubmit}>
-          <input type="submit" value="Generate settlement" />
-        </form>
-        <div>{retrievedSettlementResult}</div>
-        <form onSubmit={saveRetrievedSettlementToProfile}>
-          <input type="submit" value="Save settlement to profile" />
-        </form>
-      </main>
+            <input type="submit" value="Generate settlement" />
+          </form>
+          <div>{generatedSettlementResult}</div>
+          <Typography variant="h2">
+            Internal database settlement generator
+          </Typography>
+          <br />
+          <form onSubmit={settlementRetrieverSubmit}>
+            <input type="submit" value="Generate settlement" />
+          </form>
+          <div>{retrievedSettlementResult}</div>
+          <form onSubmit={saveRetrievedSettlementToProfile}>
+            <input type="submit" value="Save settlement to profile" />
+          </form>
+        </main>
+      </Box>
     </div>
   );
 }
