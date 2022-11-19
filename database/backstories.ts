@@ -1,7 +1,7 @@
 import { sql } from './connect';
 
 export type Backstory = {
-  id: number;
+  id: number | null;
   classId: number;
   originId: number;
   firstNameId: number;
@@ -31,8 +31,7 @@ export async function getRandomBackstory() {
   SELECT * FROM backstories
   ORDER BY RANDOM()
   LIMIT 1`;
-
-  return backstory;
+  return backstory[0];
 }
 
 export async function createSavedBackstoryById(

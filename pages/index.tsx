@@ -1,8 +1,7 @@
-import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
-import { height } from '@mui/system';
+import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
 import Head from 'next/head';
-import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -14,15 +13,26 @@ export default function Home() {
       </Head>
 
       <Box
-        sx={{ height: '100%' }}
         component="div"
         display="flex"
+        flexDirection="column"
+        position="absolute"
+        height="100%"
+        width="100%"
+        ml="-3rem"
+        mr="-3rem"
+        mt="-8rem"
         justifyContent="center"
+        alignItems="center"
       >
-        <Typography variant="h1">
-          <Link href="/generators">Tapestry</Link>
+        <Typography variant="h6">
+          <Link href="/generators" underline="none" color="text.primary">
+            Tapestry
+          </Link>
         </Typography>
-        <Typography></Typography>
+        <Typography variant="body2">
+          A curated collection of text generators for use with tabletop RPGs.
+        </Typography>
       </Box>
     </>
   );

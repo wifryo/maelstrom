@@ -5,8 +5,8 @@ import { User } from '../database/users';
 const navigationStyles = css`
   width: 100%;
   height: 3rem;
-  background-color: #25201d;
-  color: #faf9f7;
+  background-color: #f9e6c4;
+  color: #000000;
   position: fixed;
   z-index: 1;
   padding: 0 3rem;
@@ -14,7 +14,7 @@ const navigationStyles = css`
   display: flex;
   justify-content: flex-start;
   border-bottom: solid;
-  border-color: #faf9f7;
+  border-color: #000000;
   border-width: 1px;
 
   > div {
@@ -23,7 +23,7 @@ const navigationStyles = css`
 
   > div > a {
     text-decoration: none;
-    color: #faf9f7;
+    color: #000000;
     margin: 0 1rem 0 1rem;
   }
 `;

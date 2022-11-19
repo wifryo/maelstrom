@@ -16,37 +16,45 @@ export const customTheme = createTheme({
       primary: '#000',
     },
     background: {
-      default: '#ffffff',
+      default: '#F9E6C4',
     },
   },
   typography: {
     htmlFontSize: 16,
-    fontFamily: "'Libertinage', 'Ubuntu', 'sans-serif'",
+    fontFamily: "'Roboto', 'Libertinage', 'sans-serif'",
     fontSize: 16,
     h1: {
-      fontFamily: "'Chaucer', 'Ubuntu', 'sans-serif'",
-      fontSize: '5rem',
+      fontFamily: "'Libertinage', 'Roboto', 'sans-serif'",
+      fontSize: '3rem',
     },
     h2: {
-      fontFamily: "'Libertinage', 'Ubuntu', 'sans-serif'",
+      fontFamily: "'Libertinage', 'Roboto', 'sans-serif'",
       fontSize: '1.5rem',
       fontWeight: 500,
     },
     h3: {
-      fontFamily: "'Libertinage', 'Ubuntu', 'sans-serif'",
+      fontFamily: "'Libertinage', 'Roboto', 'sans-serif'",
       fontSize: '1rem',
     },
     h4: undefined,
-    h5: undefined,
     h6: {
-      fontFamily: "'Libertinage', 'Ubuntu', 'sans-serif'",
-      fontSize: '1rem',
+      fontFamily: "'Chaucer', 'Libertinage', 'sans-serif'",
+      fontSize: '5rem',
     },
 
     button: {
-      fontFamily: "'Roboto', 'Ubuntu', 'sans-serif'",
+      fontFamily: "'Roboto', 'Libertinage', 'sans-serif'",
       fontSize: '1rem',
       lineHeight: 1,
+    },
+    body2: {
+      fontFamily: "'Libertinage', 'Roboto', 'sans-serif'",
+      fontSize: '1.3rem',
+    },
+    h5: {
+      fontFamily: "'Roboto', 'Libertinage', 'sans-serif'",
+      fontSize: '1rem',
+      fontWeight: 400,
     },
   },
 });

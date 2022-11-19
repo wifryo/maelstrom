@@ -4,7 +4,7 @@ import { User } from '../database/users';
 import Header from './Header';
 
 const mainStyles = css`
-  min-height: calc(100vh - 5rem);
+  min-height: 100vh;
   padding-left: 3rem;
   padding-right: 3rem;
   padding-top: 5rem;

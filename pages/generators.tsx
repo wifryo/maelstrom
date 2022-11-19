@@ -1,9 +1,14 @@
-import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import Typography from '@mui/material/Typography';
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
 import React, { useState } from 'react';
+import Backstory from '../database/backstories';
 import {
   CharacterClass,
   getCharacterClasses,
@@ -36,8 +41,10 @@ export default function Generators(props: Props) {
   const [generatedBackstoryResult, setGeneratedBackstoryResult] = useState();
   const [selectedCharacterClass, setSelectedCharacterClass] =
     useState('Barbarian');
-  const [selectedBackstoryOrigin, setSelectedBackstoryOrigin] =
-    useState('Dragonborn');
+  const [selectedBackstoryOrigin, setSelectedBackstoryOrigin] = useState({
+    id: '',
+    name: '',
+  });
 
   async function nameGeneratorSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -52,48 +59,6 @@ export default function Generators(props: Props) {
     setGeneratedNameResult(data.result);
   }
 
-  // maybe delete if not needed - could be useful to combine with other retrieval functions
-  async function retrieveName(event: React.SyntheticEvent) {
-    event.preventDefault();
-    const response = await fetch('/api/names', {
-      method: 'GET',
-    });
-    const retrievedName = await response.json();
-    setFullName(retrievedName);
-  }
-
-  async function saveRetrievedNameToProfile(event: React.SyntheticEvent) {
-    event.preventDefault();
-    const id = props.userId;
-    const response = await fetch(`/api/users/names/${id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId: id,
-        firstNameId: fullName.firstNameId,
-        lastNameId: fullName.lastNameId,
-      }),
-    });
-    const data = await response.json();
-    console.log(data);
-  }
-
-  async function backstoryGeneratorSubmit(event: React.SyntheticEvent) {
-    const backstoryInput = `${selectedBackstoryOrigin} ${selectedCharacterClass} named ${`${fullName.firstName} ${fullName.lastName}`}`;
-    event.preventDefault();
-    const response = await fetch('/api/backstories/generate-backstory', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ prompt: backstoryInput }),
-    });
-    const data = await response.json();
-    setGeneratedBackstoryResult(data.result);
-  }
-
   const [backstory, setBackstory] = useState({
     id: 0,
     classId: 0,
@@ -103,83 +68,15 @@ export default function Generators(props: Props) {
     verified: false,
   });
 
-  async function backstoryRetrieverSubmit(event: React.SyntheticEvent) {
-    event.preventDefault();
-    const response = await fetch('/api/backstories', {
-      method: 'GET',
-    });
-    const data = await response.json();
-    const backstoryObject = data[0];
-    console.log(backstoryObject);
-    setBackstory(backstoryObject);
-  }
-
-  async function saveRetrievedBackstoryToProfile(event: React.SyntheticEvent) {
-    event.preventDefault();
-    const id = props.userId;
-    await fetch(`/api/users/backstories/${id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId: id,
-        backstoryId: backstory.id,
-      }),
-    });
-  }
-
   const [selectedSettlementProsperity, setSelectedSettlementProsperity] =
-    useState('Average');
+    useState('Wealthy');
   const [selectedSettlementSize, setSelectedSettlementSize] = useState('Town');
   const [selectedSettlementOrigin, setSelectedSettlementOrigin] =
     useState('Human');
   const [generatedSettlementResult, setGeneratedSettlementResult] = useState();
 
-  async function settlementGeneratorSubmit(event: React.SyntheticEvent) {
-    const backstoryInput = `${selectedSettlementProsperity} ${selectedSettlementOrigin} ${selectedSettlementSize}`;
-    event.preventDefault();
-    const response = await fetch('/api/settlements/generate-settlement', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ prompt: backstoryInput }),
-    });
-    const data = await response.json();
-    setGeneratedSettlementResult(data.result);
-  }
-
   const [retrievedSettlementResult, setRetrievedSettlementResult] = useState();
   const [retrievedSettlementId, setRetrievedSettlementId] = useState();
-
-  async function settlementRetrieverSubmit(event: React.SyntheticEvent) {
-    event.preventDefault();
-    const response = await fetch('/api/settlements', {
-      method: 'GET',
-    });
-    const data = await response.json();
-    const settlementDescription = data[0].description;
-    setRetrievedSettlementResult(settlementDescription);
-    setRetrievedSettlementId(data[0].id);
-  }
-
-  async function saveRetrievedSettlementToProfile(event: React.SyntheticEvent) {
-    event.preventDefault();
-    const id = props.userId;
-    const response = await fetch(`/api/users/settlements/${id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId: id,
-        settlementId: retrievedSettlementId,
-      }),
-    });
-    const data = await response.json();
-    console.log(data);
-  }
 
   return (
     <div>
@@ -192,7 +89,7 @@ export default function Generators(props: Props) {
         <br />
         <main>
           <Typography variant="h1">Generators</Typography>
-          <Typography variant="h2">External API name generator</Typography>
+          <Typography variant="h2">Name generator</Typography>
           <br />
           <form onSubmit={nameGeneratorSubmit}>
             <input
@@ -202,8 +99,7 @@ export default function Generators(props: Props) {
             />
             <input type="submit" value="Generate name" />
           </form>
-          <h3>{generatedNameResult}</h3>
-          <Typography variant="h2">Internal database name generator</Typography>
+          <Typography>{generatedNameResult}</Typography>
           <br />
           <Button
             variant="outlined"
@@ -217,130 +113,259 @@ export default function Generators(props: Props) {
           >
             Generate Name
           </Button>
-          <h3>{`${fullName.firstName} ${fullName.lastName}`}</h3>
-          {/* <form
-          onSubmit={async () =>
-            await fetch(`/api/users/names/${props.userId}`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                userId: props.userId,
-                firstNameId: fullName.firstNameId,
-                lastNameId: fullName.lastNameId,
-              }),
-            })
-          }
-        >
-          <input type="submit" value="Save name to profile" />
-        </form> */}
-          <form onSubmit={saveRetrievedNameToProfile}>
-            <input type="submit" value="Save name to profile" />
-          </form>
-          <Typography variant="h2">External API backstory generator</Typography>
+
+          <Typography variant="h3">{`${fullName.firstName} ${fullName.lastName}`}</Typography>
+
+          <Button
+            variant="outlined"
+            onClick={async () => {
+              const id = props.userId;
+              await fetch(`/api/users/names/${id}`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  userId: id,
+                  firstNameId: fullName.firstNameId,
+                  lastNameId: fullName.lastNameId,
+                }),
+              });
+            }}
+          >
+            Save Name
+          </Button>
+          <hr />
+
+          <Typography variant="h2">Backstory generator</Typography>
           <br />
-          <form onSubmit={backstoryGeneratorSubmit}>
-            <select
+
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel>Class</InputLabel>
+            <Select
               value={selectedCharacterClass}
-              onChange={(event) =>
-                setSelectedCharacterClass(event.target.value)
-              }
+              label="Class"
+              onChange={(event) => {
+                setSelectedCharacterClass(event.target.value);
+              }}
             >
               {props.characterClasses.map((characterClass: CharacterClass) => (
-                <option key={characterClass.id}>{characterClass.name}</option>
+                <MenuItem key={characterClass.id} value={characterClass.name}>
+                  {characterClass.name}
+                </MenuItem>
               ))}
-            </select>
-            <select
-              value={selectedBackstoryOrigin}
-              onChange={(event) =>
-                setSelectedBackstoryOrigin(event.target.value)
-              }
+            </Select>
+          </FormControl>
+
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel>Origin</InputLabel>
+            <Select
+              value={selectedBackstoryOrigin.id}
+              label="Origin"
+              onChange={(event) => {
+                const originId = Number(event.target.value);
+                const selectedBackstoryOriginArray: Origin[] =
+                  props.origins.filter((origin) => {
+                    return origin.id === originId;
+                  });
+                setSelectedBackstoryOrigin(selectedBackstoryOriginArray[0]);
+              }}
             >
               {props.origins.map((origins: Origin) => (
-                <option key={origins.id}>{origins.name}</option>
+                <MenuItem key={origins.id} value={origins.id}>
+                  {origins.name}
+                </MenuItem>
               ))}
-            </select>
-            <input type="submit" value="Generate backstory" />
-          </form>
+            </Select>
+          </FormControl>
+          <br />
           <Button
             variant="outlined"
             onClick={async () => {
-              const response = await fetch('/api/names', {
-                method: 'GET',
-              });
-              const retrievedName = await response.json();
-              setFullName(retrievedName);
+              const backstoryInput = `${selectedBackstoryOrigin} ${selectedCharacterClass} named ${`${fullName.firstName} ${fullName.lastName}`}`;
+              const response = await fetch(
+                '/api/backstories/generate-backstory',
+                {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ prompt: backstoryInput }),
+                },
+              );
+              const generatedBackstory = await response.json();
+              /* const completeBackstory: Backstory = {
+                classId: number,
+                originId: number,
+                firstNameId: number,
+                lastNameId: number,
+                backstory: generatedBackstory.result,
+                verified: boolean,
+
+              } */
+              setGeneratedBackstoryResult(generatedBackstory.result);
             }}
           >
-            Generate Name
+            Generate Backstory
           </Button>
-          <div>{generatedBackstoryResult}</div>
-          <Typography variant="h2">
-            Internal database backstory generator
-          </Typography>
+          <Button variant="outlined" onClick={async () => {}}>
+            Save Generated Backstory
+          </Button>
           <br />
-          <form onSubmit={backstoryRetrieverSubmit}>
-            <input type="submit" value="Generate backstory" />
-          </form>
-          <div>{backstory.backstory}</div>
-          <form onSubmit={saveRetrievedBackstoryToProfile}>
-            <input type="submit" value="Save backstory to profile" />
-          </form>
-          <Typography variant="h2">
-            External API settlement generator
-          </Typography>
+
+          <Button
+            variant="outlined"
+            onClick={async () => {
+              const response = await fetch('/api/backstories', {
+                method: 'GET',
+              });
+              const retrievedBackstory = await response.json();
+              console.log(retrievedBackstory);
+              setBackstory(retrievedBackstory);
+            }}
+          >
+            Retrieve Backstory
+          </Button>
+
+          <Button
+            variant="outlined"
+            onClick={async () => {
+              const id = props.userId;
+              await fetch(`/api/users/backstories/${id}`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  userId: id,
+                  backstoryId: backstory.id,
+                }),
+              });
+            }}
+          >
+            Save Retrieved Backstory
+          </Button>
+
+          <Typography variant="body2">{generatedBackstoryResult}</Typography>
+          <Typography variant="body2">{backstory.backstory}</Typography>
+
+          <hr />
+
+          <Typography variant="h2">Settlement generator</Typography>
           <br />
-          <form onSubmit={settlementGeneratorSubmit}>
-            <select
+
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel>Size</InputLabel>
+            <Select
               value={selectedSettlementSize}
-              onChange={(event) =>
-                setSelectedSettlementSize(event.target.value)
-              }
+              label="Size"
+              onChange={(event) => {
+                setSelectedSettlementSize(event.target.value);
+              }}
             >
               {props.sizes.map((size: Size) => (
-                <option key={size.id}>{size.name}</option>
+                <MenuItem key={size.id} value={size.name}>
+                  {size.name}
+                </MenuItem>
               ))}
-            </select>
-            <select
+            </Select>
+          </FormControl>
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel>Origin</InputLabel>
+            <Select
               value={selectedSettlementOrigin}
-              onChange={(event) =>
-                setSelectedSettlementOrigin(event.target.value)
-              }
+              label="Origin"
+              onChange={(event) => {
+                setSelectedSettlementOrigin(event.target.value);
+              }}
             >
-              {props.origins.map((origins: Origin) => (
-                <option key={origins.id}>{origins.name}</option>
+              {props.origins.map((origin: Origin) => (
+                <MenuItem key={origin.id} value={origin.name}>
+                  {origin.name}
+                </MenuItem>
               ))}
-            </select>
-            <select
+            </Select>
+          </FormControl>
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel>Prosperity</InputLabel>
+            <Select
               value={selectedSettlementProsperity}
-              onChange={(event) =>
-                setSelectedSettlementProsperity(event.target.value)
-              }
+              label="Prosperity"
+              onChange={(event) => {
+                setSelectedSettlementProsperity(event.target.value);
+              }}
             >
               {props.prosperityLevels.map(
                 (prosperityLevel: ProsperityLevel) => (
-                  <option key={prosperityLevel.id}>
+                  <MenuItem
+                    key={prosperityLevel.id}
+                    value={prosperityLevel.name}
+                  >
                     {prosperityLevel.name}
-                  </option>
+                  </MenuItem>
                 ),
               )}
-            </select>
-
-            <input type="submit" value="Generate settlement" />
-          </form>
-          <div>{generatedSettlementResult}</div>
-          <Typography variant="h2">
-            Internal database settlement generator
-          </Typography>
+            </Select>
+          </FormControl>
           <br />
-          <form onSubmit={settlementRetrieverSubmit}>
-            <input type="submit" value="Generate settlement" />
-          </form>
-          <div>{retrievedSettlementResult}</div>
-          <form onSubmit={saveRetrievedSettlementToProfile}>
-            <input type="submit" value="Save settlement to profile" />
-          </form>
+          <Button
+            variant="outlined"
+            onClick={async () => {
+              const backstoryInput = `${selectedSettlementProsperity} ${selectedSettlementOrigin} ${selectedSettlementSize}`;
+              const response = await fetch(
+                '/api/settlements/generate-settlement',
+                {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ prompt: backstoryInput }),
+                },
+              );
+              const data = await response.json();
+              setGeneratedSettlementResult(data.result);
+            }}
+          >
+            Generate Settlement
+          </Button>
+
+          <Typography variant="body2">{generatedSettlementResult}</Typography>
+
+          <br />
+          <Button
+            variant="outlined"
+            onClick={async () => {
+              const response = await fetch('/api/settlements', {
+                method: 'GET',
+              });
+              const data = await response.json();
+              const settlementDescription = data[0].description;
+              setRetrievedSettlementResult(settlementDescription);
+              setRetrievedSettlementId(data[0].id);
+            }}
+          >
+            Retrieve Settlement
+          </Button>
+
+          <Button
+            variant="outlined"
+            onClick={async () => {
+              const id = props.userId;
+              await fetch(`/api/users/settlements/${id}`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  userId: id,
+                  settlementId: retrievedSettlementId,
+                }),
+              });
+            }}
+          >
+            Save Settlement
+          </Button>
+          <Typography variant="body2">{retrievedSettlementResult}</Typography>
         </main>
       </Box>
     </div>
