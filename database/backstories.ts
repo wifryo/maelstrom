@@ -34,6 +34,21 @@ export async function getRandomBackstory() {
   return backstory[0];
 }
 
+export async function createBackstory(
+  backstoryToCreate: Backstory,
+  token: string | undefined,
+) {
+  if (!token) return undefined;
+  const [savedBackstory] = await sql<SavedBackstory[]>`
+    INSERT INTO backstories
+      (class_id, origin_id, first_name_id, last_name_id, backstory, verified)
+    VALUES
+      (${backstoryToCreate.classId}, ${backstoryToCreate.originId}, ${backstoryToCreate.firstNameId}, ${backstoryToCreate.lastNameId}, ${backstoryToCreate.backstory}, ${backstoryToCreate.verified})
+    RETURNING *
+    `;
+  return savedBackstory;
+}
+
 export async function createSavedBackstoryById(
   backstoryToSave: SavedBackstory,
   token: string | undefined,

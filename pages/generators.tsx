@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
 import React, { useState } from 'react';
-import Backstory from '../database/backstories';
+import { Backstory } from '../database/backstories';
 import {
   CharacterClass,
   getCharacterClasses,
@@ -19,7 +19,8 @@ import {
   ProsperityLevel,
   Size,
 } from '../database/lists';
-import { getUserBySessionToken, User } from '../database/users';
+import { Settlement } from '../database/settlements';
+import { getUserBySessionToken } from '../database/users';
 
 type Props = {
   characterClasses: CharacterClass[];
@@ -30,6 +31,7 @@ type Props = {
 };
 
 export default function Generators(props: Props) {
+  // Name useStates/functions
   const [generatedNameInput, setGeneratedNameInput] = useState('');
   const [generatedNameResult, setGeneratedNameResult] = useState();
   const [fullName, setFullName] = useState({
@@ -38,24 +40,6 @@ export default function Generators(props: Props) {
     lastNameId: 0,
     lastName: '',
   });
-  const [generatedBackstoryResult, setGeneratedBackstoryResult] = useState();
-  const [selectedCharacterClass, setSelectedCharacterClass] =
-    useState<CharacterClass>({
-      id: 1,
-      name: 'Barbarian',
-    });
-  const [selectedBackstoryOrigin, setSelectedBackstoryOrigin] =
-    useState<Origin>({
-      id: 1,
-      name: 'Dragonborn',
-    });
-
-  function addNamesToText(
-    textInput: string,
-    firstName: string,
-    lastName: string,
-  ) {}
-
   async function nameGeneratorSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     const response = await fetch('/api/names/generate-name', {
@@ -69,21 +53,51 @@ export default function Generators(props: Props) {
     setGeneratedNameResult(data.result);
   }
 
-  const [backstory, setBackstory] = useState({
+  // Backstory useStates/functions
+  const [selectedCharacterClass, setSelectedCharacterClass] =
+    useState<CharacterClass>({
+      id: 1,
+      name: 'Barbarian',
+    });
+  const [selectedBackstoryOrigin, setSelectedBackstoryOrigin] =
+    useState<Origin>({
+      id: 1,
+      name: 'Dragonborn',
+    });
+  const [backstoryWithNames, setBackstoryWithNames] = useState('');
+  const [backstory, setBackstory] = useState<Backstory>({
     id: 0,
     classId: 0,
+    originId: 0,
     firstNameId: 0,
     lastNameId: 0,
     backstory: '',
     verified: false,
   });
+  function addNamesToText(
+    textInput: string,
+    firstName: string,
+    lastName: string,
+  ) {
+    let textOutput = textInput.replaceAll('[firstName]', firstName);
+    textOutput = textOutput.replaceAll('[lastName]', lastName);
+    return textOutput;
+  }
 
+  // Settlement useStates/functions
+  const [settlement, setSettlement] = useState<Settlement>({
+    id: null,
+    size_id: 0,
+    prosperity_id: 0,
+    origin_id: 0,
+    description: '',
+    verified: false,
+  });
   const [selectedSettlementProsperity, setSelectedSettlementProsperity] =
     useState<ProsperityLevel>({
       id: 1,
       name: 'Destitute',
     });
-
   const [selectedSettlementOrigin, setSelectedSettlementOrigin] =
     useState<Origin>({
       id: 1,
@@ -93,10 +107,6 @@ export default function Generators(props: Props) {
     id: 1,
     name: 'Hamlet',
   });
-  const [generatedSettlementResult, setGeneratedSettlementResult] = useState();
-
-  const [retrievedSettlementResult, setRetrievedSettlementResult] = useState();
-  const [retrievedSettlementId, setRetrievedSettlementId] = useState();
 
   return (
     <div>
@@ -218,9 +228,20 @@ export default function Generators(props: Props) {
           <Button
             variant="outlined"
             onClick={async () => {
-              const backstoryInput = `${
-                selectedBackstoryOrigin.name
-              } ${selectedCharacterClass} named ${`${fullName.firstName} ${fullName.lastName}`}`;
+              // Construct prompt
+              const backstoryPrompt = `${selectedBackstoryOrigin.name} ${selectedCharacterClass.name} named [firstName] [lastName]`;
+              // Construct backstory object without backstory text
+              const incompleteBackstoryObject: Backstory = {
+                id: null,
+                classId: selectedCharacterClass.id,
+                originId: selectedBackstoryOrigin.id,
+                firstNameId: fullName.firstNameId,
+                lastNameId: fullName.lastNameId,
+                backstory: '',
+                verified: false,
+              };
+
+              // POST to API, sending both prompt & backstory object data so it can be added to database
               const response = await fetch(
                 '/api/backstories/generate-backstory',
                 {
@@ -228,37 +249,47 @@ export default function Generators(props: Props) {
                   headers: {
                     'Content-Type': 'application/json',
                   },
-                  body: JSON.stringify({ prompt: backstoryInput }),
+                  body: JSON.stringify({
+                    prompt: backstoryPrompt,
+                    backstoryObject: incompleteBackstoryObject,
+                  }),
                 },
               );
-              const generatedBackstory = await response.json();
-              const completeBackstory: Backstory = {
-                classId: selectedCharacterClass.id,
-                originId: selectedBackstoryOrigin.id,
-                firstNameId: fullName.firstName,
-                lastNameId: fullName.lastName,
-                backstory: generatedBackstory.result,
-                verified: false,
-              };
-              setGeneratedBackstoryResult(generatedBackstory.result);
+              // Receive complete backstory object
+              const backstoryObject = await response.json();
+              // Update useState with backstory object
+              setBackstory(backstoryObject);
+
+              // Embed generated names into backstory text
+              const backstoryTextWithNames = await addNamesToText(
+                backstoryObject.backstory,
+                fullName.firstName,
+                fullName.lastName,
+              );
+              // Update useStates
+              setBackstoryWithNames(backstoryTextWithNames);
             }}
           >
             Generate Backstory
           </Button>
-          <Button variant="outlined" onClick={async () => {}}>
-            Save Generated Backstory
-          </Button>
+
           <br />
 
           <Button
             variant="outlined"
             onClick={async () => {
+              // Retrieve random backstory
               const response = await fetch('/api/backstories', {
                 method: 'GET',
               });
               const retrievedBackstory = await response.json();
-              console.log(retrievedBackstory);
               setBackstory(retrievedBackstory);
+              const retrievedBackstoryWithNames = addNamesToText(
+                retrievedBackstory.backstory,
+                fullName.firstName,
+                fullName.lastName,
+              );
+              setBackstoryWithNames(retrievedBackstoryWithNames);
             }}
           >
             Retrieve Backstory
@@ -280,11 +311,10 @@ export default function Generators(props: Props) {
               });
             }}
           >
-            Save Retrieved Backstory
+            Save Backstory
           </Button>
 
-          <Typography variant="body2">{generatedBackstoryResult}</Typography>
-          <Typography variant="body2">{backstory.backstory}</Typography>
+          <Typography variant="body2">{backstoryWithNames}</Typography>
 
           <hr />
 
@@ -379,7 +409,18 @@ export default function Generators(props: Props) {
           <Button
             variant="outlined"
             onClick={async () => {
-              const backstoryInput = `${selectedSettlementProsperity.name} ${selectedSettlementOrigin.name} ${selectedSettlementSize.name}`;
+              // Construct prompt
+              const settlementPrompt = `${selectedSettlementProsperity.name} ${selectedSettlementOrigin.name} ${selectedSettlementSize.name}`;
+              // Construct settlement object without description
+              const settlementObject: Settlement = {
+                id: null,
+                size_id: selectedSettlementSize.id,
+                prosperity_id: selectedSettlementProsperity.id,
+                origin_id: selectedSettlementOrigin.id,
+                description: '',
+                verified: false,
+              };
+              // POST to API, sending both prompt & settlement object data so it can be added to database
               const response = await fetch(
                 '/api/settlements/generate-settlement',
                 {
@@ -387,29 +428,34 @@ export default function Generators(props: Props) {
                   headers: {
                     'Content-Type': 'application/json',
                   },
-                  body: JSON.stringify({ prompt: backstoryInput }),
+                  body: JSON.stringify({
+                    prompt: settlementPrompt,
+                    settlementObject: settlementObject,
+                  }),
                 },
               );
-              const data = await response.json();
-              setGeneratedSettlementResult(data.result);
+              // Received generated settlement description
+              const generatedSettlementDescription = await response.json();
+              // Add generated description to settlement object
+              settlementObject.description =
+                generatedSettlementDescription.result;
+              // Update useState
+              setSettlement(settlementObject);
             }}
           >
             Generate Settlement
           </Button>
 
-          <Typography variant="body2">{generatedSettlementResult}</Typography>
-
           <br />
           <Button
             variant="outlined"
             onClick={async () => {
+              // Retrieve random settlement
               const response = await fetch('/api/settlements', {
                 method: 'GET',
               });
-              const data = await response.json();
-              const settlementDescription = data[0].description;
-              setRetrievedSettlementResult(settlementDescription);
-              setRetrievedSettlementId(data[0].id);
+              const retrievedSettlement = await response.json();
+              setSettlement(retrievedSettlement);
             }}
           >
             Retrieve Settlement
@@ -426,14 +472,14 @@ export default function Generators(props: Props) {
                 },
                 body: JSON.stringify({
                   userId: id,
-                  settlementId: retrievedSettlementId,
+                  settlementId: settlement.id,
                 }),
               });
             }}
           >
             Save Settlement
           </Button>
-          <Typography variant="body2">{retrievedSettlementResult}</Typography>
+          <Typography variant="body2">{settlement.description}</Typography>
         </main>
       </Box>
     </div>

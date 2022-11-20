@@ -1,10 +1,10 @@
 import { sql } from './connect';
 
 export type Settlement = {
-  id: number;
-  size_id: number;
-  prosperity_id: number;
-  origin_id: number;
+  id: number | null;
+  sizeId: number;
+  prosperityId: number;
+  originId: number;
   description: string;
   verified: boolean;
 };
@@ -29,7 +29,22 @@ export async function getRandomSettlement() {
   SELECT * FROM settlements
   ORDER BY RANDOM()
   LIMIT 1`;
-  return settlement;
+  return settlement[0];
+}
+
+export async function createSettlement(
+  settlementToCreate: Settlement,
+  token: string | undefined,
+) {
+  if (!token) return undefined;
+  const [savedSettlement] = await sql<SavedSettlement[]>`
+    INSERT INTO settlements
+      (size_id, prosperity_level_id, origin_id, description, verified)
+    VALUES
+      (${settlementToCreate.sizeId}, ${settlementToCreate.prosperityId}, ${settlementToCreate.originId}, ${settlementToCreate.description}, ${settlementToCreate.verified})
+    RETURNING *
+    `;
+  return savedSettlement;
 }
 
 export async function createSavedSettlementById(

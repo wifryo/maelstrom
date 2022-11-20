@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Configuration, OpenAIApi } from 'openai';
 import { getValidSessionByToken } from '../../../database/sessions';
+import { createSettlement } from '../../../database/settlements';
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -49,10 +50,17 @@ export default async function handler(
       model: 'text-davinci-002',
       prompt: generatePrompt(request.body.prompt),
       temperature: 0.9,
-      max_tokens: 100,
+      max_tokens: 500,
     });
     if (completion.data.choices[0]) {
+      // Return settlement description to frontend
       response.status(200).json({ result: completion.data.choices[0].text });
+      // Get settlement object (without description text)
+      const settlementObject = request.body.settlementObject;
+      // Add settlement description to object
+      settlementObject.description = completion.data.choices[0].text;
+      // Add entire object to database
+      await createSettlement(settlementObject, request.cookies.sessionToken);
     }
     return;
   }
