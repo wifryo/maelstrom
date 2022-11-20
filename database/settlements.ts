@@ -32,6 +32,22 @@ export async function getRandomSettlement() {
   return settlement[0];
 }
 
+export async function getSettlement(
+  sizeId: string,
+  originId: string,
+  prosperityId: string,
+) {
+  const settlement = await sql<Settlement[]>`
+  SELECT * FROM settlements
+  WHERE
+    settlements.size_id = ${sizeId} AND
+    settlements.origin_id = ${originId} AND
+    settlements.prosperity_level_id = ${prosperityId}
+  ORDER BY RANDOM()
+  LIMIT 1`;
+  return settlement[0];
+}
+
 export async function createSettlement(
   settlementToCreate: Settlement,
   token: string | undefined,

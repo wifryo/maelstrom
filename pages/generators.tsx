@@ -446,7 +446,7 @@ export default function Generators(props: Props) {
               // Construct prompt
               const settlementPrompt = `${selectedSettlementProsperity.name} ${selectedSettlementOrigin.name} ${selectedSettlementSize.name}`;
               // Construct settlement object without description
-              const settlementObject: Settlement = {
+              const incompleteSettlementObject: Settlement = {
                 id: null,
                 sizeId: selectedSettlementSize.id,
                 prosperityId: selectedSettlementProsperity.id,
@@ -464,17 +464,15 @@ export default function Generators(props: Props) {
                   },
                   body: JSON.stringify({
                     prompt: settlementPrompt,
-                    settlementObject: settlementObject,
+                    settlementObject: incompleteSettlementObject,
                   }),
                 },
               );
-              // Received generated settlement description
-              const generatedSettlementDescription = await response.json();
-              // Add generated description to settlement object
-              settlementObject.description =
-                generatedSettlementDescription.result;
+              // Received generated settlement object
+              const settlementObject = await response.json();
               // Update useState
               setSettlement(settlementObject);
+              console.log(settlementObject);
             }}
           >
             Generate Settlement
@@ -487,6 +485,34 @@ export default function Generators(props: Props) {
               // Retrieve random settlement
               const response = await fetch('/api/settlements', {
                 method: 'GET',
+              });
+              const retrievedSettlement = await response.json();
+              setSettlement(retrievedSettlement);
+            }}
+          >
+            Random Settlement
+          </Button>
+
+          <Button
+            variant="outlined"
+            onClick={async () => {
+              // Retrieve settlement by size/origin/prosperity
+              console.log(`settlementsizeid: ${selectedSettlementSize.id}`);
+              console.log(`settlementoriginid: ${selectedSettlementOrigin.id}`);
+              console.log(
+                `settlementprosperitynid: ${selectedSettlementProsperity.id}`,
+              );
+
+              const response = await fetch('/api/settlements', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  sizeId: selectedSettlementSize.id,
+                  originId: selectedSettlementOrigin.id,
+                  prosperityId: selectedSettlementProsperity.id,
+                }),
               });
               const retrievedSettlement = await response.json();
               setSettlement(retrievedSettlement);

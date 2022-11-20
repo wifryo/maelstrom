@@ -53,14 +53,17 @@ export default async function handler(
       max_tokens: 500,
     });
     if (completion.data.choices[0]) {
-      // Return settlement description to frontend
-      response.status(200).json({ result: completion.data.choices[0].text });
       // Get settlement object (without description text)
-      const settlementObject = request.body.settlementObject;
+      const incompleteSettlementObject = request.body.settlementObject;
       // Add settlement description to object
-      settlementObject.description = completion.data.choices[0].text;
+      incompleteSettlementObject.description = completion.data.choices[0].text;
       // Add entire object to database
-      await createSettlement(settlementObject, request.cookies.sessionToken);
+      const settlementObject = await createSettlement(
+        incompleteSettlementObject,
+        request.cookies.sessionToken,
+      );
+      // Return settlement object to frontend
+      response.status(200).json(settlementObject);
     }
     return;
   }
