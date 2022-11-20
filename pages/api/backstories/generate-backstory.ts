@@ -8,7 +8,7 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-// Original placeholder/testing function
+// Placeholder/testing function
 function generatePrompt(prompt: Text) {
   return `Generate an original backstory for a D&D adventurer.
 

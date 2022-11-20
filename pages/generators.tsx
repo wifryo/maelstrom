@@ -80,6 +80,7 @@ export default function Generators(props: Props) {
     lastName: string,
   ) {
     let textOutput = textInput.replaceAll('[firstName]', firstName);
+    textOutput = textOutput.replaceAll('FirstName', firstName);
     textOutput = textOutput.replaceAll('[lastName]', lastName);
     return textOutput;
   }
@@ -87,9 +88,9 @@ export default function Generators(props: Props) {
   // Settlement useStates/functions
   const [settlement, setSettlement] = useState<Settlement>({
     id: null,
-    size_id: 0,
-    prosperity_id: 0,
-    origin_id: 0,
+    sizeId: 0,
+    prosperityId: 0,
+    originId: 0,
     description: '',
     verified: false,
   });
@@ -138,6 +139,12 @@ export default function Generators(props: Props) {
                 method: 'GET',
               });
               const retrievedName = await response.json();
+              const newBackstoryWithNames = addNamesToText(
+                backstory.backstory,
+                retrievedName.firstName,
+                retrievedName.lastName,
+              );
+              setBackstoryWithNames(newBackstoryWithNames);
               setFullName(retrievedName);
             }}
           >
@@ -292,6 +299,33 @@ export default function Generators(props: Props) {
               setBackstoryWithNames(retrievedBackstoryWithNames);
             }}
           >
+            Random Backstory
+          </Button>
+
+          <Button
+            variant="outlined"
+            onClick={async () => {
+              // Retrieve backstory
+              const response = await fetch('/api/backstories', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  originId: selectedBackstoryOrigin.id,
+                  characterClassId: selectedCharacterClass.id,
+                }),
+              });
+              const retrievedBackstory = await response.json();
+              setBackstory(retrievedBackstory);
+              const retrievedBackstoryWithNames = addNamesToText(
+                retrievedBackstory.backstory,
+                fullName.firstName,
+                fullName.lastName,
+              );
+              setBackstoryWithNames(retrievedBackstoryWithNames);
+            }}
+          >
             Retrieve Backstory
           </Button>
 
@@ -414,9 +448,9 @@ export default function Generators(props: Props) {
               // Construct settlement object without description
               const settlementObject: Settlement = {
                 id: null,
-                size_id: selectedSettlementSize.id,
-                prosperity_id: selectedSettlementProsperity.id,
-                origin_id: selectedSettlementOrigin.id,
+                sizeId: selectedSettlementSize.id,
+                prosperityId: selectedSettlementProsperity.id,
+                originId: selectedSettlementOrigin.id,
                 description: '',
                 verified: false,
               };

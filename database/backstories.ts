@@ -34,6 +34,17 @@ export async function getRandomBackstory() {
   return backstory[0];
 }
 
+export async function getBackstory(classId: string, originId: string) {
+  const backstory = await sql<Backstory[]>`
+  SELECT * FROM backstories
+  WHERE
+    backstories.class_id = ${classId} AND
+    backstories.origin_id = ${originId}
+  ORDER BY RANDOM()
+  LIMIT 1`;
+  return backstory[0];
+}
+
 export async function createBackstory(
   backstoryToCreate: Backstory,
   token: string | undefined,
