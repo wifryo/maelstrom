@@ -37,7 +37,7 @@ export default async function handler(
         .json({ message: 'No saved backstories or invalid session token' });
     }
 
-    return response.status(200).json(savedBackstories);
+    return response.status(200).json(savedBackstories[0]);
   }
 
   // POST creates new saved backstory entry

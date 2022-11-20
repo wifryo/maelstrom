@@ -28,7 +28,6 @@ export default async function handler(
     if (!deletedSavedBackstory) {
       return response.status(404).json({ message: 'Not a valid Id' });
     }
-    console.log(deletedSavedBackstory);
     return response.status(200).json(deletedSavedBackstory);
   }
 

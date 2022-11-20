@@ -21,6 +21,7 @@ import {
 } from '../database/lists';
 import { Settlement } from '../database/settlements';
 import { getUserBySessionToken } from '../database/users';
+import { addNamesToText } from '../utils/functions';
 
 type Props = {
   characterClasses: CharacterClass[];
@@ -74,16 +75,6 @@ export default function Generators(props: Props) {
     backstory: '',
     verified: false,
   });
-  function addNamesToText(
-    textInput: string,
-    firstName: string,
-    lastName: string,
-  ) {
-    let textOutput = textInput.replaceAll('[firstName]', firstName);
-    textOutput = textOutput.replaceAll('FirstName', firstName);
-    textOutput = textOutput.replaceAll('[lastName]', lastName);
-    return textOutput;
-  }
 
   // Settlement useStates/functions
   const [settlement, setSettlement] = useState<Settlement>({

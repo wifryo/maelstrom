@@ -85,8 +85,8 @@ export async function getSavedBackstoryContentByUserIdAndValidSessionToken(
       saved_backstories.id AS id,
       classes.name AS class,
       origins.name AS origin,
-      first_names.first_name AS firstName,
-      last_names.last_name AS lastName,
+      first_names.first_name AS first_name,
+      last_names.last_name AS last_name,
       backstories.backstory AS backstory,
       backstories.verified AS verified
     FROM
@@ -121,6 +121,5 @@ export async function deleteSavedBackstoryById(
       id = ${id}
     RETURNING *
     `;
-  console.log(savedBackstory);
   return savedBackstory;
 }

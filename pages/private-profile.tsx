@@ -5,6 +5,7 @@ import { SavedBackstoryContent } from '../database/backstories';
 import { FullSavedName } from '../database/names';
 import { SavedSettlementContent } from '../database/settlements';
 import { getUserBySessionToken, User } from '../database/users';
+import { addNamesToText } from '../utils/functions';
 
 type Props = {
   user?: User;
@@ -60,7 +61,15 @@ export default function UserProfile(props: Props) {
       method: 'GET',
     });
     const savedBackstories = await response.json();
-    setRetrievedSavedBackstories(savedBackstories[0]);
+    savedBackstories.forEach((backstory: SavedBackstoryContent) => {
+      const backstoryWithNames = addNamesToText(
+        backstory.backstory,
+        backstory.firstName,
+        backstory.lastName,
+      );
+      backstory.backstory = backstoryWithNames;
+    });
+    setRetrievedSavedBackstories(savedBackstories);
   }
 
   async function deleteSavedBackstory(id: number) {
