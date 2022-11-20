@@ -37,7 +37,7 @@ export async function down(sql) {
         settlements
       WHERE
         size_id = ${settlement.size_id} AND
-        prosperity_level_id = ${settlement.prosperity_id} AND
+        prosperity_level_id = ${settlement.prosperity_level_id} AND
         origin_id = ${settlement.origin_id} AND
         description = ${settlement.description} AND
         verified = ${settlement.verified}

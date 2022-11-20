@@ -40,11 +40,21 @@ export default function Generators(props: Props) {
   });
   const [generatedBackstoryResult, setGeneratedBackstoryResult] = useState();
   const [selectedCharacterClass, setSelectedCharacterClass] =
-    useState('Barbarian');
-  const [selectedBackstoryOrigin, setSelectedBackstoryOrigin] = useState({
-    id: '',
-    name: '',
-  });
+    useState<CharacterClass>({
+      id: 1,
+      name: 'Barbarian',
+    });
+  const [selectedBackstoryOrigin, setSelectedBackstoryOrigin] =
+    useState<Origin>({
+      id: 1,
+      name: 'Dragonborn',
+    });
+
+  function addNamesToText(
+    textInput: string,
+    firstName: string,
+    lastName: string,
+  ) {}
 
   async function nameGeneratorSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -69,10 +79,20 @@ export default function Generators(props: Props) {
   });
 
   const [selectedSettlementProsperity, setSelectedSettlementProsperity] =
-    useState('Wealthy');
-  const [selectedSettlementSize, setSelectedSettlementSize] = useState('Town');
+    useState<ProsperityLevel>({
+      id: 1,
+      name: 'Destitute',
+    });
+
   const [selectedSettlementOrigin, setSelectedSettlementOrigin] =
-    useState('Human');
+    useState<Origin>({
+      id: 1,
+      name: 'Dragonborn',
+    });
+  const [selectedSettlementSize, setSelectedSettlementSize] = useState<Size>({
+    id: 1,
+    name: 'Hamlet',
+  });
   const [generatedSettlementResult, setGeneratedSettlementResult] = useState();
 
   const [retrievedSettlementResult, setRetrievedSettlementResult] = useState();
@@ -143,14 +163,24 @@ export default function Generators(props: Props) {
           <FormControl sx={{ m: 1, minWidth: 120 }}>
             <InputLabel>Class</InputLabel>
             <Select
-              value={selectedCharacterClass}
+              value={selectedCharacterClass.id}
               label="Class"
               onChange={(event) => {
-                setSelectedCharacterClass(event.target.value);
+                // Get ID of selected characterClass
+                const characterClassId = Number(event.target.value);
+                // Use filter on characterClass object to get full characterClass object that corresponds to selected ID
+                const selectedCharacterClassArray =
+                  props.characterClasses.filter((characterClass) => {
+                    return characterClass.id === characterClassId;
+                  });
+                // Check exists
+                if (selectedCharacterClassArray[0]) {
+                  setSelectedCharacterClass(selectedCharacterClassArray[0]);
+                }
               }}
             >
               {props.characterClasses.map((characterClass: CharacterClass) => (
-                <MenuItem key={characterClass.id} value={characterClass.name}>
+                <MenuItem key={characterClass.id} value={characterClass.id}>
                   {characterClass.name}
                 </MenuItem>
               ))}
@@ -163,12 +193,18 @@ export default function Generators(props: Props) {
               value={selectedBackstoryOrigin.id}
               label="Origin"
               onChange={(event) => {
+                // Get ID of selected origin
                 const originId = Number(event.target.value);
-                const selectedBackstoryOriginArray: Origin[] =
-                  props.origins.filter((origin) => {
+                // Use filter on origins object to get full origins object that corresponds to selected ID
+                const selectedBackstoryOriginArray = props.origins.filter(
+                  (origin) => {
                     return origin.id === originId;
-                  });
-                setSelectedBackstoryOrigin(selectedBackstoryOriginArray[0]);
+                  },
+                );
+                // Check exists
+                if (selectedBackstoryOriginArray[0]) {
+                  setSelectedBackstoryOrigin(selectedBackstoryOriginArray[0]);
+                }
               }}
             >
               {props.origins.map((origins: Origin) => (
@@ -182,7 +218,9 @@ export default function Generators(props: Props) {
           <Button
             variant="outlined"
             onClick={async () => {
-              const backstoryInput = `${selectedBackstoryOrigin} ${selectedCharacterClass} named ${`${fullName.firstName} ${fullName.lastName}`}`;
+              const backstoryInput = `${
+                selectedBackstoryOrigin.name
+              } ${selectedCharacterClass} named ${`${fullName.firstName} ${fullName.lastName}`}`;
               const response = await fetch(
                 '/api/backstories/generate-backstory',
                 {
@@ -194,15 +232,14 @@ export default function Generators(props: Props) {
                 },
               );
               const generatedBackstory = await response.json();
-              /* const completeBackstory: Backstory = {
-                classId: number,
-                originId: number,
-                firstNameId: number,
-                lastNameId: number,
+              const completeBackstory: Backstory = {
+                classId: selectedCharacterClass.id,
+                originId: selectedBackstoryOrigin.id,
+                firstNameId: fullName.firstName,
+                lastNameId: fullName.lastName,
                 backstory: generatedBackstory.result,
-                verified: boolean,
-
-              } */
+                verified: false,
+              };
               setGeneratedBackstoryResult(generatedBackstory.result);
             }}
           >
@@ -253,65 +290,96 @@ export default function Generators(props: Props) {
 
           <Typography variant="h2">Settlement generator</Typography>
           <br />
-
-          <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel>Size</InputLabel>
-            <Select
-              value={selectedSettlementSize}
-              label="Size"
-              onChange={(event) => {
-                setSelectedSettlementSize(event.target.value);
-              }}
-            >
-              {props.sizes.map((size: Size) => (
-                <MenuItem key={size.id} value={size.name}>
-                  {size.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel>Origin</InputLabel>
-            <Select
-              value={selectedSettlementOrigin}
-              label="Origin"
-              onChange={(event) => {
-                setSelectedSettlementOrigin(event.target.value);
-              }}
-            >
-              {props.origins.map((origin: Origin) => (
-                <MenuItem key={origin.id} value={origin.name}>
-                  {origin.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
           <FormControl sx={{ m: 1, minWidth: 120 }}>
             <InputLabel>Prosperity</InputLabel>
             <Select
-              value={selectedSettlementProsperity}
+              value={selectedSettlementProsperity.id}
               label="Prosperity"
               onChange={(event) => {
-                setSelectedSettlementProsperity(event.target.value);
+                // Get ID of selected prosperityLevel
+                const prosperityLevelId = Number(event.target.value);
+                // Use filter on prosperityLevels object to get full prosperityLevels object that corresponds to selected ID
+                const selectedSettlementProsperityLevelArray =
+                  props.prosperityLevels.filter((prosperityLevel) => {
+                    return prosperityLevel.id === prosperityLevelId;
+                  });
+                // Check exists
+                if (selectedSettlementProsperityLevelArray[0]) {
+                  setSelectedSettlementProsperity(
+                    selectedSettlementProsperityLevelArray[0],
+                  );
+                }
               }}
             >
               {props.prosperityLevels.map(
                 (prosperityLevel: ProsperityLevel) => (
-                  <MenuItem
-                    key={prosperityLevel.id}
-                    value={prosperityLevel.name}
-                  >
+                  <MenuItem key={prosperityLevel.id} value={prosperityLevel.id}>
                     {prosperityLevel.name}
                   </MenuItem>
                 ),
               )}
             </Select>
           </FormControl>
+
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel>Origin</InputLabel>
+            <Select
+              value={selectedSettlementOrigin.id}
+              label="Origin"
+              onChange={(event) => {
+                // Get ID of selected origin
+                const originId = Number(event.target.value);
+                // Use filter on origins object to get full origins object that corresponds to selected ID
+                const selectedSettlementOriginArray = props.origins.filter(
+                  (origin) => {
+                    return origin.id === originId;
+                  },
+                );
+                // Check exists
+                if (selectedSettlementOriginArray[0]) {
+                  setSelectedSettlementOrigin(selectedSettlementOriginArray[0]);
+                }
+              }}
+            >
+              {props.origins.map((origin: Origin) => (
+                <MenuItem key={origin.id} value={origin.id}>
+                  {origin.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel>Size</InputLabel>
+            <Select
+              value={selectedSettlementSize.id}
+              label="Size"
+              onChange={(event) => {
+                // Get ID of selected size
+                const sizeId = Number(event.target.value);
+                // Use filter on sizes object to get full sizes object that corresponds to selected ID
+                const selectedSettlementSizeArray = props.sizes.filter(
+                  (size) => {
+                    return size.id === sizeId;
+                  },
+                );
+                // Check exists
+                if (selectedSettlementSizeArray[0]) {
+                  setSelectedSettlementSize(selectedSettlementSizeArray[0]);
+                }
+              }}
+            >
+              {props.sizes.map((size: Size) => (
+                <MenuItem key={size.id} value={size.id}>
+                  {size.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <br />
           <Button
             variant="outlined"
             onClick={async () => {
-              const backstoryInput = `${selectedSettlementProsperity} ${selectedSettlementOrigin} ${selectedSettlementSize}`;
+              const backstoryInput = `${selectedSettlementProsperity.name} ${selectedSettlementOrigin.name} ${selectedSettlementSize.name}`;
               const response = await fetch(
                 '/api/settlements/generate-settlement',
                 {
