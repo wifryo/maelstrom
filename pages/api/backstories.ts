@@ -31,8 +31,6 @@ export default async function handler(
         request.body.characterClassId,
         request.body.originId,
       );
-      console.log('retrieved backstory to aPI');
-      console.log(retrievedBackstory);
       return response.status(200).json(retrievedBackstory);
     }
     return response.status(400).json({ message: 'Invalid parameters' });

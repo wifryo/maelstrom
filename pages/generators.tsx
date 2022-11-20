@@ -305,7 +305,7 @@ export default function Generators(props: Props) {
           <Button
             variant="outlined"
             onClick={async () => {
-              // Retrieve backstory
+              // Retrieve backstory by origin and class
               const response = await fetch('/api/backstories', {
                 method: 'POST',
                 headers: {
