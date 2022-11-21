@@ -1734,10 +1734,10 @@
     "@typescript-eslint/types" "5.40.0"
     eslint-visitor-keys "^3.3.0"
 
-"@upleveled/eslint-config-upleveled@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@upleveled/eslint-config-upleveled/-/eslint-config-upleveled-3.0.1.tgz#559f4684d53c47db202f7f771554c32fedf728fe"
-  integrity sha512-pJf7qGaolndx3u3yuj1hlZLuCenUMOMJ8FujXiLReIf19yY3G1tgfL1NKa/M3SRqYi6hJozpIiXqHNMtOOMuRA==
+"@upleveled/eslint-config-upleveled@^3.4.2":
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/@upleveled/eslint-config-upleveled/-/eslint-config-upleveled-3.4.2.tgz#d6ad21d74f71852f60011aee0981dda8ee120f53"
+  integrity sha512-3q4AajitOJmBGvzTkHB1F3cfmPrOgS1Jh8proMYMJlsTj/15sGRFH1XjbkjB38RsdO0ZMfu1IJbt8DWirrF0MA==
 
 "@upleveled/eslint-plugin-upleveled@2.1.6":
   version "2.1.6"
@@ -2371,11 +2371,6 @@ emoji-regex@^9.2.2:
   version "9.2.2"
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-9.2.2.tgz#840c8803b0d8047f4ff0cf963176b32d4ef3ed72"
   integrity sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==
-
-emotion@^11.0.0:
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/emotion/-/emotion-11.0.0.tgz#e33353668e72f0adea1f6fba790dc6c5b05b45d9"
-  integrity sha512-QW3CRqic3aRw1OBOcnvxaHEpCmxtlGwZ5tM9dV5rY3Rn+F41E8EgTPOqJ5VfsqQ5ZXHDs2zSDyUwGI0ZfC2+5A==
 
 end-of-stream@^1.1.0, end-of-stream@^1.4.1:
   version "1.4.4"

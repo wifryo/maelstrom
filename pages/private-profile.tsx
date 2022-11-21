@@ -97,11 +97,10 @@ export default function UserProfile(props: Props) {
   const [retrievedSavedSettlements, setRetrievedSavedSettlements] = useState([
     {
       id: 0,
-      class: '',
+      size: '',
+      prosperity: '',
       origin: '',
-      firstName: '',
-      lastName: '',
-      backstory: '',
+      description: '',
       verified: false,
     },
   ]);
@@ -120,7 +119,7 @@ export default function UserProfile(props: Props) {
     });
     const deletedSavedSettlement = await response.json();
     const filteredSavedSettlements = retrievedSavedSettlements.filter(
-      (savedSettlement) => {
+      (savedSettlement: SavedSettlementContent) => {
         return savedSettlement.id !== deletedSavedSettlement.id;
       },
     );
@@ -196,20 +195,18 @@ export default function UserProfile(props: Props) {
       )}
       <h2>Saved Settlements</h2>
       <br />
-      {retrievedSavedSettlements.map(
-        (savedSettlementContent: SavedSettlementContent) => {
-          return (
-            <Fragment key={savedSettlementContent.id}>
-              <div>{savedSettlementContent.description}</div>
-              <button
-                onClick={() => deleteSavedSettlement(savedSettlementContent.id)}
-              >
-                Delete
-              </button>
-            </Fragment>
-          );
-        },
-      )}
+      {retrievedSavedSettlements.map((savedSettlementContent) => {
+        return (
+          <Fragment key={savedSettlementContent.id}>
+            <div>{savedSettlementContent.description}</div>
+            <button
+              onClick={() => deleteSavedSettlement(savedSettlementContent.id)}
+            >
+              Delete
+            </button>
+          </Fragment>
+        );
+      })}
     </>
   );
 }

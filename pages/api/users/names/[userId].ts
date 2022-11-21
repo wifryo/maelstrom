@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import {
   createSavedNameById,
-  deleteSavedNameById,
   getSavedNamesByIdAndValidSessionToken,
   SavedName,
 } from '../../../../database/savedNames';
@@ -39,54 +38,6 @@ export default async function handler(
 
     return response.status(200).json(savedNames);
   }
-
-  // TODO: edit saved names
-  /* if (request.method === 'PUT') {
-    // NOT getting the id from the body since is already on the query
-    const firstName = request.body?.firstName;
-    const accessory = request.body?.accessory;
-    const type = request.body?.type;
-
-    // Check all the information to create the animal exists
-    if (!(firstName && accessory && type)) {
-      return response
-        .status(400)
-        .json({ message: 'property firstName, accessory or type missing' });
-    }
-
-    // TODO: add type checking to the api
-
-    // Create the animal using the database util function
-    const newAnimal = await updateAnimalById(
-      animalId,
-      firstName,
-      type,
-      accessory,
-    );
-
-    if (!newAnimal) {
-      return response.status(404).json({ message: 'Not a valid Id' });
-    }
-
-    // response with the new created animal
-    return response.status(200).json(newAnimal);
-  } */
-
-  // moved to /api/savedNames/[savedNameId].ts
-  /* if (request.method === 'DELETE') {
-    const savedNameId = Number(request.query.savedNameId);
-    console.log('savednameID:');
-    console.log(savedNameId);
-    const deletedSavedName = await deleteSavedNameById(
-      savedNameId,
-      request.cookies.sessionToken,
-    );
-    if (!deletedSavedName) {
-      return response.status(404).json({ message: 'Not a valid Id' });
-    }
-    console.log(deletedSavedName);
-    return response.status(200).json(deletedSavedName);
-  } */
 
   // POST adds name to user's profile
   if (request.method === 'POST') {

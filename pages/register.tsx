@@ -1,9 +1,7 @@
 import { css } from '@emotion/react';
-import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { getValidSessionByToken } from '../database/sessions';
 import { RegisterResponseBody } from './api/register';
 
 type Props = {
@@ -101,21 +99,3 @@ export default function Register(props: Props) {
     </>
   );
 }
-
-/* export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const token = context.req.cookies.sessionToken;
-
-  if (token && (await getValidSessionByToken(token))) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: true,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
-}
- */
