@@ -160,11 +160,10 @@ export default function UserProfile(props: Props) {
       </Head>
       <Box
         display="flex"
-        sx={{ width: { xs: '100%', sm: '80%' } }}
+        width="100%"
         flexDirection="column"
         justifyContent="center"
         m="auto"
-        mb="3rem"
       >
         <Typography variant="h1" align="center">
           Profile
@@ -174,6 +173,7 @@ export default function UserProfile(props: Props) {
           display="flex"
           justifyContent="flex-end"
           alignItems="center"
+          sx={{ width: '90%', mt: '2rem' }}
         >
           <PersonOutlineIcon sx={{ mr: '0.5rem' }} />
           <Typography variant="body2" mr="2rem">
@@ -188,8 +188,23 @@ export default function UserProfile(props: Props) {
         <Divider
           orientation="horizontal"
           color="#000"
-          sx={{ height: '2px', mt: '1rem', mb: '1rem' }}
+          sx={{
+            height: '1px',
+            mt: '1rem',
+            mb: '1rem',
+            ml: '-3rem',
+            mr: '-3rem',
+          }}
         />
+      </Box>
+      <Box
+        display="flex"
+        sx={{ width: { xs: '100%', sm: '80%' } }}
+        flexDirection="column"
+        justifyContent="center"
+        m="auto"
+        mb="3rem"
+      >
         <Grid
           container
           display="flex"
@@ -217,7 +232,7 @@ export default function UserProfile(props: Props) {
                       orientation="vertical"
                       color="#000"
                       sx={{
-                        width: '0.5px',
+                        width: '1px',
                         m: 'auto',
                         display: { xs: 'none', lg: 'block' },
                       }}
@@ -250,7 +265,7 @@ export default function UserProfile(props: Props) {
           <Divider
             orientation="horizontal"
             color="#000"
-            sx={{ height: '2px', mt: '1rem', mb: '1rem' }}
+            sx={{ height: '1px', mt: '1rem', mb: '1rem' }}
           />
           <Grid item xs={12}>
             <Typography variant="h2" align="center" mt="1rem" mb="2rem">
@@ -263,7 +278,7 @@ export default function UserProfile(props: Props) {
                 <Fragment key={savedBackstoryContent.id}>
                   <Grid container>
                     <Grid item xs={12} lg={7.3}>
-                      <Typography variant="body2">
+                      <Typography variant="body2" align="justify" mr="1rem">
                         {savedBackstoryContent.backstory}
                       </Typography>
                     </Grid>
@@ -272,7 +287,7 @@ export default function UserProfile(props: Props) {
                         orientation="vertical"
                         color="#000"
                         sx={{
-                          width: '0.5px',
+                          width: '1px',
                           m: 'auto',
                           display: { xs: 'none', lg: 'block' },
                         }}
@@ -283,7 +298,7 @@ export default function UserProfile(props: Props) {
                       item
                       xs={12}
                       lg={4.5}
-                      sx={{ mt: { xs: '1rem', lg: 0 } }}
+                      sx={{ mt: { xs: '1rem', lg: 0 }, mb: 'auto' }}
                       justifyContent="center"
                     >
                       <Button
@@ -308,7 +323,7 @@ export default function UserProfile(props: Props) {
           <Divider
             orientation="horizontal"
             color="#000"
-            sx={{ height: '2px', mt: '1rem', mb: '1rem' }}
+            sx={{ height: '1px', mt: '1rem', mb: '1rem' }}
           />
           <Grid item xs={12}>
             <Typography variant="h2" align="center" mt="1rem" mb="2rem">
@@ -320,7 +335,7 @@ export default function UserProfile(props: Props) {
               <Fragment key={savedSettlementContent.id}>
                 <Grid container>
                   <Grid item xs={12} lg={7.3}>
-                    <Typography variant="body2">
+                    <Typography variant="body2" align="justify" mr="1rem">
                       {savedSettlementContent.description}
                     </Typography>
                   </Grid>
@@ -329,7 +344,7 @@ export default function UserProfile(props: Props) {
                       orientation="vertical"
                       color="#000"
                       sx={{
-                        width: '0.5px',
+                        width: '1px',
                         m: 'auto',
                         display: { xs: 'none', lg: 'block' },
                       }}
@@ -340,7 +355,7 @@ export default function UserProfile(props: Props) {
                     item
                     xs={12}
                     lg={4.5}
-                    sx={{ mt: { xs: '1rem', lg: 0 } }}
+                    sx={{ mt: { xs: '1rem', lg: 0 }, mb: 'auto' }}
                     justifyContent="center"
                   >
                     <Button
@@ -354,7 +369,6 @@ export default function UserProfile(props: Props) {
                         deleteSavedSettlement(savedSettlementContent.id)
                       }
                     >
-                      Delete
                       <DeleteOutlineIcon sx={{ mr: '0.5rem' }} /> Delete
                     </Button>
                   </Grid>

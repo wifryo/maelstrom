@@ -132,6 +132,17 @@ export default function Generators(props: Props) {
           Leptoceratops Gigantosaurus Adamantisaurus Jingshanosaurus
           Pelorosaurus Daliansaurus Airakoraptor Efraasia Gigantspinosaurus.
         </Typography>
+        <Divider
+          orientation="horizontal"
+          color="#000"
+          sx={{
+            height: '1px',
+            mt: '1rem',
+            mb: '1rem',
+            ml: '-12rem',
+            mr: '-13rem',
+          }}
+        />
         <Grid
           container
           display="flex"
@@ -161,7 +172,7 @@ export default function Generators(props: Props) {
                 orientation="vertical"
                 color="#000"
                 sx={{
-                  width: '0.5px',
+                  width: '1px',
                   m: 'auto',
                   display: { xs: 'none', lg: 'block' },
                 }}
@@ -224,7 +235,7 @@ export default function Generators(props: Props) {
           <Divider
             orientation="horizontal"
             color="#000"
-            sx={{ height: '2px', mt: '1rem', mb: '1rem' }}
+            sx={{ height: '1px', mt: '1rem', mb: '1rem' }}
           />
           <Grid item xs={12}>
             <Typography variant="h2" align="center" mt="1rem" mb="2rem">
@@ -243,7 +254,7 @@ export default function Generators(props: Props) {
                 orientation="vertical"
                 color="#000"
                 sx={{
-                  width: '0.5px',
+                  width: '1px',
                   m: 'auto',
                   display: { xs: 'none', lg: 'block' },
                 }}
@@ -451,7 +462,7 @@ export default function Generators(props: Props) {
             orientation="horizontal"
             color="#000"
             sx={{
-              height: '2px',
+              height: '1px',
               mt: '1rem',
               mb: '1rem',
             }}
@@ -471,7 +482,7 @@ export default function Generators(props: Props) {
               <Divider
                 orientation="vertical"
                 color="#000"
-                sx={{ width: '0.5px', m: 'auto' }}
+                sx={{ width: '1px', m: 'auto' }}
               />
             </Grid>
             <Grid
