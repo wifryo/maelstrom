@@ -1,6 +1,12 @@
+import MemoryIcon from '@mui/icons-material/Memory';
+import SaveIcon from '@mui/icons-material/Save';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import ShuffleIcon from '@mui/icons-material/Shuffle';
+import { Divider } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
+import Grid from '@mui/material/Grid';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
@@ -107,431 +113,580 @@ export default function Generators(props: Props) {
         <meta name="description" content="tapestry" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Box display="flex" justifyContent="center">
-        <br />
-        <main>
-          <Typography variant="h1">Generators</Typography>
-          <Typography variant="h2">Name generator</Typography>
-          <br />
-          <form onSubmit={nameGeneratorSubmit}>
-            <input
-              placeholder="Enter an adjective"
-              value={generatedNameInput}
-              onChange={(e) => setGeneratedNameInput(e.target.value)}
-            />
-            <input type="submit" value="Generate name" />
-          </form>
-          <Typography>{generatedNameResult}</Typography>
-          <br />
-          <Button
-            variant="outlined"
-            onClick={async () => {
-              const response = await fetch('/api/names', {
-                method: 'GET',
-              });
-              const retrievedName = await response.json();
-              const newBackstoryWithNames = addNamesToText(
-                backstory.backstory,
-                retrievedName.firstName,
-                retrievedName.lastName,
-              );
-              setBackstoryWithNames(newBackstoryWithNames);
-              setFullName(retrievedName);
-            }}
-          >
-            Generate Name
-          </Button>
-
-          <Typography variant="h3">{`${fullName.firstName} ${fullName.lastName}`}</Typography>
-
-          <Button
-            variant="outlined"
-            onClick={async () => {
-              const id = props.userId;
-              await fetch(`/api/users/names/${id}`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  userId: id,
-                  firstNameId: fullName.firstNameId,
-                  lastNameId: fullName.lastNameId,
-                }),
-              });
-            }}
-          >
-            Save Name
-          </Button>
-          <hr />
-
-          <Typography variant="h2">Backstory generator</Typography>
-          <br />
-
-          <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel>Class</InputLabel>
-            <Select
-              value={selectedCharacterClass.id}
-              label="Class"
-              onChange={(event) => {
-                // Get ID of selected characterClass
-                const characterClassId = Number(event.target.value);
-                // Use filter on characterClass object to get full characterClass object that corresponds to selected ID
-                const selectedCharacterClassArray =
-                  props.characterClasses.filter((characterClass) => {
-                    return characterClass.id === characterClassId;
-                  });
-                // Check exists
-                if (selectedCharacterClassArray[0]) {
-                  setSelectedCharacterClass(selectedCharacterClassArray[0]);
-                }
-              }}
+      <Box
+        display="flex"
+        sx={{ width: { xs: '100%', sm: '80%' } }}
+        flexDirection="column"
+        justifyContent="center"
+        m="auto"
+        mb="3rem"
+      >
+        <Typography variant="h1" align="center" mb="2rem">
+          Generators
+        </Typography>
+        <Typography variant="body2" align="justify" pl="3rem" pr="3rem">
+          Machairoceratops Cryptodraco Hanssuesia Anoplosaurus Dryptosaurus
+          Herbstosaurus Thecocoelurus Talenkauen Hesperosaurus Didanodon
+          Sibirotitan Iliosuchus Scutellosaurus Jintasaurus Koparion Riojasuchus
+          Asiaceratops Silesaurus Kinnareemimus Pararhabdodon Kakuru
+          Leptoceratops Gigantosaurus Adamantisaurus Jingshanosaurus
+          Pelorosaurus Daliansaurus Airakoraptor Efraasia Gigantspinosaurus.
+        </Typography>
+        <Grid
+          container
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+        >
+          <Grid item xs={12}>
+            <Typography variant="h2" align="center" mt="2rem" mb="2rem">
+              Name generator
+            </Typography>
+          </Grid>
+          <Grid container>
+            <Grid item xs={12} lg={7.3}>
+              {/* <form onSubmit={nameGeneratorSubmit}>
+              <input
+                placeholder="Enter an adjective"
+                value={generatedNameInput}
+                onChange={(e) => setGeneratedNameInput(e.target.value)}
+              />
+              <input type="submit" value="Generate name" />
+            </form>
+            <Typography>{generatedNameResult}</Typography> */}
+              <Typography variant="body2">{`${fullName.firstName} ${fullName.lastName}`}</Typography>
+            </Grid>
+            <Grid item xs={12} lg={0.2}>
+              <Divider
+                orientation="vertical"
+                color="#000"
+                sx={{
+                  width: '0.5px',
+                  m: 'auto',
+                  display: { xs: 'none', lg: 'block' },
+                }}
+              />
+            </Grid>
+            <Grid
+              container
+              item
+              xs={12}
+              lg={4.5}
+              sx={{ mt: { xs: '1rem', lg: 0 } }}
+              justifyContent="center"
             >
-              {props.characterClasses.map((characterClass: CharacterClass) => (
-                <MenuItem key={characterClass.id} value={characterClass.id}>
-                  {characterClass.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel>Origin</InputLabel>
-            <Select
-              value={selectedBackstoryOrigin.id}
-              label="Origin"
-              onChange={(event) => {
-                // Get ID of selected origin
-                const originId = Number(event.target.value);
-                // Use filter on origins object to get full origins object that corresponds to selected ID
-                const selectedBackstoryOriginArray = props.origins.filter(
-                  (origin) => {
-                    return origin.id === originId;
-                  },
-                );
-                // Check exists
-                if (selectedBackstoryOriginArray[0]) {
-                  setSelectedBackstoryOrigin(selectedBackstoryOriginArray[0]);
-                }
-              }}
-            >
-              {props.origins.map((origins: Origin) => (
-                <MenuItem key={origins.id} value={origins.id}>
-                  {origins.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <br />
-          <Button
-            variant="outlined"
-            onClick={async () => {
-              // Construct prompt
-              const backstoryPrompt = `${selectedBackstoryOrigin.name} ${selectedCharacterClass.name} named [firstName] [lastName]`;
-              // Construct backstory object without backstory text
-              const incompleteBackstoryObject: Backstory = {
-                id: null,
-                classId: selectedCharacterClass.id,
-                originId: selectedBackstoryOrigin.id,
-                firstNameId: fullName.firstNameId,
-                lastNameId: fullName.lastNameId,
-                backstory: '',
-                verified: false,
-              };
-
-              // POST to API, sending both prompt & backstory object data so it can be added to database
-              const response = await fetch(
-                '/api/backstories/generate-backstory',
-                {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    prompt: backstoryPrompt,
-                    backstoryObject: incompleteBackstoryObject,
-                  }),
-                },
-              );
-              // Receive complete backstory object
-              const backstoryObject = await response.json();
-              // Update useState with backstory object
-              setBackstory(backstoryObject);
-
-              // Embed generated names into backstory text
-              const backstoryTextWithNames = await addNamesToText(
-                backstoryObject.backstory,
-                fullName.firstName,
-                fullName.lastName,
-              );
-              // Update useStates
-              setBackstoryWithNames(backstoryTextWithNames);
-            }}
-          >
-            Generate Backstory
-          </Button>
-
-          <br />
-
-          <Button
-            variant="outlined"
-            onClick={async () => {
-              // Retrieve random backstory
-              const response = await fetch('/api/backstories', {
-                method: 'GET',
-              });
-              const retrievedBackstory = await response.json();
-              setBackstory(retrievedBackstory);
-              const retrievedBackstoryWithNames = addNamesToText(
-                retrievedBackstory.backstory,
-                fullName.firstName,
-                fullName.lastName,
-              );
-              setBackstoryWithNames(retrievedBackstoryWithNames);
-            }}
-          >
-            Random Backstory
-          </Button>
-
-          <Button
-            variant="outlined"
-            onClick={async () => {
-              // Retrieve backstory by origin and class
-              const response = await fetch('/api/backstories', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  originId: selectedBackstoryOrigin.id,
-                  characterClassId: selectedCharacterClass.id,
-                }),
-              });
-              const retrievedBackstory = await response.json();
-              setBackstory(retrievedBackstory);
-              const retrievedBackstoryWithNames = addNamesToText(
-                retrievedBackstory.backstory,
-                fullName.firstName,
-                fullName.lastName,
-              );
-              setBackstoryWithNames(retrievedBackstoryWithNames);
-            }}
-          >
-            Retrieve Backstory
-          </Button>
-
-          <Button
-            variant="outlined"
-            onClick={async () => {
-              const id = props.userId;
-              await fetch(`/api/users/backstories/${id}`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  userId: id,
-                  backstoryId: backstory.id,
-                }),
-              });
-            }}
-          >
-            Save Backstory
-          </Button>
-
-          <Typography variant="body2">{backstoryWithNames}</Typography>
-
-          <hr />
-
-          <Typography variant="h2">Settlement generator</Typography>
-          <br />
-          <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel>Prosperity</InputLabel>
-            <Select
-              value={selectedSettlementProsperity.id}
-              label="Prosperity"
-              onChange={(event) => {
-                // Get ID of selected prosperityLevel
-                const prosperityLevelId = Number(event.target.value);
-                // Use filter on prosperityLevels object to get full prosperityLevels object that corresponds to selected ID
-                const selectedSettlementProsperityLevelArray =
-                  props.prosperityLevels.filter((prosperityLevel) => {
-                    return prosperityLevel.id === prosperityLevelId;
+              <Button
+                variant="outlined"
+                sx={{
+                  mb: '0.5rem',
+                  mr: '0.5rem',
+                  width: 300,
+                }}
+                onClick={async () => {
+                  const response = await fetch('/api/names', {
+                    method: 'GET',
                   });
-                // Check exists
-                if (selectedSettlementProsperityLevelArray[0]) {
-                  setSelectedSettlementProsperity(
-                    selectedSettlementProsperityLevelArray[0],
+                  const retrievedName = await response.json();
+                  const newBackstoryWithNames = addNamesToText(
+                    backstory.backstory,
+                    retrievedName.firstName,
+                    retrievedName.lastName,
                   );
-                }
-              }}
+                  setBackstoryWithNames(newBackstoryWithNames);
+                  setFullName(retrievedName);
+                }}
+              >
+                <MemoryIcon sx={{ mr: '0.5rem' }} /> Generate Name
+              </Button>
+
+              <Button
+                variant="outlined"
+                sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
+                onClick={async () => {
+                  const id = props.userId;
+                  await fetch(`/api/users/names/${id}`, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      userId: id,
+                      firstNameId: fullName.firstNameId,
+                      lastNameId: fullName.lastNameId,
+                    }),
+                  });
+                }}
+              >
+                <SaveIcon sx={{ mr: '0.5rem' }} /> Save Name
+              </Button>
+            </Grid>
+          </Grid>
+          <Divider
+            orientation="horizontal"
+            color="#000"
+            sx={{ height: '2px', mt: '1rem', mb: '1rem' }}
+          />
+          <Grid item xs={12}>
+            <Typography variant="h2" align="center" mt="1rem" mb="2rem">
+              Backstory generator
+            </Typography>
+          </Grid>
+
+          <Grid container>
+            <Grid item xs={12} lg={7.3}>
+              <Typography variant="body2" align="justify" mr="1rem">
+                {backstoryWithNames}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} lg={0.2}>
+              <Divider
+                orientation="vertical"
+                color="#000"
+                sx={{
+                  width: '0.5px',
+                  m: 'auto',
+                  display: { xs: 'none', lg: 'block' },
+                }}
+              />
+            </Grid>
+            <Grid
+              container
+              item
+              xs={12}
+              lg={4.5}
+              sx={{ mt: { xs: '1rem', lg: 0 } }}
+              display="flex"
+              flexDirection="row"
+              justifyContent="center"
+              alignItems="flex-start"
+              mb="auto"
             >
-              {props.prosperityLevels.map(
-                (prosperityLevel: ProsperityLevel) => (
-                  <MenuItem key={prosperityLevel.id} value={prosperityLevel.id}>
-                    {prosperityLevel.name}
-                  </MenuItem>
-                ),
-              )}
-            </Select>
-          </FormControl>
+              <FormControl sx={{ width: { xs: 300, lg: 200 } }}>
+                <InputLabel>Class</InputLabel>
+                <Select
+                  value={selectedCharacterClass.id}
+                  sx={{ mb: '1rem', mr: '0.5rem' }}
+                  label="Class"
+                  onChange={(event) => {
+                    // Get ID of selected characterClass
+                    const characterClassId = Number(event.target.value);
+                    // Use filter on characterClass object to get full characterClass object that corresponds to selected ID
+                    const selectedCharacterClassArray =
+                      props.characterClasses.filter((characterClass) => {
+                        return characterClass.id === characterClassId;
+                      });
+                    // Check exists
+                    if (selectedCharacterClassArray[0]) {
+                      setSelectedCharacterClass(selectedCharacterClassArray[0]);
+                    }
+                  }}
+                >
+                  {props.characterClasses.map(
+                    (characterClass: CharacterClass) => (
+                      <MenuItem
+                        key={characterClass.id}
+                        value={characterClass.id}
+                      >
+                        {characterClass.name}
+                      </MenuItem>
+                    ),
+                  )}
+                </Select>
+              </FormControl>
 
-          <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel>Origin</InputLabel>
-            <Select
-              value={selectedSettlementOrigin.id}
-              label="Origin"
-              onChange={(event) => {
-                // Get ID of selected origin
-                const originId = Number(event.target.value);
-                // Use filter on origins object to get full origins object that corresponds to selected ID
-                const selectedSettlementOriginArray = props.origins.filter(
-                  (origin) => {
-                    return origin.id === originId;
-                  },
-                );
-                // Check exists
-                if (selectedSettlementOriginArray[0]) {
-                  setSelectedSettlementOrigin(selectedSettlementOriginArray[0]);
-                }
-              }}
+              <FormControl sx={{ width: { xs: 300, lg: 200 } }}>
+                <InputLabel>Origin</InputLabel>
+                <Select
+                  value={selectedBackstoryOrigin.id}
+                  sx={{ mb: '0.5rem', mr: '0.5rem' }}
+                  label="Origin"
+                  onChange={(event) => {
+                    // Get ID of selected origin
+                    const originId = Number(event.target.value);
+                    // Use filter on origins object to get full origins object that corresponds to selected ID
+                    const selectedBackstoryOriginArray = props.origins.filter(
+                      (origin) => {
+                        return origin.id === originId;
+                      },
+                    );
+                    // Check exists
+                    if (selectedBackstoryOriginArray[0]) {
+                      setSelectedBackstoryOrigin(
+                        selectedBackstoryOriginArray[0],
+                      );
+                    }
+                  }}
+                >
+                  {props.origins.map((origins: Origin) => (
+                    <MenuItem key={origins.id} value={origins.id}>
+                      {origins.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <Button
+                variant="outlined"
+                sx={{
+                  mb: '0.5rem',
+                  mr: '0.5rem',
+                  width: 300,
+                }}
+                onClick={async () => {
+                  // Construct prompt
+                  const backstoryPrompt = `${selectedBackstoryOrigin.name} ${selectedCharacterClass.name} named [firstName] [lastName]`;
+                  // Construct backstory object without backstory text
+                  const incompleteBackstoryObject: Backstory = {
+                    id: null,
+                    classId: selectedCharacterClass.id,
+                    originId: selectedBackstoryOrigin.id,
+                    firstNameId: fullName.firstNameId,
+                    lastNameId: fullName.lastNameId,
+                    backstory: '',
+                    verified: false,
+                  };
+
+                  // POST to API, sending both prompt & backstory object data so it can be added to database
+                  const response = await fetch(
+                    '/api/backstories/generate-backstory',
+                    {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                        prompt: backstoryPrompt,
+                        backstoryObject: incompleteBackstoryObject,
+                      }),
+                    },
+                  );
+                  // Receive complete backstory object
+                  const backstoryObject = await response.json();
+                  // Update useState with backstory object
+                  setBackstory(backstoryObject);
+
+                  // Embed generated names into backstory text
+                  const backstoryTextWithNames = await addNamesToText(
+                    backstoryObject.backstory,
+                    fullName.firstName,
+                    fullName.lastName,
+                  );
+                  // Update useStates
+                  setBackstoryWithNames(backstoryTextWithNames);
+                }}
+              >
+                <MemoryIcon sx={{ mr: '0.5rem' }} /> Generate Backstory
+              </Button>
+
+              <Button
+                variant="outlined"
+                sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
+                onClick={async () => {
+                  // Retrieve random backstory
+                  const response = await fetch('/api/backstories', {
+                    method: 'GET',
+                  });
+                  const retrievedBackstory = await response.json();
+                  setBackstory(retrievedBackstory);
+                  const retrievedBackstoryWithNames = addNamesToText(
+                    retrievedBackstory.backstory,
+                    fullName.firstName,
+                    fullName.lastName,
+                  );
+                  setBackstoryWithNames(retrievedBackstoryWithNames);
+                }}
+              >
+                <ShuffleIcon sx={{ mr: '0.5rem' }} /> Random Backstory
+              </Button>
+
+              <Button
+                variant="outlined"
+                sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
+                onClick={async () => {
+                  // Retrieve backstory by origin and class
+                  const response = await fetch('/api/backstories', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      originId: selectedBackstoryOrigin.id,
+                      characterClassId: selectedCharacterClass.id,
+                    }),
+                  });
+                  const retrievedBackstory = await response.json();
+                  setBackstory(retrievedBackstory);
+                  const retrievedBackstoryWithNames = addNamesToText(
+                    retrievedBackstory.backstory,
+                    fullName.firstName,
+                    fullName.lastName,
+                  );
+                  setBackstoryWithNames(retrievedBackstoryWithNames);
+                }}
+              >
+                <SaveAltIcon sx={{ mr: '0.5rem' }} /> Retrieve Backstory
+              </Button>
+
+              <Button
+                variant="outlined"
+                sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
+                onClick={async () => {
+                  const id = props.userId;
+                  await fetch(`/api/users/backstories/${id}`, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      userId: id,
+                      backstoryId: backstory.id,
+                    }),
+                  });
+                }}
+              >
+                <SaveIcon sx={{ mr: '0.5rem' }} /> Save Backstory
+              </Button>
+            </Grid>
+          </Grid>
+          <Divider
+            orientation="horizontal"
+            color="#000"
+            sx={{
+              height: '2px',
+              mt: '1rem',
+              mb: '1rem',
+            }}
+          />
+          <Grid item xs={12}>
+            <Typography variant="h2" align="center" mt="1rem" mb="2rem">
+              Settlement generator
+            </Typography>
+          </Grid>
+          <Grid container>
+            <Grid item xs={12} lg={7.3}>
+              <Typography variant="body2" align="justify" mr="1rem">
+                {settlement.description}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} lg={0.2}>
+              <Divider
+                orientation="vertical"
+                color="#000"
+                sx={{ width: '0.5px', m: 'auto' }}
+              />
+            </Grid>
+            <Grid
+              container
+              item
+              xs={12}
+              lg={4.5}
+              sx={{ mt: { xs: '1rem', lg: 0 } }}
+              display="flex"
+              flexDirection="row"
+              justifyContent="center"
+              alignItems="flex-start"
             >
-              {props.origins.map((origin: Origin) => (
-                <MenuItem key={origin.id} value={origin.id}>
-                  {origin.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel>Size</InputLabel>
-            <Select
-              value={selectedSettlementSize.id}
-              label="Size"
-              onChange={(event) => {
-                // Get ID of selected size
-                const sizeId = Number(event.target.value);
-                // Use filter on sizes object to get full sizes object that corresponds to selected ID
-                const selectedSettlementSizeArray = props.sizes.filter(
-                  (size) => {
-                    return size.id === sizeId;
-                  },
-                );
-                // Check exists
-                if (selectedSettlementSizeArray[0]) {
-                  setSelectedSettlementSize(selectedSettlementSizeArray[0]);
-                }
-              }}
-            >
-              {props.sizes.map((size: Size) => (
-                <MenuItem key={size.id} value={size.id}>
-                  {size.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <br />
-          <Button
-            variant="outlined"
-            onClick={async () => {
-              // Construct prompt
-              const settlementPrompt = `${selectedSettlementProsperity.name} ${selectedSettlementOrigin.name} ${selectedSettlementSize.name}`;
-              // Construct settlement object without description
-              const incompleteSettlementObject: Settlement = {
-                id: null,
-                sizeId: selectedSettlementSize.id,
-                prosperityId: selectedSettlementProsperity.id,
-                originId: selectedSettlementOrigin.id,
-                description: '',
-                verified: false,
-              };
-              // POST to API, sending both prompt & settlement object data so it can be added to database
-              const response = await fetch(
-                '/api/settlements/generate-settlement',
-                {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    prompt: settlementPrompt,
-                    settlementObject: incompleteSettlementObject,
-                  }),
-                },
-              );
-              // Received generated settlement object
-              const settlementObject = await response.json();
-              // Update useState
-              setSettlement(settlementObject);
-              console.log(settlementObject);
-            }}
-          >
-            Generate Settlement
-          </Button>
+              <FormControl sx={{ width: { xs: 300, md: 200, lg: 200 } }}>
+                <InputLabel>Prosperity</InputLabel>
+                <Select
+                  value={selectedSettlementProsperity.id}
+                  sx={{ mb: '1rem', mr: '0.5rem' }}
+                  label="Prosperity"
+                  onChange={(event) => {
+                    // Get ID of selected prosperityLevel
+                    const prosperityLevelId = Number(event.target.value);
+                    // Use filter on prosperityLevels object to get full prosperityLevels object that corresponds to selected ID
+                    const selectedSettlementProsperityLevelArray =
+                      props.prosperityLevels.filter((prosperityLevel) => {
+                        return prosperityLevel.id === prosperityLevelId;
+                      });
+                    // Check exists
+                    if (selectedSettlementProsperityLevelArray[0]) {
+                      setSelectedSettlementProsperity(
+                        selectedSettlementProsperityLevelArray[0],
+                      );
+                    }
+                  }}
+                >
+                  {props.prosperityLevels.map(
+                    (prosperityLevel: ProsperityLevel) => (
+                      <MenuItem
+                        key={prosperityLevel.id}
+                        value={prosperityLevel.id}
+                      >
+                        {prosperityLevel.name}
+                      </MenuItem>
+                    ),
+                  )}
+                </Select>
+              </FormControl>
 
-          <br />
-          <Button
-            variant="outlined"
-            onClick={async () => {
-              // Retrieve random settlement
-              const response = await fetch('/api/settlements', {
-                method: 'GET',
-              });
-              const retrievedSettlement = await response.json();
-              setSettlement(retrievedSettlement);
-            }}
-          >
-            Random Settlement
-          </Button>
+              <FormControl sx={{ width: { xs: 300, md: 200, lg: 200 } }}>
+                <InputLabel>Origin</InputLabel>
+                <Select
+                  value={selectedSettlementOrigin.id}
+                  sx={{ mb: '1rem', mr: '0.5rem' }}
+                  label="Origin"
+                  onChange={(event) => {
+                    // Get ID of selected origin
+                    const originId = Number(event.target.value);
+                    // Use filter on origins object to get full origins object that corresponds to selected ID
+                    const selectedSettlementOriginArray = props.origins.filter(
+                      (origin) => {
+                        return origin.id === originId;
+                      },
+                    );
+                    // Check exists
+                    if (selectedSettlementOriginArray[0]) {
+                      setSelectedSettlementOrigin(
+                        selectedSettlementOriginArray[0],
+                      );
+                    }
+                  }}
+                >
+                  {props.origins.map((origin: Origin) => (
+                    <MenuItem key={origin.id} value={origin.id}>
+                      {origin.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl sx={{ width: { xs: 300, md: 200, lg: 200 } }}>
+                <InputLabel>Size</InputLabel>
+                <Select
+                  value={selectedSettlementSize.id}
+                  sx={{ mb: '1rem', mr: '0.5rem' }}
+                  label="Size"
+                  onChange={(event) => {
+                    // Get ID of selected size
+                    const sizeId = Number(event.target.value);
+                    // Use filter on sizes object to get full sizes object that corresponds to selected ID
+                    const selectedSettlementSizeArray = props.sizes.filter(
+                      (size) => {
+                        return size.id === sizeId;
+                      },
+                    );
+                    // Check exists
+                    if (selectedSettlementSizeArray[0]) {
+                      setSelectedSettlementSize(selectedSettlementSizeArray[0]);
+                    }
+                  }}
+                >
+                  {props.sizes.map((size: Size) => (
+                    <MenuItem key={size.id} value={size.id}>
+                      {size.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <br />
+              <Button
+                variant="outlined"
+                sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
+                onClick={async () => {
+                  // Construct prompt
+                  const settlementPrompt = `${selectedSettlementProsperity.name} ${selectedSettlementOrigin.name} ${selectedSettlementSize.name}`;
+                  // Construct settlement object without description
+                  const incompleteSettlementObject: Settlement = {
+                    id: null,
+                    sizeId: selectedSettlementSize.id,
+                    prosperityId: selectedSettlementProsperity.id,
+                    originId: selectedSettlementOrigin.id,
+                    description: '',
+                    verified: false,
+                  };
+                  // POST to API, sending both prompt & settlement object data so it can be added to database
+                  const response = await fetch(
+                    '/api/settlements/generate-settlement',
+                    {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                        prompt: settlementPrompt,
+                        settlementObject: incompleteSettlementObject,
+                      }),
+                    },
+                  );
+                  // Received generated settlement object
+                  const settlementObject = await response.json();
+                  // Update useState
+                  setSettlement(settlementObject);
+                  console.log(settlementObject);
+                }}
+              >
+                <MemoryIcon sx={{ mr: '0.5rem' }} /> Generate Settlement
+              </Button>
 
-          <Button
-            variant="outlined"
-            onClick={async () => {
-              // Retrieve settlement by size/origin/prosperity
-              console.log(`settlementsizeid: ${selectedSettlementSize.id}`);
-              console.log(`settlementoriginid: ${selectedSettlementOrigin.id}`);
-              console.log(
-                `settlementprosperitynid: ${selectedSettlementProsperity.id}`,
-              );
+              <br />
+              <Button
+                variant="outlined"
+                sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
+                onClick={async () => {
+                  // Retrieve random settlement
+                  const response = await fetch('/api/settlements', {
+                    method: 'GET',
+                  });
+                  const retrievedSettlement = await response.json();
+                  setSettlement(retrievedSettlement);
+                }}
+              >
+                <ShuffleIcon sx={{ mr: '0.5rem' }} /> Random Settlement
+              </Button>
 
-              const response = await fetch('/api/settlements', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  sizeId: selectedSettlementSize.id,
-                  originId: selectedSettlementOrigin.id,
-                  prosperityId: selectedSettlementProsperity.id,
-                }),
-              });
-              const retrievedSettlement = await response.json();
-              setSettlement(retrievedSettlement);
-            }}
-          >
-            Retrieve Settlement
-          </Button>
+              <Button
+                variant="outlined"
+                sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
+                onClick={async () => {
+                  // Retrieve settlement by size/origin/prosperity
+                  console.log(`settlementsizeid: ${selectedSettlementSize.id}`);
+                  console.log(
+                    `settlementoriginid: ${selectedSettlementOrigin.id}`,
+                  );
+                  console.log(
+                    `settlementprosperitynid: ${selectedSettlementProsperity.id}`,
+                  );
 
-          <Button
-            variant="outlined"
-            onClick={async () => {
-              const id = props.userId;
-              await fetch(`/api/users/settlements/${id}`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  userId: id,
-                  settlementId: settlement.id,
-                }),
-              });
-            }}
-          >
-            Save Settlement
-          </Button>
-          <Typography variant="body2">{settlement.description}</Typography>
-        </main>
+                  const response = await fetch('/api/settlements', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      sizeId: selectedSettlementSize.id,
+                      originId: selectedSettlementOrigin.id,
+                      prosperityId: selectedSettlementProsperity.id,
+                    }),
+                  });
+                  const retrievedSettlement = await response.json();
+                  setSettlement(retrievedSettlement);
+                }}
+              >
+                <SaveAltIcon sx={{ mr: '0.5rem' }} /> Retrieve Settlement
+              </Button>
+
+              <Button
+                variant="outlined"
+                sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
+                onClick={async () => {
+                  const id = props.userId;
+                  await fetch(`/api/users/settlements/${id}`, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      userId: id,
+                      settlementId: settlement.id,
+                    }),
+                  });
+                }}
+              >
+                <SaveIcon sx={{ mr: '0.5rem' }} /> Save Settlement
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
       </Box>
     </div>
   );

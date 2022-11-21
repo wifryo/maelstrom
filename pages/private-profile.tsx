@@ -1,3 +1,7 @@
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import TollIcon from '@mui/icons-material/Toll';
+import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { Fragment, useEffect, useState } from 'react';
@@ -149,65 +153,218 @@ export default function UserProfile(props: Props) {
   }
 
   return (
-    <>
+    <div>
       <Head>
         <title>Personal Information</title>
         <meta name="description" content="Biography of the person" />
       </Head>
-      <h1>Personal Information</h1>
-      id: {props.user.id} username: {props.user.username} remaining credits:
-      {props.user.credits}
-      <hr />
-      <h2>Saved Names</h2>
-      <br />
-      {retrievedSavedNames.map((fullSavedName: FullSavedName) => {
-        return (
-          <Fragment
-            key={`${fullSavedName.firstNameId}_${fullSavedName.lastNameId}`}
-          >
-            <div>
-              {fullSavedName.id} {fullSavedName.firstName}{' '}
-              {fullSavedName.lastName}
-            </div>
-            <button onClick={() => deleteSavedName(fullSavedName.id)}>
-              Delete
-            </button>
-          </Fragment>
-        );
-      })}
-      <h2>Saved Backstories</h2>
-      <br />
-      {retrievedSavedBackstories.map(
-        (savedBackstoryContent: SavedBackstoryContent) => {
-          return (
-            <Fragment key={savedBackstoryContent.id}>
-              <div>
-                {savedBackstoryContent.id} {savedBackstoryContent.backstory}
-              </div>
-              <button
-                onClick={() => deleteSavedBackstory(savedBackstoryContent.id)}
+      <Box
+        display="flex"
+        sx={{ width: { xs: '100%', sm: '80%' } }}
+        flexDirection="column"
+        justifyContent="center"
+        m="auto"
+        mb="3rem"
+      >
+        <Typography variant="h1" align="center">
+          Profile
+        </Typography>
+        <Grid
+          container
+          display="flex"
+          justifyContent="flex-end"
+          alignItems="center"
+        >
+          <PersonOutlineIcon sx={{ mr: '0.5rem' }} />
+          <Typography variant="body2" mr="2rem">
+            username:{props.user.username}
+          </Typography>
+          <TollIcon sx={{ mr: '0.5rem' }} />
+          <Typography variant="body2">
+            remaining credits:
+            {props.user.credits}
+          </Typography>
+        </Grid>
+        <Divider
+          orientation="horizontal"
+          color="#000"
+          sx={{ height: '2px', mt: '1rem', mb: '1rem' }}
+        />
+        <Grid
+          container
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+        >
+          <Grid item xs={12}>
+            <Typography variant="h2" align="center" mt="1rem" mb="2rem">
+              Saved Names
+            </Typography>
+          </Grid>
+          {retrievedSavedNames.map((fullSavedName: FullSavedName) => {
+            return (
+              <Fragment
+                key={`${fullSavedName.firstNameId}_${fullSavedName.lastNameId}`}
               >
-                Delete
-              </button>
-            </Fragment>
-          );
-        },
-      )}
-      <h2>Saved Settlements</h2>
-      <br />
-      {retrievedSavedSettlements.map((savedSettlementContent) => {
-        return (
-          <Fragment key={savedSettlementContent.id}>
-            <div>{savedSettlementContent.description}</div>
-            <button
-              onClick={() => deleteSavedSettlement(savedSettlementContent.id)}
-            >
-              Delete
-            </button>
-          </Fragment>
-        );
-      })}
-    </>
+                <Grid container>
+                  <Grid item xs={12} lg={7.3}>
+                    <Typography variant="body2">
+                      {fullSavedName.firstName} {fullSavedName.lastName}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} lg={0.2}>
+                    <Divider
+                      orientation="vertical"
+                      color="#000"
+                      sx={{
+                        width: '0.5px',
+                        m: 'auto',
+                        display: { xs: 'none', lg: 'block' },
+                      }}
+                    />
+                  </Grid>
+                  <Grid
+                    container
+                    item
+                    xs={12}
+                    lg={4.5}
+                    sx={{ mt: { xs: '1rem', lg: 0 } }}
+                    justifyContent="center"
+                  >
+                    <Button
+                      variant="outlined"
+                      sx={{
+                        mb: '0.5rem',
+                        mr: '0.5rem',
+                        width: 300,
+                      }}
+                      onClick={() => deleteSavedName(fullSavedName.id)}
+                    >
+                      <DeleteOutlineIcon sx={{ mr: '0.5rem' }} /> Delete
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Fragment>
+            );
+          })}
+          <Divider
+            orientation="horizontal"
+            color="#000"
+            sx={{ height: '2px', mt: '1rem', mb: '1rem' }}
+          />
+          <Grid item xs={12}>
+            <Typography variant="h2" align="center" mt="1rem" mb="2rem">
+              Saved Backstories
+            </Typography>
+          </Grid>
+          {retrievedSavedBackstories.map(
+            (savedBackstoryContent: SavedBackstoryContent) => {
+              return (
+                <Fragment key={savedBackstoryContent.id}>
+                  <Grid container>
+                    <Grid item xs={12} lg={7.3}>
+                      <Typography variant="body2">
+                        {savedBackstoryContent.backstory}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} lg={0.2}>
+                      <Divider
+                        orientation="vertical"
+                        color="#000"
+                        sx={{
+                          width: '0.5px',
+                          m: 'auto',
+                          display: { xs: 'none', lg: 'block' },
+                        }}
+                      />
+                    </Grid>
+                    <Grid
+                      container
+                      item
+                      xs={12}
+                      lg={4.5}
+                      sx={{ mt: { xs: '1rem', lg: 0 } }}
+                      justifyContent="center"
+                    >
+                      <Button
+                        variant="outlined"
+                        sx={{
+                          mb: '0.5rem',
+                          mr: '0.5rem',
+                          width: 300,
+                        }}
+                        onClick={() =>
+                          deleteSavedBackstory(savedBackstoryContent.id)
+                        }
+                      >
+                        <DeleteOutlineIcon sx={{ mr: '0.5rem' }} /> Delete
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Fragment>
+              );
+            },
+          )}
+          <Divider
+            orientation="horizontal"
+            color="#000"
+            sx={{ height: '2px', mt: '1rem', mb: '1rem' }}
+          />
+          <Grid item xs={12}>
+            <Typography variant="h2" align="center" mt="1rem" mb="2rem">
+              Saved Settlements
+            </Typography>
+          </Grid>
+          {retrievedSavedSettlements.map((savedSettlementContent) => {
+            return (
+              <Fragment key={savedSettlementContent.id}>
+                <Grid container>
+                  <Grid item xs={12} lg={7.3}>
+                    <Typography variant="body2">
+                      {savedSettlementContent.description}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} lg={0.2}>
+                    <Divider
+                      orientation="vertical"
+                      color="#000"
+                      sx={{
+                        width: '0.5px',
+                        m: 'auto',
+                        display: { xs: 'none', lg: 'block' },
+                      }}
+                    />
+                  </Grid>
+                  <Grid
+                    container
+                    item
+                    xs={12}
+                    lg={4.5}
+                    sx={{ mt: { xs: '1rem', lg: 0 } }}
+                    justifyContent="center"
+                  >
+                    <Button
+                      variant="outlined"
+                      sx={{
+                        mb: '0.5rem',
+                        mr: '0.5rem',
+                        width: 300,
+                      }}
+                      onClick={() =>
+                        deleteSavedSettlement(savedSettlementContent.id)
+                      }
+                    >
+                      Delete
+                      <DeleteOutlineIcon sx={{ mr: '0.5rem' }} /> Delete
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Fragment>
+            );
+          })}
+        </Grid>
+      </Box>
+    </div>
   );
 }
 
