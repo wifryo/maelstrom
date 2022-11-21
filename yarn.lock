@@ -1318,13 +1318,6 @@
   resolved "https://registry.yarnpkg.com/@mui/core-downloads-tracker/-/core-downloads-tracker-5.10.14.tgz#498a35c1aeab006ba5029f4e3954829f78c204c1"
   integrity sha512-qLgIJNOR9Dre8JiZ/neVzOf4jf88J6YtOkQqugtMrleLjbfRVUSS4LWl9CSOjNq76quYdmYWnSDgfQqOooT2cQ==
 
-"@mui/icons-material@^5.10.14":
-  version "5.10.14"
-  resolved "https://registry.yarnpkg.com/@mui/icons-material/-/icons-material-5.10.14.tgz#6b1e40cc95f2a27e6547980f6a1636f54ac05617"
-  integrity sha512-qtH60slQa+7MZRn6kyui8rKuoGDglPqaHX+pzBKNvd8JCOlrnfY5DmGGDdToTXyXl8xJ8nhANZbrbpg7UVKq/Q==
-  dependencies:
-    "@babel/runtime" "^7.20.1"
-
 "@mui/material@^5.10.14":
   version "5.10.14"
   resolved "https://registry.yarnpkg.com/@mui/material/-/material-5.10.14.tgz#fcd687c92b22a71dc139376a5bc2d0bc578a172b"
@@ -1653,6 +1646,13 @@
   version "7.3.13"
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.3.13.tgz#da4bfd73f49bd541d28920ab0e2bf0ee80f71c91"
   integrity sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==
+
+"@types/sharp@^0.31.0":
+  version "0.31.0"
+  resolved "https://registry.yarnpkg.com/@types/sharp/-/sharp-0.31.0.tgz#c4af03a7e1d126f0d428a265e126fabd86ab6d0f"
+  integrity sha512-nwivOU101fYInCwdDcH/0/Ru6yIRXOpORx25ynEOc6/IakuCmjOAGpaO5VfUl4QkDtUC6hj+Z2eCQvgXOioknw==
+  dependencies:
+    "@types/node" "*"
 
 "@typescript-eslint/eslint-plugin@5.43.0", "@typescript-eslint/eslint-plugin@^5.5.0":
   version "5.43.0"
