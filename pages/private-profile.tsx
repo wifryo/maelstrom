@@ -174,19 +174,16 @@ export default function UserProfile(props: Props) {
         <Grid
           container
           display="flex"
-          justifyContent="flex-end"
+          justifyContent="flex-start"
           alignItems="center"
           sx={{ mt: '2rem' }}
         >
           <PersonOutlineIcon sx={{ mr: '0.5rem' }} />
           <Typography variant="body2" mr="2rem">
-            username:{props.user.username}
+            {props.user.username}
           </Typography>
           <TollIcon sx={{ mr: '0.5rem' }} />
-          <Typography variant="body2">
-            remaining credits:
-            {props.user.credits}
-          </Typography>
+          <Typography variant="body2">credits: {props.user.credits}</Typography>
         </Grid>
         <Divider
           orientation="horizontal"
