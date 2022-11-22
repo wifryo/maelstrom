@@ -21,7 +21,7 @@ export const customTheme = createTheme({
   },
   typography: {
     htmlFontSize: 16,
-    fontFamily: "'Roboto', 'Libertinage', 'sans-serif'",
+    fontFamily: "'Libertinage', 'Roboto', 'sans-serif'",
     fontSize: 16,
     h1: {
       fontFamily: "'Libertinage', 'Roboto', 'sans-serif'",
@@ -40,6 +40,7 @@ export const customTheme = createTheme({
     h6: {
       fontFamily: "'Chaucer', 'Libertinage', 'sans-serif'",
       fontSize: '5rem',
+      color: '#000',
     },
 
     button: {
@@ -50,6 +51,7 @@ export const customTheme = createTheme({
     body2: {
       fontFamily: "'Libertinage', 'Roboto', 'sans-serif'",
       fontSize: '1.3rem',
+      color: '#000',
     },
     h5: {
       fontFamily: "'Roboto', 'Libertinage', 'sans-serif'",

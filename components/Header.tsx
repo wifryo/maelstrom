@@ -1,45 +1,20 @@
 import { css } from '@emotion/react';
-import Link from 'next/link';
+import AppBar from '@mui/material/AppBar';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 import { User } from '../database/users';
-
-const navigationStyles = css`
-  width: 100%;
-  height: 3rem;
-  background-color: #f9e6c4;
-  color: #000000;
-  position: fixed;
-  z-index: 1;
-  padding: 0 3rem;
-  margin-bottom: 1.5rem;
-  display: flex;
-  justify-content: flex-start;
-  border-bottom: solid;
-  border-color: #000000;
-  border-width: 1px;
-
-  > div {
-    align-self: center;
-  }
-
-  > div > a {
-    text-decoration: none;
-    color: #000000;
-    margin: 0 1rem 0 1rem;
-  }
-`;
-
-const authenticationStyles = css`
-  position: relative;
-  display: block;
-  cursor: pointer;
-  :hover > div {
-    display: block;
-  }
-`;
 
 type Props = {
   user?: User;
 };
+
+const anchorStyles = css`
+  text-decoration: none;
+  color: #000;
+  font-size: 1.29rem;
+`;
 
 function Anchor({ children, ...restProps }: any) {
   // using a instead of Link since we want to force a full refresh
@@ -48,39 +23,61 @@ function Anchor({ children, ...restProps }: any) {
 
 export default function Header(props: Props) {
   return (
-    <header>
-      <nav css={navigationStyles}>
-        <div>
-          <Link href="/generators">
-            <a data-test-id="generators">generators</a>
-          </Link>
-          <Link href="/about">
-            <a data-test-id="about">about</a>
-          </Link>
-          <Link href="/private-profile">
-            <a data-test-id="profile">profile</a>
-          </Link>
-        </div>
+    <AppBar
+      position="fixed"
+      sx={{
+        height: '4rem',
+        pl: '3rem',
+        pr: '3rem',
+        boxShadow: 0,
+        backgroundColor: '#F9E6C4',
+        borderBottom: 'solid',
+        borderBottomWidth: '1px',
+        borderColor: '#000',
+      }}
+    >
+      <Toolbar disableGutters={true}>
+        <Grid container alignItems="center" height="3rem">
+          <Grid container item xs={4}>
+            <Link href="/generators" underline="none" mr="1rem">
+              <Typography variant="body2">generators</Typography>
+            </Link>
+            <Link href="/about" underline="none" mr="1rem">
+              <Typography variant="body2">about</Typography>
+            </Link>
+          </Grid>
 
-        <div css={authenticationStyles}>
-          {props.user && props.user.username}
-          {props.user ? (
-            <Anchor
-              css={css`
-                margin-left: 10px;
-              `}
-              href="/logout"
-            >
-              logout
-            </Anchor>
-          ) : (
-            <>
-              <Link href="/login">login</Link>
-              <Link href="/register">register</Link>
-            </>
-          )}
-        </div>
-      </nav>
-    </header>
+          <Grid container item xs={4} justifyContent="center">
+            <Link href="/" underline="none">
+              <Typography variant="h6" fontSize="2rem">
+                Tapestry
+              </Typography>
+            </Link>
+          </Grid>
+          <Grid container item xs={4} justifyContent="flex-end">
+            <Link href="/private-profile" underline="none" mr="1rem">
+              <Typography variant="body2">
+                {props.user && props.user.username}
+              </Typography>
+            </Link>
+
+            {props.user ? (
+              <Anchor href="/logout" css={anchorStyles}>
+                logout
+              </Anchor>
+            ) : (
+              <>
+                <Link href="/login" underline="none" mr="1rem">
+                  <Typography variant="body2">login</Typography>
+                </Link>
+                <Link href="/register" underline="none">
+                  <Typography variant="body2">register</Typography>
+                </Link>
+              </>
+            )}
+          </Grid>
+        </Grid>
+      </Toolbar>
+    </AppBar>
   );
 }
