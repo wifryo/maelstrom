@@ -270,7 +270,7 @@ export default function UserProfile(props: Props) {
                 <Fragment key={savedBackstoryContent.id}>
                   <Grid container>
                     <Grid item xs={12} lg={7.3}>
-                      <Accordion>
+                      <Accordion sx={{ backgroundColor: '#F9E6C4', mb: '1px' }}>
                         <AccordionSummary
                           expandIcon={<ExpandMoreIcon />}
                           aria-controls="panel1a-content"
@@ -345,7 +345,7 @@ export default function UserProfile(props: Props) {
               <Fragment key={savedSettlementContent.id}>
                 <Grid container>
                   <Grid item xs={12} lg={7.3}>
-                    <Accordion>
+                    <Accordion sx={{ backgroundColor: '#F9E6C4', mb: '1px' }}>
                       <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1a-content"

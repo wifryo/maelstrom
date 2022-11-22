@@ -12,6 +12,9 @@ export const customTheme = createTheme({
     error: {
       main: red.A400,
     },
+    info: {
+      main: red.A400,
+    },
     text: {
       primary: '#000',
     },
