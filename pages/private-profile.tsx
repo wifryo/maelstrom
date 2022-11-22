@@ -1,7 +1,11 @@
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import TollIcon from '@mui/icons-material/Toll';
 import { Box, Button, Divider, Grid, Typography } from '@mui/material';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { Fragment, useEffect, useState } from 'react';
@@ -155,8 +159,8 @@ export default function UserProfile(props: Props) {
   return (
     <div>
       <Head>
-        <title>Personal Information</title>
-        <meta name="description" content="Biography of the person" />
+        <title>Profile</title>
+        <meta name="description" content="profile & saved texts" />
       </Head>
       <Box
         display="flex"
@@ -166,9 +170,7 @@ export default function UserProfile(props: Props) {
         m="auto"
         mb="3rem"
       >
-        <Typography variant="h1" align="center">
-          Profile
-        </Typography>
+        <Typography variant="h1">Profile</Typography>
         <Grid
           container
           display="flex"
@@ -202,7 +204,7 @@ export default function UserProfile(props: Props) {
           justifyContent="center"
         >
           <Grid item xs={12}>
-            <Typography variant="h2" align="center" mt="1rem" mb="2rem">
+            <Typography variant="h2" mt="1rem" mb="2rem">
               Saved Names
             </Typography>
           </Grid>
@@ -241,7 +243,7 @@ export default function UserProfile(props: Props) {
                       sx={{
                         mb: '0.5rem',
                         mr: '0.5rem',
-                        width: 300,
+                        width: 140,
                       }}
                       onClick={() => deleteSavedName(fullSavedName.id)}
                     >
@@ -258,7 +260,7 @@ export default function UserProfile(props: Props) {
             sx={{ height: '1px', mt: '1rem', mb: '1rem' }}
           />
           <Grid item xs={12}>
-            <Typography variant="h2" align="center" mt="1rem" mb="2rem">
+            <Typography variant="h2" mt="1rem" mb="2rem">
               Saved Backstories
             </Typography>
           </Grid>
@@ -268,9 +270,27 @@ export default function UserProfile(props: Props) {
                 <Fragment key={savedBackstoryContent.id}>
                   <Grid container>
                     <Grid item xs={12} lg={7.3}>
-                      <Typography variant="body2" align="justify" mr="1rem">
+                      <Accordion>
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          aria-controls="panel1a-content"
+                          id="panel1a-header"
+                        >
+                          <Typography>
+                            {savedBackstoryContent.class}{' '}
+                            {savedBackstoryContent.origin} backstory
+                          </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Typography variant="body2" align="justify" mr="1rem">
+                            {savedBackstoryContent.backstory}
+                          </Typography>
+                        </AccordionDetails>
+                      </Accordion>
+
+                      {/* <Typography variant="body2" align="justify" mr="1rem">
                         {savedBackstoryContent.backstory}
-                      </Typography>
+                      </Typography> */}
                     </Grid>
                     <Grid item xs={12} lg={0.2}>
                       <Divider
@@ -296,7 +316,7 @@ export default function UserProfile(props: Props) {
                         sx={{
                           mb: '0.5rem',
                           mr: '0.5rem',
-                          width: 300,
+                          width: 140,
                         }}
                         onClick={() =>
                           deleteSavedBackstory(savedBackstoryContent.id)
@@ -316,7 +336,7 @@ export default function UserProfile(props: Props) {
             sx={{ height: '1px', mt: '1rem', mb: '1rem' }}
           />
           <Grid item xs={12}>
-            <Typography variant="h2" align="center" mt="1rem" mb="2rem">
+            <Typography variant="h2" mt="1rem" mb="2rem">
               Saved Settlements
             </Typography>
           </Grid>
@@ -325,9 +345,24 @@ export default function UserProfile(props: Props) {
               <Fragment key={savedSettlementContent.id}>
                 <Grid container>
                   <Grid item xs={12} lg={7.3}>
-                    <Typography variant="body2" align="justify" mr="1rem">
-                      {savedSettlementContent.description}
-                    </Typography>
+                    <Accordion>
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                      >
+                        <Typography>
+                          {savedSettlementContent.prosperity}{' '}
+                          {savedSettlementContent.origin}{' '}
+                          {savedSettlementContent.size}
+                        </Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Typography variant="body2" align="justify" mr="1rem">
+                          {savedSettlementContent.description}
+                        </Typography>
+                      </AccordionDetails>
+                    </Accordion>
                   </Grid>
                   <Grid item xs={12} lg={0.2}>
                     <Divider
@@ -353,7 +388,7 @@ export default function UserProfile(props: Props) {
                       sx={{
                         mb: '0.5rem',
                         mr: '0.5rem',
-                        width: 300,
+                        width: 140,
                       }}
                       onClick={() =>
                         deleteSavedSettlement(savedSettlementContent.id)
