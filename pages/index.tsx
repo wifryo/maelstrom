@@ -32,18 +32,6 @@ export default function Home() {
         <Typography variant="body2">
           A curated collection of text generators for use with tabletop RPGs.
         </Typography>
-        {/*
-        <Link href="/login" underline="none" color="text.primary" mt="2rem">
-          <Button
-            variant="outlined"
-            sx={{
-              width: 150,
-              color: '#000',
-            }}
-          >
-            Login
-          </Button>
-        </Link> */}
 
         <Box display="flex" mt="2rem">
           <Link href="/login" color="text.primary" mr="5px">
