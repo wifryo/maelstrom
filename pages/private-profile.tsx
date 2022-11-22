@@ -160,10 +160,11 @@ export default function UserProfile(props: Props) {
       </Head>
       <Box
         display="flex"
-        width="100%"
+        sx={{ width: { xs: '100%', sm: '80%' } }}
         flexDirection="column"
         justifyContent="center"
         m="auto"
+        mb="3rem"
       >
         <Typography variant="h1" align="center">
           Profile
@@ -173,7 +174,7 @@ export default function UserProfile(props: Props) {
           display="flex"
           justifyContent="flex-end"
           alignItems="center"
-          sx={{ width: '90%', mt: '2rem' }}
+          sx={{ mt: '2rem' }}
         >
           <PersonOutlineIcon sx={{ mr: '0.5rem' }} />
           <Typography variant="body2" mr="2rem">
@@ -192,19 +193,8 @@ export default function UserProfile(props: Props) {
             height: '1px',
             mt: '1rem',
             mb: '1rem',
-            ml: '-3rem',
-            mr: '-3rem',
           }}
         />
-      </Box>
-      <Box
-        display="flex"
-        sx={{ width: { xs: '100%', sm: '80%' } }}
-        flexDirection="column"
-        justifyContent="center"
-        m="auto"
-        mb="3rem"
-      >
         <Grid
           container
           display="flex"
@@ -247,7 +237,7 @@ export default function UserProfile(props: Props) {
                     justifyContent="center"
                   >
                     <Button
-                      variant="outlined"
+                      variant="contained"
                       sx={{
                         mb: '0.5rem',
                         mr: '0.5rem',
@@ -302,7 +292,7 @@ export default function UserProfile(props: Props) {
                       justifyContent="center"
                     >
                       <Button
-                        variant="outlined"
+                        variant="contained"
                         sx={{
                           mb: '0.5rem',
                           mr: '0.5rem',
@@ -359,7 +349,7 @@ export default function UserProfile(props: Props) {
                     justifyContent="center"
                   >
                     <Button
-                      variant="outlined"
+                      variant="contained"
                       sx={{
                         mb: '0.5rem',
                         mr: '0.5rem',

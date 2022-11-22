@@ -6,10 +6,15 @@ import { Divider } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
 import Grid from '@mui/material/Grid';
 import InputLabel from '@mui/material/InputLabel';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
@@ -39,6 +44,7 @@ type Props = {
 
 export default function Generators(props: Props) {
   // Name useStates/functions
+  const [nameGenAiToggle, setNameGenAiToggle] = useState(false);
   const [generatedNameInput, setGeneratedNameInput] = useState('');
   const [generatedNameResult, setGeneratedNameResult] = useState();
   const [fullName, setFullName] = useState({
@@ -121,17 +127,16 @@ export default function Generators(props: Props) {
         m="auto"
         mb="3rem"
       >
-        <Typography variant="h1" align="center" mb="2rem">
+        <Typography variant="h1" mb="2rem">
           Generators
         </Typography>
-        <Typography variant="body2" align="justify" pl="3rem" pr="3rem">
-          Machairoceratops Cryptodraco Hanssuesia Anoplosaurus Dryptosaurus
-          Herbstosaurus Thecocoelurus Talenkauen Hesperosaurus Didanodon
-          Sibirotitan Iliosuchus Scutellosaurus Jintasaurus Koparion Riojasuchus
-          Asiaceratops Silesaurus Kinnareemimus Pararhabdodon Kakuru
-          Leptoceratops Gigantosaurus Adamantisaurus Jingshanosaurus
-          Pelorosaurus Daliansaurus Airakoraptor Efraasia Gigantspinosaurus.
+
+        <Typography variant="body2">
+          Generate names, backstories and settlement descriptions for use in
+          your tabletop RPG campaign. Saved texts can be found on your profile
+          page. More generators coming soon!
         </Typography>
+
         <Divider
           orientation="horizontal"
           color="#000"
@@ -139,10 +144,9 @@ export default function Generators(props: Props) {
             height: '1px',
             mt: '1rem',
             mb: '1rem',
-            ml: '-12rem',
-            mr: '-13rem',
           }}
         />
+
         <Grid
           container
           display="flex"
@@ -150,7 +154,7 @@ export default function Generators(props: Props) {
           justifyContent="center"
         >
           <Grid item xs={12}>
-            <Typography variant="h2" align="center" mt="2rem" mb="2rem">
+            <Typography variant="h2" mt="1rem" mb="2rem">
               Name generator
             </Typography>
           </Grid>
@@ -186,8 +190,33 @@ export default function Generators(props: Props) {
               sx={{ mt: { xs: '1rem', lg: 0 } }}
               justifyContent="center"
             >
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={nameGenAiToggle}
+                    value={nameGenAiToggle}
+                    onChange={(event) => {
+                      setNameGenAiToggle(event.currentTarget.checked);
+                    }}
+                  />
+                }
+                label="AI assisted generation"
+              />
+              {nameGenAiToggle ? (
+                <Typography color="error.main">
+                  Warning: costs 1 credit
+                </Typography>
+              ) : (
+                <Typography> </Typography>
+              )}
+              {/* <FormControlLabel
+                disabled
+                control={<Switch />}
+                label="Disabled control example"
+              /> */}
+
               <Button
-                variant="outlined"
+                variant="contained"
                 sx={{
                   mb: '0.5rem',
                   mr: '0.5rem',
@@ -207,11 +236,11 @@ export default function Generators(props: Props) {
                   setFullName(retrievedName);
                 }}
               >
-                <MemoryIcon sx={{ mr: '0.5rem' }} /> Generate Name
+                <MemoryIcon sx={{ mr: '0.5rem' }} /> Generate
               </Button>
 
               <Button
-                variant="outlined"
+                variant="contained"
                 sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
                 onClick={async () => {
                   const id = props.userId;
@@ -228,7 +257,7 @@ export default function Generators(props: Props) {
                   });
                 }}
               >
-                <SaveIcon sx={{ mr: '0.5rem' }} /> Save Name
+                <SaveIcon sx={{ mr: '0.5rem' }} /> Save
               </Button>
             </Grid>
           </Grid>
@@ -238,7 +267,7 @@ export default function Generators(props: Props) {
             sx={{ height: '1px', mt: '1rem', mb: '1rem' }}
           />
           <Grid item xs={12}>
-            <Typography variant="h2" align="center" mt="1rem" mb="2rem">
+            <Typography variant="h2" mt="1rem" mb="2rem">
               Backstory generator
             </Typography>
           </Grid>
@@ -336,7 +365,7 @@ export default function Generators(props: Props) {
                 </Select>
               </FormControl>
               <Button
-                variant="outlined"
+                variant="contained"
                 sx={{
                   mb: '0.5rem',
                   mr: '0.5rem',
@@ -385,11 +414,11 @@ export default function Generators(props: Props) {
                   setBackstoryWithNames(backstoryTextWithNames);
                 }}
               >
-                <MemoryIcon sx={{ mr: '0.5rem' }} /> Generate Backstory
+                <MemoryIcon sx={{ mr: '0.5rem' }} /> Generate
               </Button>
 
               <Button
-                variant="outlined"
+                variant="contained"
                 sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
                 onClick={async () => {
                   // Retrieve random backstory
@@ -406,11 +435,11 @@ export default function Generators(props: Props) {
                   setBackstoryWithNames(retrievedBackstoryWithNames);
                 }}
               >
-                <ShuffleIcon sx={{ mr: '0.5rem' }} /> Random Backstory
+                <ShuffleIcon sx={{ mr: '0.5rem' }} /> Random
               </Button>
 
               <Button
-                variant="outlined"
+                variant="contained"
                 sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
                 onClick={async () => {
                   // Retrieve backstory by origin and class
@@ -434,11 +463,11 @@ export default function Generators(props: Props) {
                   setBackstoryWithNames(retrievedBackstoryWithNames);
                 }}
               >
-                <SaveAltIcon sx={{ mr: '0.5rem' }} /> Retrieve Backstory
+                <SaveAltIcon sx={{ mr: '0.5rem' }} /> Retrieve
               </Button>
 
               <Button
-                variant="outlined"
+                variant="contained"
                 sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
                 onClick={async () => {
                   const id = props.userId;
@@ -454,7 +483,7 @@ export default function Generators(props: Props) {
                   });
                 }}
               >
-                <SaveIcon sx={{ mr: '0.5rem' }} /> Save Backstory
+                <SaveIcon sx={{ mr: '0.5rem' }} /> Save
               </Button>
             </Grid>
           </Grid>
@@ -468,7 +497,7 @@ export default function Generators(props: Props) {
             }}
           />
           <Grid item xs={12}>
-            <Typography variant="h2" align="center" mt="1rem" mb="2rem">
+            <Typography variant="h2" mt="1rem" mb="2rem">
               Settlement generator
             </Typography>
           </Grid>
@@ -591,7 +620,7 @@ export default function Generators(props: Props) {
               </FormControl>
               <br />
               <Button
-                variant="outlined"
+                variant="contained"
                 sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
                 onClick={async () => {
                   // Construct prompt
@@ -626,12 +655,12 @@ export default function Generators(props: Props) {
                   console.log(settlementObject);
                 }}
               >
-                <MemoryIcon sx={{ mr: '0.5rem' }} /> Generate Settlement
+                <MemoryIcon sx={{ mr: '0.5rem' }} /> Generate
               </Button>
 
               <br />
               <Button
-                variant="outlined"
+                variant="contained"
                 sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
                 onClick={async () => {
                   // Retrieve random settlement
@@ -642,11 +671,11 @@ export default function Generators(props: Props) {
                   setSettlement(retrievedSettlement);
                 }}
               >
-                <ShuffleIcon sx={{ mr: '0.5rem' }} /> Random Settlement
+                <ShuffleIcon sx={{ mr: '0.5rem' }} /> Random
               </Button>
 
               <Button
-                variant="outlined"
+                variant="contained"
                 sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
                 onClick={async () => {
                   // Retrieve settlement by size/origin/prosperity
@@ -673,11 +702,11 @@ export default function Generators(props: Props) {
                   setSettlement(retrievedSettlement);
                 }}
               >
-                <SaveAltIcon sx={{ mr: '0.5rem' }} /> Retrieve Settlement
+                <SaveAltIcon sx={{ mr: '0.5rem' }} /> Retrieve
               </Button>
 
               <Button
-                variant="outlined"
+                variant="contained"
                 sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
                 onClick={async () => {
                   const id = props.userId;
@@ -693,7 +722,7 @@ export default function Generators(props: Props) {
                   });
                 }}
               >
-                <SaveIcon sx={{ mr: '0.5rem' }} /> Save Settlement
+                <SaveIcon sx={{ mr: '0.5rem' }} /> Save
               </Button>
             </Grid>
           </Grid>

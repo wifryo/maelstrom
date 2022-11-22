@@ -4,10 +4,10 @@ import { createTheme } from '@mui/material/styles';
 export const customTheme = createTheme({
   palette: {
     primary: {
-      main: '#263238',
+      main: '#2F4858',
     },
     secondary: {
-      main: '#c4e0a4',
+      main: '#8CAA94',
     },
     error: {
       main: red.A400,
@@ -29,7 +29,7 @@ export const customTheme = createTheme({
     },
     h2: {
       fontFamily: "'Libertinage', 'Roboto', 'sans-serif'",
-      fontSize: '1.5rem',
+      fontSize: '2rem',
       fontWeight: 500,
     },
     h3: {
