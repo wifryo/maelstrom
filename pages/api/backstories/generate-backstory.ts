@@ -9,7 +9,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 // Placeholder/testing function
-function generatePrompt(prompt: Text) {
+/* function generatePrompt(prompt: Text) {
   return `Generate an original backstory for a D&D adventurer.
 
 Prompt: Human Paladin named [firstName] [lastName]
@@ -20,9 +20,9 @@ Prompt: Human Bard named [firstName] [lastName]
 Backstory: [firstName] [lastName] was talented in the art of poetry from an early age. He makes his living using slam poetry to inspire his allies in battle.
 Prompt: ${prompt}
 Backstory:`;
-}
+} */
 
-/* function generatePrompt(prompt: Text) {
+function generatePrompt(prompt: Text) {
   return `Generate an original backstory for a male or female D&D adventurer.
 
   Prompt: Generate a backstory for a 5e D&D character named [firstName] [lastName], a hobgoblin fighter.
@@ -50,7 +50,7 @@ Backstory:`;
 
 Prompt: ${prompt}
 Backstory:`;
-} */
+}
 
 export default async function handler(
   request: NextApiRequest,
