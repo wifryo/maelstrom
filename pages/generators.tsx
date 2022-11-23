@@ -162,7 +162,7 @@ export default function Generators(props: Props) {
             </Typography>
           </Grid>
           <Grid container>
-            <Grid item xs={12} lg={7.3} xl={9}>
+            <Grid item xs={12} lg={7.3} xl={8.5}>
               <Typography variant="body2">{`${fullName.firstName} ${fullName.lastName}`}</Typography>
             </Grid>
             <Grid item xs={12} lg={0.2}>
@@ -181,7 +181,7 @@ export default function Generators(props: Props) {
               item
               xs={12}
               lg={4.5}
-              xl={2.8}
+              xl={3.3}
               sx={{ mt: { xs: '1rem', lg: 0 } }}
               justifyContent="center"
             >
@@ -279,7 +279,7 @@ export default function Generators(props: Props) {
           </Grid>
 
           <Grid container>
-            <Grid item xs={12} lg={7.3} xl={9}>
+            <Grid item xs={12} lg={7.3} xl={8.5}>
               {backstoryLoading ? (
                 <Typography justifySelf="center">loading...</Typography>
               ) : (
@@ -304,7 +304,7 @@ export default function Generators(props: Props) {
               item
               xs={12}
               lg={4.5}
-              xl={2.8}
+              xl={3.3}
               sx={{ mt: { xs: '1rem', lg: 0 } }}
               display="flex"
               flexDirection="row"
@@ -533,7 +533,7 @@ export default function Generators(props: Props) {
             </Typography>
           </Grid>
           <Grid container>
-            <Grid item xs={12} lg={7.3} xl={9}>
+            <Grid item xs={12} lg={7.3} xl={8.5}>
               {settlementLoading ? (
                 <Typography justifySelf="center">loading...</Typography>
               ) : (
@@ -554,7 +554,7 @@ export default function Generators(props: Props) {
               item
               xs={12}
               lg={4.5}
-              xl={2.8}
+              xl={3.3}
               sx={{ mt: { xs: '1rem', lg: 0 } }}
               display="flex"
               flexDirection="row"
