@@ -1,4 +1,11 @@
 import { css } from '@emotion/react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import FormGroup from '@mui/material/FormGroup';
+import InputLabel from '@mui/material/InputLabel';
+import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -34,8 +41,6 @@ export default function Login(props: Props) {
       return console.log(loginResponseBody.errors);
     }
 
-    console.log(router.query.returnTo);
-
     const returnTo = router.query.returnTo;
 
     if (
@@ -61,7 +66,7 @@ export default function Login(props: Props) {
         <title>Login</title>
         <meta name="description" content="Login new users" />
       </Head>
-      <h1>Login</h1>
+
       {errors.map((error) => {
         return (
           <p
@@ -76,32 +81,73 @@ export default function Login(props: Props) {
           </p>
         );
       })}
-      <label>
-        username
-        <input
-          value={username}
-          onChange={(event) => {
-            setUsername(event.currentTarget.value.toLowerCase());
-          }}
-        />
-      </label>
-      <br />
-      <label>
-        password
-        <input
-          value={password}
-          onChange={(event) => {
-            setPassword(event.currentTarget.value);
-          }}
-        />
-      </label>
-      <button
-        onClick={async () => {
-          await loginHandler();
+      <Box
+        sx={{
+          width: { xs: '100%', sm: '400px' },
         }}
+        margin="auto"
       >
-        Login
-      </button>
+        <FormGroup>
+          <Typography mb="1rem" variant="h2">
+            Login
+          </Typography>
+
+          <InputLabel
+            htmlFor="login-username"
+            sx={{ sm: { mt: '2rem' }, xs: { mt: '1rem' }, color: '#000' }}
+          >
+            Username*
+          </InputLabel>
+          <Paper elevation={0}>
+            <TextField
+              fullWidth
+              id="login-username"
+              variant="outlined"
+              color="primary"
+              margin="none"
+              size="small"
+              value={username}
+              onChange={(event) => {
+                setUsername(event.currentTarget.value);
+              }}
+              required
+            />
+          </Paper>
+          <InputLabel
+            sx={{ mt: '1rem', color: '#000' }}
+            htmlFor="login-password"
+          >
+            Password*
+          </InputLabel>
+          <Paper elevation={0}>
+            <TextField
+              fullWidth
+              type="password"
+              id="login-password"
+              variant="outlined"
+              margin="none"
+              color="primary"
+              size="small"
+              value={password}
+              onChange={(event) => {
+                setPassword(event.currentTarget.value);
+              }}
+              required
+            />
+          </Paper>
+          <Button
+            sx={{ m: 'auto', mt: '2rem', mb: '2rem', width: '200px' }}
+            color="primary"
+            variant="contained"
+            disableElevation
+            onClick={async () => {
+              await loginHandler();
+            }}
+          >
+            Login
+          </Button>
+        </FormGroup>
+      </Box>
     </>
   );
 }

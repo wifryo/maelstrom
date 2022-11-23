@@ -1,6 +1,5 @@
 import MemoryIcon from '@mui/icons-material/Memory';
 import SaveIcon from '@mui/icons-material/Save';
-import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -42,6 +41,7 @@ type Props = {
 export default function Generators(props: Props) {
   // Name useStates/functions
   const [nameGenAiToggle, setNameGenAiToggle] = useState(false);
+
   const [generatedNameInput, setGeneratedNameInput] = useState('');
   const [generatedNameResult, setGeneratedNameResult] = useState();
   const [fullName, setFullName] = useState({
@@ -65,6 +65,8 @@ export default function Generators(props: Props) {
 
   // Backstory useStates/functions
   const [backstoryGenAiToggle, setBackstoryGenAiToggle] = useState(false);
+  const [backstoryLoading, setBackstoryLoading] = useState(false);
+
   const [selectedCharacterClass, setSelectedCharacterClass] =
     useState<CharacterClass>({
       id: 1,
@@ -88,6 +90,8 @@ export default function Generators(props: Props) {
 
   // Settlement useStates/functions
   const [settlementGenAiToggle, setSettlementGenAiToggle] = useState(false);
+  const [settlementLoading, setSettlementLoading] = useState(false);
+
   const [settlement, setSettlement] = useState<Settlement>({
     id: null,
     sizeId: 0,
@@ -264,9 +268,13 @@ export default function Generators(props: Props) {
 
           <Grid container>
             <Grid item xs={12} lg={7.3}>
-              <Typography variant="body2" align="justify" mr="1rem">
-                {backstoryWithNames}
-              </Typography>
+              {backstoryLoading ? (
+                <Typography justifySelf="center">loading...</Typography>
+              ) : (
+                <Typography variant="body2" align="justify" mr="1rem">
+                  {backstoryWithNames}
+                </Typography>
+              )}
             </Grid>
             <Grid item xs={12} lg={0.2}>
               <Divider
@@ -384,6 +392,7 @@ export default function Generators(props: Props) {
                   // if AI assist is enabled, use external API, otherwise fetch from database
                   if (backstoryGenAiToggle) {
                     // Construct prompt
+                    setBackstoryLoading(true);
                     const backstoryPrompt = `${selectedBackstoryOrigin.name} ${selectedCharacterClass.name} named [firstName] [lastName]`;
                     // Construct backstory object without backstory text
                     const incompleteBackstoryObject: Backstory = {
@@ -422,6 +431,8 @@ export default function Generators(props: Props) {
                       fullName.lastName,
                     );
                     // Update useStates
+                    setBackstoryLoading(false);
+
                     setBackstoryWithNames(backstoryTextWithNames);
                   } else {
                     // Retrieve backstory by origin and class
@@ -507,9 +518,13 @@ export default function Generators(props: Props) {
           </Grid>
           <Grid container>
             <Grid item xs={12} lg={7.3}>
-              <Typography variant="body2" align="justify" mr="1rem">
-                {settlement.description}
-              </Typography>
+              {settlementLoading ? (
+                <Typography justifySelf="center">loading...</Typography>
+              ) : (
+                <Typography variant="body2" align="justify" mr="1rem">
+                  {settlement.description}
+                </Typography>
+              )}
             </Grid>
             <Grid item xs={12} lg={0.2}>
               <Divider
@@ -648,6 +663,8 @@ export default function Generators(props: Props) {
                 onClick={async () => {
                   if (settlementGenAiToggle) {
                     // Construct prompt
+                    setSettlementLoading(true);
+
                     const settlementPrompt = `${selectedSettlementProsperity.name} ${selectedSettlementOrigin.name} ${selectedSettlementSize.name}`;
                     // Construct settlement object without description
                     const incompleteSettlementObject: Settlement = {
@@ -675,8 +692,8 @@ export default function Generators(props: Props) {
                     // Received generated settlement object
                     const settlementObject = await response.json();
                     // Update useState
+                    setSettlementLoading(false);
                     setSettlement(settlementObject);
-                    console.log(settlementObject);
                   } else {
                     // Retrieve settlement by size/origin/prosperity
                     const response = await fetch('/api/settlements', {
