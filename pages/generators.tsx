@@ -267,7 +267,7 @@ export default function Generators(props: Props) {
           </Grid>
 
           <Grid container>
-            <Grid item xs={12} lg={7.3}>
+            <Grid item xs={12} lg={7.3} xl={9}>
               {backstoryLoading ? (
                 <Typography justifySelf="center">loading...</Typography>
               ) : (
@@ -292,6 +292,7 @@ export default function Generators(props: Props) {
               item
               xs={12}
               lg={4.5}
+              xl={2.8}
               sx={{ mt: { xs: '1rem', lg: 0 } }}
               display="flex"
               flexDirection="row"
@@ -517,7 +518,7 @@ export default function Generators(props: Props) {
             </Typography>
           </Grid>
           <Grid container>
-            <Grid item xs={12} lg={7.3}>
+            <Grid item xs={12} lg={7.3} xl={9}>
               {settlementLoading ? (
                 <Typography justifySelf="center">loading...</Typography>
               ) : (
@@ -538,6 +539,7 @@ export default function Generators(props: Props) {
               item
               xs={12}
               lg={4.5}
+              xl={2.8}
               sx={{ mt: { xs: '1rem', lg: 0 } }}
               display="flex"
               flexDirection="row"
