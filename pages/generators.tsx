@@ -185,74 +185,86 @@ export default function Generators(props: Props) {
               sx={{ mt: { xs: '1rem', lg: 0 } }}
               justifyContent="center"
             >
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={nameGenAiToggle}
-                    value={nameGenAiToggle}
-                    onChange={(event) => {
-                      setNameGenAiToggle(event.currentTarget.checked);
-                    }}
-                  />
-                }
-                label="AI assisted generation"
-              />
-              {nameGenAiToggle ? (
-                <Typography color="error.main">
-                  Warning: costs 1 credit
-                </Typography>
-              ) : (
-                <Typography> </Typography>
-              )}
+              <Box
+                display="flex"
+                flexDirection="column"
+                width="100%"
+                alignItems="center"
+                flex-wrap="none"
+              >
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={nameGenAiToggle}
+                      value={nameGenAiToggle}
+                      onChange={(event) => {
+                        setNameGenAiToggle(event.currentTarget.checked);
+                      }}
+                    />
+                  }
+                  label="AI assisted generation"
+                />
+                {nameGenAiToggle ? (
+                  <Typography color="error.main">
+                    Warning: costs 1 credit
+                  </Typography>
+                ) : (
+                  <Typography> </Typography>
+                )}
 
-              <Button
-                variant="contained"
-                sx={{
-                  mb: '0.5rem',
-                  mr: '0.5rem',
-                  width: 300,
-                }}
-                onClick={async () => {
-                  /* if (nameGenAiToggle) { */
-                  const response = await fetch('/api/names', {
-                    method: 'GET',
-                  });
-                  const retrievedName = await response.json();
-                  const newBackstoryWithNames = addNamesToText(
-                    backstory.backstory,
-                    retrievedName.firstName,
-                    retrievedName.lastName,
-                  );
-                  setBackstoryWithNames(newBackstoryWithNames);
-                  setFullName(retrievedName);
-                  /* } else {
+                <Button
+                  variant="contained"
+                  sx={{
+                    mb: '0.5rem',
+                    mr: '0.5rem',
+                    width: 300,
+                  }}
+                  onClick={async () => {
+                    /* if (nameGenAiToggle) { */
+                    const response = await fetch('/api/names', {
+                      method: 'GET',
+                    });
+                    const retrievedName = await response.json();
+                    const newBackstoryWithNames = addNamesToText(
+                      backstory.backstory,
+                      retrievedName.firstName,
+                      retrievedName.lastName,
+                    );
+                    setBackstoryWithNames(newBackstoryWithNames);
+                    setFullName(retrievedName);
+                    /* } else {
                     // generate name function goes here
                   } */
-                }}
-              >
-                <MemoryIcon sx={{ mr: '0.5rem' }} /> Generate
-              </Button>
+                  }}
+                >
+                  <MemoryIcon sx={{ mr: '0.5rem' }} /> Generate
+                </Button>
 
-              <Button
-                variant="contained"
-                sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
-                onClick={async () => {
-                  const id = props.userId;
-                  await fetch(`/api/users/names/${id}`, {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                      userId: id,
-                      firstNameId: fullName.firstNameId,
-                      lastNameId: fullName.lastNameId,
-                    }),
-                  });
-                }}
-              >
-                <SaveIcon sx={{ mr: '0.5rem' }} /> Save
-              </Button>
+                <Button
+                  variant="contained"
+                  sx={{
+                    mb: '0.5rem',
+                    mr: '0.5rem',
+                    width: 300,
+                  }}
+                  onClick={async () => {
+                    const id = props.userId;
+                    await fetch(`/api/users/names/${id}`, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                        userId: id,
+                        firstNameId: fullName.firstNameId,
+                        lastNameId: fullName.lastNameId,
+                      }),
+                    });
+                  }}
+                >
+                  <SaveIcon sx={{ mr: '0.5rem' }} /> Save
+                </Button>
+              </Box>
             </Grid>
           </Grid>
           <Divider
@@ -363,104 +375,107 @@ export default function Generators(props: Props) {
                   ))}
                 </Select>
               </FormControl>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={backstoryGenAiToggle}
-                    value={backstoryGenAiToggle}
-                    onChange={(event) => {
-                      setBackstoryGenAiToggle(event.currentTarget.checked);
-                    }}
-                  />
-                }
-                label="AI assisted generation"
-              />
-              {backstoryGenAiToggle ? (
-                <Typography color="error.main">
-                  Warning: costs 1 credit
-                </Typography>
-              ) : (
-                <Typography> </Typography>
-              )}
-              <Button
-                variant="contained"
-                sx={{
-                  mb: '0.5rem',
-                  mr: '0.5rem',
-                  width: 300,
-                }}
-                onClick={async () => {
-                  // if AI assist is enabled, use external API, otherwise fetch from database
-                  if (backstoryGenAiToggle) {
-                    // Construct prompt
-                    setBackstoryLoading(true);
-                    const backstoryPrompt = `${selectedBackstoryOrigin.name} ${selectedCharacterClass.name} named [firstName] [lastName]`;
-                    // Construct backstory object without backstory text
-                    const incompleteBackstoryObject: Backstory = {
-                      id: null,
-                      classId: selectedCharacterClass.id,
-                      originId: selectedBackstoryOrigin.id,
-                      firstNameId: fullName.firstNameId,
-                      lastNameId: fullName.lastNameId,
-                      backstory: '',
-                      verified: false,
-                    };
+              <Box
+                display="flex"
+                flexDirection="column"
+                width="100%"
+                alignItems="center"
+                flex-wrap="none"
+              >
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={backstoryGenAiToggle}
+                      value={backstoryGenAiToggle}
+                      onChange={(event) => {
+                        setBackstoryGenAiToggle(event.currentTarget.checked);
+                      }}
+                    />
+                  }
+                  label="AI assisted generation"
+                />
+                {backstoryGenAiToggle ? (
+                  <Typography color="error.main">
+                    Warning: costs 1 credit
+                  </Typography>
+                ) : (
+                  <Typography> </Typography>
+                )}
+                <Button
+                  variant="contained"
+                  sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
+                  onClick={async () => {
+                    // if AI assist is enabled, use external API, otherwise fetch from database
+                    if (backstoryGenAiToggle) {
+                      // Construct prompt
+                      setBackstoryLoading(true);
+                      const backstoryPrompt = `${selectedBackstoryOrigin.name} ${selectedCharacterClass.name} named [firstName] [lastName]`;
+                      // Construct backstory object without backstory text
+                      const incompleteBackstoryObject: Backstory = {
+                        id: null,
+                        classId: selectedCharacterClass.id,
+                        originId: selectedBackstoryOrigin.id,
+                        firstNameId: fullName.firstNameId,
+                        lastNameId: fullName.lastNameId,
+                        backstory: '',
+                        verified: false,
+                      };
 
-                    // POST to API, sending both prompt & backstory object data so it can be added to database
-                    const response = await fetch(
-                      '/api/backstories/generate-backstory',
-                      {
+                      // POST to API, sending both prompt & backstory object data so it can be added to database
+                      const response = await fetch(
+                        '/api/backstories/generate-backstory',
+                        {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify({
+                            prompt: backstoryPrompt,
+                            backstoryObject: incompleteBackstoryObject,
+                          }),
+                        },
+                      );
+                      // Receive complete backstory object
+                      const backstoryObject = await response.json();
+                      // Update useState with backstory object
+                      setBackstory(backstoryObject);
+
+                      // Embed generated names into backstory text
+                      const backstoryTextWithNames = await addNamesToText(
+                        backstoryObject.backstory,
+                        fullName.firstName,
+                        fullName.lastName,
+                      );
+                      // Update useStates
+                      setBackstoryLoading(false);
+
+                      setBackstoryWithNames(backstoryTextWithNames);
+                    } else {
+                      // Retrieve backstory by origin and class
+                      const response = await fetch('/api/backstories', {
                         method: 'POST',
                         headers: {
                           'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                          prompt: backstoryPrompt,
-                          backstoryObject: incompleteBackstoryObject,
+                          originId: selectedBackstoryOrigin.id,
+                          characterClassId: selectedCharacterClass.id,
                         }),
-                      },
-                    );
-                    // Receive complete backstory object
-                    const backstoryObject = await response.json();
-                    // Update useState with backstory object
-                    setBackstory(backstoryObject);
-
-                    // Embed generated names into backstory text
-                    const backstoryTextWithNames = await addNamesToText(
-                      backstoryObject.backstory,
-                      fullName.firstName,
-                      fullName.lastName,
-                    );
-                    // Update useStates
-                    setBackstoryLoading(false);
-
-                    setBackstoryWithNames(backstoryTextWithNames);
-                  } else {
-                    // Retrieve backstory by origin and class
-                    const response = await fetch('/api/backstories', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify({
-                        originId: selectedBackstoryOrigin.id,
-                        characterClassId: selectedCharacterClass.id,
-                      }),
-                    });
-                    const retrievedBackstory = await response.json();
-                    setBackstory(retrievedBackstory);
-                    const retrievedBackstoryWithNames = addNamesToText(
-                      retrievedBackstory.backstory,
-                      fullName.firstName,
-                      fullName.lastName,
-                    );
-                    setBackstoryWithNames(retrievedBackstoryWithNames);
-                  }
-                }}
-              >
-                <MemoryIcon sx={{ mr: '0.5rem' }} /> Generate
-              </Button>
-
+                      });
+                      const retrievedBackstory = await response.json();
+                      setBackstory(retrievedBackstory);
+                      const retrievedBackstoryWithNames = addNamesToText(
+                        retrievedBackstory.backstory,
+                        fullName.firstName,
+                        fullName.lastName,
+                      );
+                      setBackstoryWithNames(retrievedBackstoryWithNames);
+                    }
+                  }}
+                >
+                  <MemoryIcon sx={{ mr: '0.5rem' }} /> Generate
+                </Button>
+              </Box>
               <Button
                 variant="contained"
                 sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
@@ -639,85 +654,90 @@ export default function Generators(props: Props) {
                   ))}
                 </Select>
               </FormControl>
-              <br />
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={settlementGenAiToggle}
-                    value={settlementGenAiToggle}
-                    onChange={(event) => {
-                      setSettlementGenAiToggle(event.currentTarget.checked);
-                    }}
-                  />
-                }
-                label="AI assisted generation"
-              />
-              {settlementGenAiToggle ? (
-                <Typography color="error.main">
-                  Warning: costs 1 credit
-                </Typography>
-              ) : (
-                <Typography> </Typography>
-              )}
-              <Button
-                variant="contained"
-                sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
-                onClick={async () => {
-                  if (settlementGenAiToggle) {
-                    // Construct prompt
-                    setSettlementLoading(true);
+              <Box
+                display="flex"
+                flexDirection="column"
+                width="100%"
+                alignItems="center"
+                flex-wrap="none"
+              >
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={settlementGenAiToggle}
+                      value={settlementGenAiToggle}
+                      onChange={(event) => {
+                        setSettlementGenAiToggle(event.currentTarget.checked);
+                      }}
+                    />
+                  }
+                  label="AI assisted generation"
+                />
+                {settlementGenAiToggle ? (
+                  <Typography color="error.main">
+                    Warning: costs 1 credit
+                  </Typography>
+                ) : (
+                  <Typography> </Typography>
+                )}
+                <Button
+                  variant="contained"
+                  sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
+                  onClick={async () => {
+                    if (settlementGenAiToggle) {
+                      // Construct prompt
+                      setSettlementLoading(true);
 
-                    const settlementPrompt = `${selectedSettlementProsperity.name} ${selectedSettlementOrigin.name} ${selectedSettlementSize.name}`;
-                    // Construct settlement object without description
-                    const incompleteSettlementObject: Settlement = {
-                      id: null,
-                      sizeId: selectedSettlementSize.id,
-                      prosperityId: selectedSettlementProsperity.id,
-                      originId: selectedSettlementOrigin.id,
-                      description: '',
-                      verified: false,
-                    };
-                    // POST to API, sending both prompt & settlement object data so it can be added to database
-                    const response = await fetch(
-                      '/api/settlements/generate-settlement',
-                      {
+                      const settlementPrompt = `${selectedSettlementProsperity.name} ${selectedSettlementOrigin.name} ${selectedSettlementSize.name}`;
+                      // Construct settlement object without description
+                      const incompleteSettlementObject: Settlement = {
+                        id: null,
+                        sizeId: selectedSettlementSize.id,
+                        prosperityId: selectedSettlementProsperity.id,
+                        originId: selectedSettlementOrigin.id,
+                        description: '',
+                        verified: false,
+                      };
+                      // POST to API, sending both prompt & settlement object data so it can be added to database
+                      const response = await fetch(
+                        '/api/settlements/generate-settlement',
+                        {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify({
+                            prompt: settlementPrompt,
+                            settlementObject: incompleteSettlementObject,
+                          }),
+                        },
+                      );
+                      // Received generated settlement object
+                      const settlementObject = await response.json();
+                      // Update useState
+                      setSettlementLoading(false);
+                      setSettlement(settlementObject);
+                    } else {
+                      // Retrieve settlement by size/origin/prosperity
+                      const response = await fetch('/api/settlements', {
                         method: 'POST',
                         headers: {
                           'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                          prompt: settlementPrompt,
-                          settlementObject: incompleteSettlementObject,
+                          sizeId: selectedSettlementSize.id,
+                          originId: selectedSettlementOrigin.id,
+                          prosperityId: selectedSettlementProsperity.id,
                         }),
-                      },
-                    );
-                    // Received generated settlement object
-                    const settlementObject = await response.json();
-                    // Update useState
-                    setSettlementLoading(false);
-                    setSettlement(settlementObject);
-                  } else {
-                    // Retrieve settlement by size/origin/prosperity
-                    const response = await fetch('/api/settlements', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify({
-                        sizeId: selectedSettlementSize.id,
-                        originId: selectedSettlementOrigin.id,
-                        prosperityId: selectedSettlementProsperity.id,
-                      }),
-                    });
-                    const retrievedSettlement = await response.json();
-                    setSettlement(retrievedSettlement);
-                  }
-                }}
-              >
-                <MemoryIcon sx={{ mr: '0.5rem' }} /> Generate
-              </Button>
-
-              <br />
+                      });
+                      const retrievedSettlement = await response.json();
+                      setSettlement(retrievedSettlement);
+                    }
+                  }}
+                >
+                  <MemoryIcon sx={{ mr: '0.5rem' }} /> Generate
+                </Button>
+              </Box>
               <Button
                 variant="contained"
                 sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
