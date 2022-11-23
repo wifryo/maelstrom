@@ -159,7 +159,7 @@ export default function UserProfile(props: Props) {
   return (
     <div>
       <Head>
-        <title>Profile</title>
+        <title>Tapestry: Profile</title>
         <meta name="description" content="profile & saved texts" />
       </Head>
       <Box

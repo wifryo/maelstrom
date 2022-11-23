@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Home</title>
+        <title>Tapestry</title>
         <meta name="description" content="tapestry" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

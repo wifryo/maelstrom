@@ -63,7 +63,7 @@ export default function Login(props: Props) {
   return (
     <>
       <Head>
-        <title>Login</title>
+        <title>Tapestry: Login</title>
         <meta name="description" content="Login new users" />
       </Head>
 

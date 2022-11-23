@@ -59,7 +59,7 @@ export default function Register(props: Props) {
   return (
     <>
       <Head>
-        <title>Register</title>
+        <title>Tapestry: Register</title>
         <meta name="description" content="Register new users" />
       </Head>
       {errors.map((error) => {
