@@ -52,7 +52,12 @@ export default function Header(props: Props) {
       }}
     >
       <Toolbar disableGutters={true}>
-        <Grid container alignItems="center" height="3rem">
+        <Grid
+          container
+          height="3rem"
+          alignItems="center"
+          justifyContent="space-between"
+        >
           <Grid
             container
             item
@@ -116,7 +121,6 @@ export default function Header(props: Props) {
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
                 onClick={handleMenu}
-                color="#000"
               >
                 <MenuIcon />
               </IconButton>
