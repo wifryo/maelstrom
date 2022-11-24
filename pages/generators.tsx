@@ -42,14 +42,15 @@ export default function Generators(props: Props) {
   // Name useStates/functions
   const [nameGenAiToggle, setNameGenAiToggle] = useState(false);
 
-  const [generatedNameInput, setGeneratedNameInput] = useState('');
-  const [generatedNameResult, setGeneratedNameResult] = useState();
   const [fullName, setFullName] = useState({
     firstNameId: 0,
     firstName: '',
     lastNameId: 0,
     lastName: '',
   });
+  // Unused AI name gen code, re-implement later
+  /* const [generatedNameInput, setGeneratedNameInput] = useState('');
+  const [generatedNameResult, setGeneratedNameResult] = useState();
   async function nameGeneratorSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     const response = await fetch('/api/names/generate-name', {
@@ -61,7 +62,7 @@ export default function Generators(props: Props) {
     });
     const data = await response.json();
     setGeneratedNameResult(data.result);
-  }
+  } */
 
   // Backstory useStates/functions
   const [backstoryGenAiToggle, setBackstoryGenAiToggle] = useState(false);
