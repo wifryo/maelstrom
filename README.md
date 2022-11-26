@@ -10,13 +10,13 @@ Visit the live, deployed version of **Tapestry** [here](https://tapestry-gen.fly
 
 The application is fully responsive for all screen sizes. The visual design was implemented using [Material UI](https://mui.com/).
 
-The primary functionality of the application was planned in Figma, a sample of which is shown below. The full version of the initial flowchart be found [here](https://www.figma.com/file/XtbHPUghd4wbZKq7x73yVV/tapestry?node-id=0%3A1&t=4QTNe0RWf4jwAzgN-1) - please note that this does not represent the final product, as the design evolved somewhat during the development process.
+The primary functionality of the application was planned in Figma & DrawSQL. The full version of the initial flowchart be found [here](https://www.figma.com/file/XtbHPUghd4wbZKq7x73yVV/tapestry?node-id=0%3A1&t=4QTNe0RWf4jwAzgN-1) - please note that these diagrams does not represent the final product, as improvements were made to the design during the development process.
 
 ![image](https://user-images.githubusercontent.com/28006307/204076585-595beb90-742d-45c6-bfbd-6a2d31c57d47.png)
 
-The database schema to support this functionality was designed in DrawSQL. This also no longer represents the current state of the project, due to improvements made since.
 
-![image](https://user-images.githubusercontent.com/28006307/204077090-0fcaaff0-ac12-439e-b7cf-34df157910f2.png)
+![image](https://user-images.githubusercontent.com/28006307/204077208-c59e9c60-1529-467f-9bec-8d064f93e4ea.png)
+
 
 ## Functionality
 
