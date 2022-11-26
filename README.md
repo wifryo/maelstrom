@@ -55,3 +55,17 @@ The primary functionality of the application was planned in Figma & DrawSQL. The
 - Ability to acquire more credits
 - Ability to choose a particular author's "voice"
 - Pronoun selection for backstory
+
+## Setup instructions
+
+- Clone the repository with `git clone <repo>`
+- Create a PostgreSQL database & user with appropriate permissions
+- Create a new .env file
+- Copy the environment variables from .env-example into .env
+- Replace the placeholders xxxxx with your username, password and name of database
+- Register with [OpenAI](https://openai.com/api/), generate a new API key and add it to .env
+- Install dotenv-cli with yarn add dotenv-cli
+- Ensure all dependencies are installed (e.g. by running `yarn` in your CLI in the project directory)
+- Run migrations with `yarn migrate up`
+- Start the local database service with `postgres`
+- Start the local server with `yarn dev`
