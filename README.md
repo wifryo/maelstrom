@@ -29,16 +29,16 @@ The primary functionality of the application was planned in Figma & DrawSQL. The
 
 ## Technologies
 
-- Next.js
-- Typescript
-- React
-- PostgreSQL
-- Node.js
-- Material UI
+- [Next.js](https://nextjs.org/)
+- [Typescript](https://www.typescriptlang.org/)
+- [React](https://reactjs.org/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Node.js](https://nodejs.org/en/)
+- [Material UI](https://mui.com/)
 - REST API
-- OpenAI GPT-3
-- DrawSQL
-- Jest
-- Playwright
-- Fly.io
+- [OpenAI GPT-3](https://openai.com/api/)
+- [DrawSQL](https://drawsql.app/)
+- [Jest](https://jestjs.io/)
+- [Playwright](https://playwright.dev/)
+- [Fly.io](https://fly.io/)
 
