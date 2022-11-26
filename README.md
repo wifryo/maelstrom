@@ -1,6 +1,5 @@
 # Tapestry
 
-## Contents
 [Design](https://github.com/wifryo/tapestry/blob/main/README.md#design)  
 [Functionality](https://github.com/wifryo/tapestry/blob/main/README.md#functionality)  
 [Technologies](https://github.com/wifryo/tapestry/blob/main/README.md#technologies)  
