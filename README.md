@@ -5,10 +5,10 @@
 Visit the live, deployed version of **Tapestry** [here](https://tapestry-gen.fly.dev/)
 
 ## Contents
-[Design](https://github.com/wifryo/tapestry/blob/main/README.md#design)
-[Functionality](https://github.com/wifryo/tapestry/blob/main/README.md#functionality)
-[Technologies](https://github.com/wifryo/tapestry/blob/main/README.md#technologies)
-[Future plans](https://github.com/wifryo/tapestry/blob/main/README.md#future-plans)
+[Design](https://github.com/wifryo/tapestry/blob/main/README.md#design)  
+[Functionality](https://github.com/wifryo/tapestry/blob/main/README.md#functionality)  
+[Technologies](https://github.com/wifryo/tapestry/blob/main/README.md#technologies)  
+[Future plans](https://github.com/wifryo/tapestry/blob/main/README.md#future-plans)  
 
 ![image](https://user-images.githubusercontent.com/28006307/204075902-6f88966d-50ec-44cc-aeda-397fb540ab42.png)
 
