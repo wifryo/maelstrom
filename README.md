@@ -68,7 +68,7 @@ Please note that these diagrams do not represent the final product, as improveme
 - Replace the placeholders xxxxx with your username, password and name of database
 - Register with [OpenAI](https://openai.com/api/), generate a new API key and add it to .env
 - Install dotenv-cli with yarn add dotenv-cli
-- Ensure all dependencies are installed (e.g. by running `yarn` in your CLI in the project directory)
+- Ensure all dependencies are installed (e.g. by running `yarn`)
 - Run migrations with `yarn migrate up`
 - Start the local database service with `postgres`
 - Start the local server with `yarn dev`
