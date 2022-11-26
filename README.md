@@ -12,8 +12,7 @@ The application is fully responsive for all screen sizes. The visual design was 
 
 The primary functionality of the application was planned in Figma & DrawSQL. The full version of the initial flowchart be found [here](https://www.figma.com/file/XtbHPUghd4wbZKq7x73yVV/tapestry?node-id=0%3A1&t=4QTNe0RWf4jwAzgN-1) Please note that these diagrams do not represent the final product, as improvements were made to the design during the development process.
 
-![image](https://user-images.githubusercontent.com/28006307/204076585-595beb90-742d-45c6-bfbd-6a2d31c57d47.png)
-
+![image](https://user-images.githubusercontent.com/28006307/204078324-326733cd-cdb4-4440-8b33-3a7a1be88789.png)
 
 ![image](https://user-images.githubusercontent.com/28006307/204077208-c59e9c60-1529-467f-9bec-8d064f93e4ea.png)
 
