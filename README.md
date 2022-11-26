@@ -41,3 +41,10 @@ The primary functionality of the application was planned in Figma & DrawSQL. The
 - [Playwright](https://playwright.dev/)
 - [Fly.io](https://fly.io/)
 
+## Future plans
+
+- More generators
+- Ability to approve quality generated texts & use them to further refine AI model
+- Ability to acquire more credits
+- Ability to choose a particular author's "voice"
+- Pronoun selection for backstory
