@@ -43,10 +43,10 @@ export default function Generators(props: Props) {
   const [nameGenAiToggle, setNameGenAiToggle] = useState(false);
 
   const [fullName, setFullName] = useState({
-    firstNameId: 0,
-    firstName: '',
-    lastNameId: 0,
-    lastName: '',
+    firstNameId: 13,
+    firstName: 'Chogbert',
+    lastNameId: 6,
+    lastName: 'Brebblington',
   });
   // Unused AI name gen code, re-implement later
   /* const [generatedNameInput, setGeneratedNameInput] = useState('');
