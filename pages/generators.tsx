@@ -119,7 +119,7 @@ export default function Generators(props: Props) {
   return (
     <div>
       <Head>
-        <title>Tapestry: Generators</title>
+        <title>Tapestry: generators</title>
         <meta name="description" content="tapestry" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
