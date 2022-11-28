@@ -80,7 +80,7 @@ const names = [
   { last_name: 'Viewlook', verified: true },
   { last_name: 'Vobblechops', verified: true },
   { last_name: 'Vololo', verified: true },
-  { last_name: 'Wankleton', verified: true },
+  { last_name: 'Wonkleton', verified: true },
   { last_name: 'Xibb', verified: true },
   { last_name: 'Xiop', verified: true },
   { last_name: 'Xol', verified: true },
