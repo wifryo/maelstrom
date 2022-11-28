@@ -67,6 +67,7 @@ export default function Generators(props: Props) {
   // Backstory useStates/functions
   const [backstoryGenAiToggle, setBackstoryGenAiToggle] = useState(false);
   const [backstoryLoading, setBackstoryLoading] = useState(false);
+  const [backstoryError, setBackstoryError] = useState(false);
 
   const [selectedCharacterClass, setSelectedCharacterClass] =
     useState<CharacterClass>({
@@ -92,6 +93,7 @@ export default function Generators(props: Props) {
   // Settlement useStates/functions
   const [settlementGenAiToggle, setSettlementGenAiToggle] = useState(false);
   const [settlementLoading, setSettlementLoading] = useState(false);
+  const [settlementError, setSettlementError] = useState(false);
 
   const [settlement, setSettlement] = useState<Settlement>({
     id: null,
@@ -285,7 +287,9 @@ export default function Generators(props: Props) {
                 <Typography justifySelf="center">loading...</Typography>
               ) : (
                 <Typography variant="body2" align="justify" mr="1rem">
-                  {backstoryWithNames}
+                  {backstoryError
+                    ? 'No matching backstory found. Try generating with AI assist instead, or choose different options.'
+                    : backstoryWithNames}
                 </Typography>
               )}
             </Grid>
@@ -409,6 +413,7 @@ export default function Generators(props: Props) {
                     // if AI assist is enabled, use external API, otherwise fetch from database
                     if (backstoryGenAiToggle) {
                       // Construct prompt
+                      setBackstoryError(false);
                       setBackstoryLoading(true);
                       const backstoryPrompt = `${selectedBackstoryOrigin.name} ${selectedCharacterClass.name} named [firstName] [lastName]`;
                       // Construct backstory object without backstory text
@@ -463,14 +468,24 @@ export default function Generators(props: Props) {
                           characterClassId: selectedCharacterClass.id,
                         }),
                       });
-                      const retrievedBackstory = await response.json();
-                      setBackstory(retrievedBackstory);
-                      const retrievedBackstoryWithNames = addNamesToText(
-                        retrievedBackstory.backstory,
-                        fullName.firstName,
-                        fullName.lastName,
-                      );
-                      setBackstoryWithNames(retrievedBackstoryWithNames);
+                      let error = false;
+                      setBackstoryError(false);
+                      const retrievedBackstory = await response
+                        .json()
+                        .catch(() => {
+                          setBackstoryError(true);
+                          error = true;
+                          return;
+                        });
+                      if (!error) {
+                        setBackstory(retrievedBackstory);
+                        const retrievedBackstoryWithNames = addNamesToText(
+                          retrievedBackstory.backstory,
+                          fullName.firstName,
+                          fullName.lastName,
+                        );
+                        setBackstoryWithNames(retrievedBackstoryWithNames);
+                      }
                     }
                   }}
                 >
@@ -482,6 +497,8 @@ export default function Generators(props: Props) {
                 sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
                 onClick={async () => {
                   // Retrieve random backstory
+                  setBackstoryError(false);
+
                   const response = await fetch('/api/backstories', {
                     method: 'GET',
                   });
@@ -539,7 +556,9 @@ export default function Generators(props: Props) {
                 <Typography justifySelf="center">loading...</Typography>
               ) : (
                 <Typography variant="body2" align="justify" mr="1rem">
-                  {settlement.description}
+                  {settlementError
+                    ? 'No matching settlement found. Try generating with AI assist instead, or choose different options.'
+                    : settlement.description}
                 </Typography>
               )}
             </Grid>
@@ -688,7 +707,7 @@ export default function Generators(props: Props) {
                     if (settlementGenAiToggle) {
                       // Construct prompt
                       setSettlementLoading(true);
-
+                      setSettlementError(false);
                       const settlementPrompt = `${selectedSettlementProsperity.name} ${selectedSettlementOrigin.name} ${selectedSettlementSize.name}`;
                       // Construct settlement object without description
                       const incompleteSettlementObject: Settlement = {
@@ -720,6 +739,8 @@ export default function Generators(props: Props) {
                       setSettlement(settlementObject);
                     } else {
                       // Retrieve settlement by size/origin/prosperity
+                      setSettlementError(false);
+
                       const response = await fetch('/api/settlements', {
                         method: 'POST',
                         headers: {
@@ -731,8 +752,17 @@ export default function Generators(props: Props) {
                           prosperityId: selectedSettlementProsperity.id,
                         }),
                       });
-                      const retrievedSettlement = await response.json();
-                      setSettlement(retrievedSettlement);
+                      let error = false;
+                      const retrievedSettlement = await response
+                        .json()
+                        .catch(() => {
+                          setSettlementError(true);
+                          error = true;
+                          return;
+                        });
+                      if (!error) {
+                        setSettlement(retrievedSettlement);
+                      }
                     }
                   }}
                 >

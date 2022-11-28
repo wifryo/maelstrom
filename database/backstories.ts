@@ -104,6 +104,7 @@ export async function getSavedBackstoryContentByUserIdAndValidSessionToken(
       backstories.first_name_id = first_names.id AND
       backstories.last_name_id = last_names.id
     `;
+
   return [savedBackstories];
 }
 

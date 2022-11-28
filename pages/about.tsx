@@ -1,23 +1,7 @@
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
-import TollIcon from '@mui/icons-material/Toll';
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
-import { Fragment } from 'react';
-import { SavedBackstoryContent } from '../database/backstories';
-import { FullSavedName } from '../database/names';
-import { getUserBySessionToken, User } from '../database/users';
-
-type Props = {
-  user?: User;
-};
 
 export default function About() {
   return (
