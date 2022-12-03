@@ -774,6 +774,8 @@ export default function Generators(props: Props) {
                 sx={{ mb: '0.5rem', mr: '0.5rem', width: 300 }}
                 onClick={async () => {
                   // Retrieve random settlement
+                  setSettlementError(false);
+
                   const response = await fetch('/api/settlements', {
                     method: 'GET',
                   });

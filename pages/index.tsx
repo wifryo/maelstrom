@@ -1,7 +1,9 @@
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
+import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
+import { getValidSessionByToken } from '../database/sessions';
 
 export default function Home() {
   return (
@@ -45,4 +47,21 @@ export default function Home() {
       </Box>
     </>
   );
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const token = context.req.cookies.sessionToken;
+
+  if (token && (await getValidSessionByToken(token))) {
+    return {
+      redirect: {
+        destination: '/generators',
+        permanent: true,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 }

@@ -87,7 +87,11 @@ export default function Login(props: Props) {
         }}
         margin="auto"
       >
-        <FormGroup>
+        <FormGroup
+          onSubmit={async () => {
+            await loginHandler();
+          }}
+        >
           <Typography mb="1rem" variant="h2">
             Login
           </Typography>
@@ -158,7 +162,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (token && (await getValidSessionByToken(token))) {
     return {
       redirect: {
-        destination: '/',
+        destination: '/generators',
         permanent: true,
       },
     };
