@@ -29,7 +29,8 @@ export default function Home() {
           <Typography variant="h6">Tapestry</Typography>
         </Link>
         <Typography variant="body2">
-          A curated collection of text generators for use with tabletop RPGs.
+          A curated collection of AI-powered text generators for use with
+          tabletop RPGs.
         </Typography>
 
         <Box display="flex" mt="2rem">
