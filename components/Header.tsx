@@ -86,7 +86,7 @@ export default function Header(props: Props) {
             justifyContent="flex-end"
             sx={{ display: { xs: 'none', sm: 'flex' } }}
           >
-            <Link href="/private-profile" underline="none" mr="1rem">
+            <Link href="/profile" underline="none" mr="1rem">
               <Typography variant="body2">
                 {props.user && props.user.username}
               </Typography>
@@ -146,7 +146,7 @@ export default function Header(props: Props) {
                       <Link href="/about" underline="none">
                         <MenuItem onClick={handleClose}>about</MenuItem>
                       </Link>
-                      <Link href="/private-profile" underline="none">
+                      <Link href="/profile" underline="none">
                         <MenuItem onClick={handleClose}>profile</MenuItem>
                       </Link>
                       <Anchor href="/logout" css={anchorStyles}>

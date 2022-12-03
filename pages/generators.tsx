@@ -121,7 +121,7 @@ export default function Generators(props: Props) {
   return (
     <div>
       <Head>
-        <title>Tapestry: generators</title>
+        <title>Tapestry | Generators</title>
         <meta name="description" content="tapestry" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -826,7 +826,7 @@ export async function getServerSideProps(
   if (!user) {
     return {
       redirect: {
-        destination: '/login?returnTo=/private-profile',
+        destination: '/login?returnTo=/profile',
         permanent: false,
       },
     };

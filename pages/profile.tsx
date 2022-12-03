@@ -159,7 +159,7 @@ export default function UserProfile(props: Props) {
   return (
     <div>
       <Head>
-        <title>Tapestry: profile</title>
+        <title>Tapestry | Profile</title>
         <meta name="description" content="profile & saved texts" />
       </Head>
       <Box
@@ -411,7 +411,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (!user) {
     return {
       redirect: {
-        destination: '/login?returnTo=/private-profile',
+        destination: '/login?returnTo=/profile',
         permanent: false,
       },
     };

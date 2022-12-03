@@ -7,7 +7,7 @@ export default function About() {
   return (
     <div>
       <Head>
-        <title>Tapestry: about</title>
+        <title>Tapestry | About</title>
         <meta name="description" content="about" />
       </Head>
       <Box
