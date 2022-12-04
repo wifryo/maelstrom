@@ -9,6 +9,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { Fragment, useEffect, useState } from 'react';
+import { getAllBackstoriesByValidSessionToken } from '../database/admin';
 import { SavedBackstoryContent } from '../database/backstories';
 import { FullSavedName } from '../database/names';
 import { SavedSettlementContent } from '../database/settlements';
@@ -17,130 +18,12 @@ import { addNamesToText } from '../utils/functions';
 
 type Props = {
   user?: User;
+  allBackstories: any;
 };
 
-export default function UserProfile(props: Props) {
-  const [retrievedSavedNames, setRetrievedSavedNames] = useState([
-    { id: 0, firstNameId: 0, firstName: '', lastNameId: 0, lastName: '' },
-  ]);
-
-  async function getSavedNames(id: number) {
-    const response = await fetch(`/api/users/names/${id}`, {
-      method: 'GET',
-    });
-    const savedNames = await response.json();
-    setRetrievedSavedNames(savedNames[0]);
-  }
-
-  async function deleteSavedName(id: number) {
-    const response = await fetch(`/api/savedNames/${id}`, {
-      method: 'DELETE',
-    });
-    const deletedSavedName = await response.json();
-    const filteredSavedNames = retrievedSavedNames.filter((savedName) => {
-      return savedName.id !== deletedSavedName.id;
-    });
-    setRetrievedSavedNames(filteredSavedNames);
-  }
-
+export default function Admin(props: Props) {
   useEffect(() => {
-    if (!props.user?.id) {
-      return;
-    }
-    getSavedNames(props.user.id).catch((err) => {
-      console.log(err);
-    });
-  }, []);
-
-  const [retrievedSavedBackstories, setRetrievedSavedBackstories] = useState([
-    {
-      id: 0,
-      class: '',
-      origin: '',
-      firstName: '',
-      lastName: '',
-      backstory: '',
-      verified: false,
-    },
-  ]);
-
-  async function getSavedBackstories(id: number) {
-    const response = await fetch(`/api/users/backstories/${id}`, {
-      method: 'GET',
-    });
-    const savedBackstories = await response.json();
-    savedBackstories.forEach((backstory: SavedBackstoryContent) => {
-      const backstoryWithNames = addNamesToText(
-        backstory.backstory,
-        backstory.firstName,
-        backstory.lastName,
-      );
-      backstory.backstory = backstoryWithNames;
-    });
-    setRetrievedSavedBackstories(savedBackstories);
-  }
-
-  async function deleteSavedBackstory(id: number) {
-    const response = await fetch(`/api/savedBackstories/${id}`, {
-      method: 'DELETE',
-    });
-    const deletedSavedBackstory = await response.json();
-    const filteredSavedBackstories = retrievedSavedBackstories.filter(
-      (savedBackstory) => {
-        return savedBackstory.id !== deletedSavedBackstory.id;
-      },
-    );
-    setRetrievedSavedBackstories(filteredSavedBackstories);
-  }
-
-  useEffect(() => {
-    if (!props.user?.id) {
-      return;
-    }
-    getSavedBackstories(props.user.id).catch((err) => {
-      console.log(err);
-    });
-  }, []);
-
-  const [retrievedSavedSettlements, setRetrievedSavedSettlements] = useState([
-    {
-      id: 0,
-      size: '',
-      prosperity: '',
-      origin: '',
-      description: '',
-      verified: false,
-    },
-  ]);
-
-  async function getSavedSettlements(id: number) {
-    const response = await fetch(`/api/users/settlements/${id}`, {
-      method: 'GET',
-    });
-    const savedSettlements = await response.json();
-    setRetrievedSavedSettlements(savedSettlements[0]);
-  }
-
-  async function deleteSavedSettlement(id: number) {
-    const response = await fetch(`/api/settlements/${id}`, {
-      method: 'DELETE',
-    });
-    const deletedSavedSettlement = await response.json();
-    const filteredSavedSettlements = retrievedSavedSettlements.filter(
-      (savedSettlement: SavedSettlementContent) => {
-        return savedSettlement.id !== deletedSavedSettlement.id;
-      },
-    );
-    setRetrievedSavedSettlements(filteredSavedSettlements);
-  }
-
-  useEffect(() => {
-    if (!props.user?.id) {
-      return;
-    }
-    getSavedSettlements(props.user.id).catch((err) => {
-      console.log(err);
-    });
+    console.log(props.allBackstories);
   }, []);
 
   if (!props.user) {
@@ -159,7 +42,7 @@ export default function UserProfile(props: Props) {
   return (
     <div>
       <Head>
-        <title>Tapestry | Profile</title>
+        <title>Tapestry | Admin</title>
         <meta name="description" content="profile & saved texts" />
       </Head>
       <Box
@@ -205,7 +88,18 @@ export default function UserProfile(props: Props) {
               Saved Names
             </Typography>
           </Grid>
-          {retrievedSavedNames.map((fullSavedName: FullSavedName) => {
+          <Button
+            variant="contained"
+            sx={{
+              mb: '0.5rem',
+              mr: '0.5rem',
+              width: 140,
+            }}
+            onClick={() => console.log(props.allBackstories)}
+          >
+            plip
+          </Button>
+          {/*  {retrievedSavedNames.map((fullSavedName: FullSavedName) => {
             return (
               <Fragment
                 key={`${fullSavedName.firstNameId}_${fullSavedName.lastNameId}`}
@@ -250,7 +144,7 @@ export default function UserProfile(props: Props) {
                 </Grid>
               </Fragment>
             );
-          })}
+          })} */}
           <Divider
             orientation="horizontal"
             color="#000"
@@ -258,10 +152,10 @@ export default function UserProfile(props: Props) {
           />
           <Grid item xs={12}>
             <Typography variant="h2" mt="1rem" mb="2rem">
-              Saved Backstories
+              Backstories
             </Typography>
           </Grid>
-          {retrievedSavedBackstories.map(
+          {/* {retrievedSavedBackstories.map(
             (savedBackstoryContent: SavedBackstoryContent) => {
               return (
                 <Fragment key={savedBackstoryContent.id}>
@@ -284,10 +178,6 @@ export default function UserProfile(props: Props) {
                           </Typography>
                         </AccordionDetails>
                       </Accordion>
-
-                      {/* <Typography variant="body2" align="justify" mr="1rem">
-                        {savedBackstoryContent.backstory}
-                      </Typography> */}
                     </Grid>
                     <Grid item xs={12} lg={0.2}>
                       <Divider
@@ -326,7 +216,7 @@ export default function UserProfile(props: Props) {
                 </Fragment>
               );
             },
-          )}
+          )} */}
           <Divider
             orientation="horizontal"
             color="#000"
@@ -337,7 +227,7 @@ export default function UserProfile(props: Props) {
               Saved Settlements
             </Typography>
           </Grid>
-          {retrievedSavedSettlements.map((savedSettlementContent) => {
+          {/* {retrievedSavedSettlements.map((savedSettlementContent) => {
             return (
               <Fragment key={savedSettlementContent.id}>
                 <Grid container>
@@ -397,7 +287,7 @@ export default function UserProfile(props: Props) {
                 </Grid>
               </Fragment>
             );
-          })}
+          })} */}
         </Grid>
       </Box>
     </div>
@@ -407,8 +297,16 @@ export default function UserProfile(props: Props) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const token = context.req.cookies.sessionToken;
   const user = token && (await getUserBySessionToken(token));
-
+  const allBackstories = await getAllBackstoriesByValidSessionToken(token);
   if (!user) {
+    return {
+      redirect: {
+        destination: '/login?returnTo=/generators',
+        permanent: false,
+      },
+    };
+  }
+  if (user.id !== 24) {
     return {
       redirect: {
         destination: '/login?returnTo=/generators',
@@ -418,6 +316,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   return {
-    props: { user },
+    props: { user, allBackstories },
   };
 }
