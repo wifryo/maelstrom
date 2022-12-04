@@ -18,7 +18,7 @@ import {
   getAllNamesByValidSessionToken,
   getAllSettlementsByValidSessionToken,
 } from '../database/admin';
-import { SavedBackstoryContent } from '../database/backstories';
+import { Backstory, SavedBackstoryContent } from '../database/backstories';
 import { FirstName, FullSavedName, LastName } from '../database/names';
 import { SavedSettlementContent } from '../database/settlements';
 import { getUserBySessionToken, User } from '../database/users';
@@ -228,6 +228,30 @@ export default function Admin(props: Props) {
               })}
             </AccordionDetails>
           </Accordion>
+
+          <Accordion sx={{ backgroundColor: '#F9E6C4', mb: '1px' }}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>Last names migration</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {props.allNames.lastNames.map((lastName: LastName) => {
+                return (
+                  <Fragment key={lastName.id}>
+                    <Box>
+                      {`{ last_name: '` +
+                        lastName.lastName +
+                        `', verified: true },`}
+                    </Box>
+                  </Fragment>
+                );
+              })}
+            </AccordionDetails>
+          </Accordion>
+
           <Divider
             orientation="horizontal"
             color="#000"
@@ -300,6 +324,39 @@ export default function Admin(props: Props) {
               );
             },
           )}
+
+          <Accordion sx={{ backgroundColor: '#F9E6C4', mb: '1px' }}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>Backstories migration</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {props.allBackstories.backstories.map((backstory: Backstory) => {
+                return (
+                  <Fragment key={backstory.id}>
+                    <Box>
+                      {`{ class_id: ` +
+                        backstory.classId +
+                        `, origin_id: ` +
+                        backstory.originId +
+                        `, first_name_id: ` +
+                        backstory.firstNameId +
+                        `, last_name_id: ` +
+                        backstory.lastNameId +
+                        `, backstory: "` +
+                        backstory.backstory +
+                        `", verified: ` +
+                        backstory.verified +
+                        `,},`}
+                    </Box>
+                  </Fragment>
+                );
+              })}
+            </AccordionDetails>
+          </Accordion>
           <Divider
             orientation="horizontal"
             color="#000"
