@@ -2,30 +2,35 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import TollIcon from '@mui/icons-material/Toll';
-import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { Fragment, useEffect, useState } from 'react';
-import { getAllBackstoriesByValidSessionToken } from '../database/admin';
+import {
+  getAllBackstoriesByValidSessionToken,
+  getAllNamesByValidSessionToken,
+  getAllSettlementsByValidSessionToken,
+} from '../database/admin';
 import { SavedBackstoryContent } from '../database/backstories';
-import { FullSavedName } from '../database/names';
+import { FirstName, FullSavedName, LastName } from '../database/names';
 import { SavedSettlementContent } from '../database/settlements';
 import { getUserBySessionToken, User } from '../database/users';
-import { addNamesToText } from '../utils/functions';
 
 type Props = {
   user?: User;
   allBackstories: any;
+  allNames: any;
+  allSettlements: any;
 };
 
 export default function Admin(props: Props) {
-  useEffect(() => {
-    console.log(props.allBackstories);
-  }, []);
-
   if (!props.user) {
     return (
       <>
@@ -53,7 +58,7 @@ export default function Admin(props: Props) {
         m="auto"
         mb="3rem"
       >
-        <Typography variant="h1">Profile</Typography>
+        <Typography variant="h1">Admin</Typography>
         <Grid
           container
           display="flex"
@@ -85,66 +90,144 @@ export default function Admin(props: Props) {
         >
           <Grid item xs={12}>
             <Typography variant="h2" mt="1rem" mb="2rem">
-              Saved Names
+              Names
             </Typography>
           </Grid>
-          <Button
-            variant="contained"
-            sx={{
-              mb: '0.5rem',
-              mr: '0.5rem',
-              width: 140,
-            }}
-            onClick={() => console.log(props.allBackstories)}
-          >
-            plip
-          </Button>
-          {/*  {retrievedSavedNames.map((fullSavedName: FullSavedName) => {
-            return (
-              <Fragment
-                key={`${fullSavedName.firstNameId}_${fullSavedName.lastNameId}`}
-              >
-                <Grid container>
-                  <Grid item xs={12} lg={7.3}>
-                    <Typography variant="body2">
-                      {fullSavedName.firstName} {fullSavedName.lastName}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12} lg={0.2}>
-                    <Divider
-                      orientation="vertical"
-                      color="#000"
-                      sx={{
-                        width: '1px',
-                        m: 'auto',
-                        display: { xs: 'none', lg: 'block' },
-                      }}
-                    />
-                  </Grid>
-                  <Grid
-                    container
-                    item
-                    xs={12}
-                    lg={4.5}
-                    sx={{ mt: { xs: '1rem', lg: 0 } }}
-                    justifyContent="center"
-                  >
-                    <Button
-                      variant="contained"
-                      sx={{
-                        mb: '0.5rem',
-                        mr: '0.5rem',
-                        width: 140,
-                      }}
-                      onClick={() => deleteSavedName(fullSavedName.id)}
-                    >
-                      <DeleteOutlineIcon sx={{ mr: '0.5rem' }} /> Delete
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Fragment>
-            );
-          })} */}
+
+          <Accordion sx={{ backgroundColor: '#F9E6C4', mb: '1px' }}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>First names</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {props.allNames.firstNames.map((firstName: FirstName) => {
+                return (
+                  <Fragment key={firstName.id}>
+                    <Grid container>
+                      <Grid item xs={12} lg={7.3}>
+                        <Typography variant="body2">
+                          {firstName.firstName}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12} lg={0.2}>
+                        <Divider
+                          orientation="vertical"
+                          color="#000"
+                          sx={{
+                            width: '1px',
+                            m: 'auto',
+                            display: { xs: 'none', lg: 'block' },
+                          }}
+                        />
+                      </Grid>
+                      <Grid
+                        container
+                        item
+                        xs={12}
+                        lg={4.5}
+                        sx={{ mt: { xs: '1rem', lg: 0 } }}
+                        justifyContent="center"
+                      >
+                        {/* <Button
+                          variant="contained"
+                          sx={{
+                            mb: '0.5rem',
+                            mr: '0.5rem',
+                            width: 140,
+                          }}
+                          onClick={() => deleteName(firstName.id)}
+                        >
+                          <DeleteOutlineIcon sx={{ mr: '0.5rem' }} /> Delete
+                        </Button> */}
+                      </Grid>
+                    </Grid>
+                  </Fragment>
+                );
+              })}
+            </AccordionDetails>
+          </Accordion>
+
+          <Accordion sx={{ backgroundColor: '#F9E6C4', mb: '1px' }}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>First names migration</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {props.allNames.firstNames.map((firstName: FirstName) => {
+                return (
+                  <Fragment key={firstName.id}>
+                    <Box>
+                      {`{ first_name: '` +
+                        firstName.firstName +
+                        `', verified: true },`}
+                    </Box>
+                  </Fragment>
+                );
+              })}
+            </AccordionDetails>
+          </Accordion>
+
+          <Accordion sx={{ backgroundColor: '#F9E6C4', mb: '1px' }}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>Last names</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {props.allNames.lastNames.map((lastName: LastName) => {
+                return (
+                  <Fragment key={lastName.id}>
+                    <Grid container>
+                      <Grid item xs={12} lg={7.3}>
+                        <Typography variant="body2">
+                          {lastName.lastName}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12} lg={0.2}>
+                        <Divider
+                          orientation="vertical"
+                          color="#000"
+                          sx={{
+                            width: '1px',
+                            m: 'auto',
+                            display: { xs: 'none', lg: 'block' },
+                          }}
+                        />
+                      </Grid>
+                      <Grid
+                        container
+                        item
+                        xs={12}
+                        lg={4.5}
+                        sx={{ mt: { xs: '1rem', lg: 0 } }}
+                        justifyContent="center"
+                      >
+                        <Button
+                          variant="contained"
+                          sx={{
+                            mb: '0.5rem',
+                            mr: '0.5rem',
+                            width: 140,
+                          }}
+                          onClick={() => deleteSavedName(fullSavedName.id)}
+                        >
+                          <DeleteOutlineIcon sx={{ mr: '0.5rem' }} /> Delete
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Fragment>
+                );
+              })}
+            </AccordionDetails>
+          </Accordion>
           <Divider
             orientation="horizontal"
             color="#000"
@@ -155,7 +238,7 @@ export default function Admin(props: Props) {
               Backstories
             </Typography>
           </Grid>
-          {/* {retrievedSavedBackstories.map(
+          {props.allBackstories.backstoriesContent.map(
             (savedBackstoryContent: SavedBackstoryContent) => {
               return (
                 <Fragment key={savedBackstoryContent.id}>
@@ -216,7 +299,7 @@ export default function Admin(props: Props) {
                 </Fragment>
               );
             },
-          )} */}
+          )}
           <Divider
             orientation="horizontal"
             color="#000"
@@ -298,6 +381,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const token = context.req.cookies.sessionToken;
   const user = token && (await getUserBySessionToken(token));
   const allBackstories = await getAllBackstoriesByValidSessionToken(token);
+  const allNames = await getAllNamesByValidSessionToken(token);
+  const allSettlements = await getAllSettlementsByValidSessionToken(token);
+
   if (!user) {
     return {
       redirect: {
@@ -316,6 +402,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   return {
-    props: { user, allBackstories },
+    props: { user, allBackstories, allNames, allSettlements },
   };
 }
