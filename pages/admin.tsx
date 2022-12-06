@@ -367,67 +367,69 @@ export default function Admin(props: Props) {
               Saved Settlements
             </Typography>
           </Grid>
-          {/* {retrievedSavedSettlements.map((savedSettlementContent) => {
-            return (
-              <Fragment key={savedSettlementContent.id}>
-                <Grid container>
-                  <Grid item xs={12} lg={7.3}>
-                    <Accordion sx={{ backgroundColor: '#F9E6C4', mb: '1px' }}>
-                      <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1a-content"
-                        id="panel1a-header"
-                      >
-                        <Typography>
-                          {savedSettlementContent.prosperity}{' '}
-                          {savedSettlementContent.origin}{' '}
-                          {savedSettlementContent.size}
-                        </Typography>
-                      </AccordionSummary>
-                      <AccordionDetails>
-                        <Typography variant="body2" align="justify" mr="1rem">
-                          {savedSettlementContent.description}
-                        </Typography>
-                      </AccordionDetails>
-                    </Accordion>
-                  </Grid>
-                  <Grid item xs={12} lg={0.2}>
-                    <Divider
-                      orientation="vertical"
-                      color="#000"
-                      sx={{
-                        width: '1px',
-                        m: 'auto',
-                        display: { xs: 'none', lg: 'block' },
-                      }}
-                    />
-                  </Grid>
-                  <Grid
-                    container
-                    item
-                    xs={12}
-                    lg={4.5}
-                    sx={{ mt: { xs: '1rem', lg: 0 }, mb: 'auto' }}
-                    justifyContent="center"
-                  >
-                    <Button
-                      variant="contained"
-                      sx={{
-                        mb: '0.5rem',
-                        mr: '0.5rem',
-                        width: 140,
-                      }}
-                      onClick={() =>
-                        deleteSavedSettlement(savedSettlementContent.id)
-                      }
+          {props.allSettlements.settlementsContent.map(
+            (savedSettlementContent: SavedSettlementContent) => {
+              return (
+                <Fragment key={savedSettlementContent.id}>
+                  <Grid container>
+                    <Grid item xs={12} lg={7.3}>
+                      <Accordion sx={{ backgroundColor: '#F9E6C4', mb: '1px' }}>
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          aria-controls="panel1a-content"
+                          id="panel1a-header"
+                        >
+                          <Typography>
+                            {savedSettlementContent.prosperity}{' '}
+                            {savedSettlementContent.origin}{' '}
+                            {savedSettlementContent.size}
+                          </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Typography variant="body2" align="justify" mr="1rem">
+                            {savedSettlementContent.description}
+                          </Typography>
+                        </AccordionDetails>
+                      </Accordion>
+                    </Grid>
+                    <Grid item xs={12} lg={0.2}>
+                      <Divider
+                        orientation="vertical"
+                        color="#000"
+                        sx={{
+                          width: '1px',
+                          m: 'auto',
+                          display: { xs: 'none', lg: 'block' },
+                        }}
+                      />
+                    </Grid>
+                    <Grid
+                      container
+                      item
+                      xs={12}
+                      lg={4.5}
+                      sx={{ mt: { xs: '1rem', lg: 0 }, mb: 'auto' }}
+                      justifyContent="center"
                     >
-                      <DeleteOutlineIcon sx={{ mr: '0.5rem' }} /> Delete
-                    </Button>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          mb: '0.5rem',
+                          mr: '0.5rem',
+                          width: 140,
+                        }}
+                        onClick={() =>
+                          deleteSavedBackstory(savedBackstoryContent.id)
+                        }
+                      >
+                        <DeleteOutlineIcon sx={{ mr: '0.5rem' }} /> Delete
+                      </Button>
+                    </Grid>
                   </Grid>
-                </Grid>
-              </Fragment>
-            );
-          })} */}
+                </Fragment>
+              );
+            },
+          )}
         </Grid>
       </Box>
     </div>
