@@ -451,9 +451,9 @@ export default function Admin(props: Props) {
                           settlement.originId +
                           `, size_id: ` +
                           settlement.sizeId +
-                          `, description: ` +
+                          `, description: "` +
                           settlement.description +
-                          `", verified: ` +
+                          `, verified: ` +
                           settlement.verified +
                           `,},`}
                       </Box>
