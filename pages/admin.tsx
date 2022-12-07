@@ -20,7 +20,7 @@ import {
 } from '../database/admin';
 import { Backstory, SavedBackstoryContent } from '../database/backstories';
 import { FirstName, FullSavedName, LastName } from '../database/names';
-import { SavedSettlementContent } from '../database/settlements';
+import { SavedSettlementContent, Settlement } from '../database/settlements';
 import { getUserBySessionToken, User } from '../database/users';
 
 type Props = {
@@ -430,6 +430,39 @@ export default function Admin(props: Props) {
               );
             },
           )}
+
+          <Accordion sx={{ backgroundColor: '#F9E6C4', mb: '1px' }}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>Settlements migration</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {props.allSettlements.settlements.map(
+                (settlement: Settlement) => {
+                  return (
+                    <Fragment key={settlement.id}>
+                      <Box>
+                        {`{ prosperity_level_id: ` +
+                          settlement.prosperityId +
+                          `, origin_id: ` +
+                          settlement.originId +
+                          `, size_id: ` +
+                          settlement.sizeId +
+                          `, description: ` +
+                          settlement.description +
+                          `", verified: ` +
+                          settlement.verified +
+                          `,},`}
+                      </Box>
+                    </Fragment>
+                  );
+                },
+              )}
+            </AccordionDetails>
+          </Accordion>
         </Grid>
       </Box>
     </div>
