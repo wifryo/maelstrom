@@ -1,4 +1,4 @@
-const prosperityLevels = [
+const prosperities = [
   { name: 'Destitute' },
   { name: 'Poor' },
   { name: 'Average' },
@@ -8,17 +8,17 @@ const prosperityLevels = [
 
 export async function up(sql) {
   await sql`
-    INSERT INTO prosperity_levels ${sql(prosperityLevels, 'name')}
+    INSERT INTO prosperities ${sql(prosperities, 'name')}
   `;
 }
 
 export async function down(sql) {
-  for (const prosperityLevel of prosperityLevels) {
+  for (const prosperity of prosperities) {
     await sql`
       DELETE FROM
-        prosperity_levels
+        prosperities
       WHERE
-        name = ${prosperityLevel.name}
+        name = ${prosperity.name}
     `;
   }
 }
