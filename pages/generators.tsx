@@ -20,11 +20,11 @@ import {
   CharacterClass,
   getCharacterClasses,
   getOrigins,
-  getProsperityLevels,
+  getProsperities,
   getSizes,
-  Origin,
-  ProsperityLevel,
+  Prosperity,
   Size,
+  Species,
 } from '../database/lists';
 import { Settlement } from '../database/settlements';
 import { getUserBySessionToken } from '../database/users';
@@ -32,9 +32,9 @@ import { addNamesToText } from '../utils/functions';
 
 type Props = {
   characterClasses: CharacterClass[];
-  origins: Origin[];
+  origins: Species[];
   sizes: Size[];
-  prosperityLevels: ProsperityLevel[];
+  prosperities: Prosperity[];
   userId: number;
 };
 
@@ -74,8 +74,8 @@ export default function Generators(props: Props) {
       id: 1,
       name: 'Barbarian',
     });
-  const [selectedBackstoryOrigin, setSelectedBackstoryOrigin] =
-    useState<Origin>({
+  const [selectedBackstorySpecies, setSelectedBackstorySpecies] =
+    useState<Species>({
       id: 1,
       name: 'Dragonborn',
     });
@@ -83,10 +83,8 @@ export default function Generators(props: Props) {
   const [backstory, setBackstory] = useState<Backstory>({
     id: 0,
     classId: 0,
-    originId: 0,
-    firstNameId: 0,
-    lastNameId: 0,
-    backstory: '',
+    speciesId: 0,
+    description: '',
     verified: false,
   });
 
@@ -99,17 +97,17 @@ export default function Generators(props: Props) {
     id: null,
     sizeId: 0,
     prosperityId: 0,
-    originId: 0,
+    speciesId: 0,
     description: '',
     verified: false,
   });
   const [selectedSettlementProsperity, setSelectedSettlementProsperity] =
-    useState<ProsperityLevel>({
+    useState<Prosperity>({
       id: 1,
       name: 'Destitute',
     });
   const [selectedSettlementOrigin, setSelectedSettlementOrigin] =
-    useState<Origin>({
+    useState<Species>({
       id: 1,
       name: 'Dragonborn',
     });
@@ -229,7 +227,7 @@ export default function Generators(props: Props) {
                     });
                     const retrievedName = await response.json();
                     const newBackstoryWithNames = addNamesToText(
-                      backstory.backstory,
+                      backstory.description,
                       retrievedName.firstName,
                       retrievedName.lastName,
                     );

@@ -92,8 +92,7 @@ export async function getSavedBackstoryContentByUserIdAndValidSessionToken(
       saved_backstories,
       classes,
       species,
-      first_names,
-      last_names
+      names
     WHERE
       saved_backstories.user_id = ${id} AND
       saved_backstories.backstory_id = backstories.id AND
