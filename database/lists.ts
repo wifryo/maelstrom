@@ -5,7 +5,7 @@ export type CharacterClass = {
   name: string;
 };
 
-export type Origin = {
+export type Species = {
   id: number;
   name: string;
 };
@@ -15,7 +15,7 @@ export type Size = {
   name: string;
 };
 
-export type ProsperityLevel = {
+export type Prosperity = {
   id: number;
   name: string;
 };
@@ -28,7 +28,7 @@ export async function getCharacterClasses() {
 }
 
 export async function getOrigins() {
-  const origins = await sql<Origin[]>`
+  const origins = await sql<Species[]>`
   SELECT * FROM origins
   `;
   return origins;
@@ -41,9 +41,9 @@ export async function getSizes() {
   return sizes;
 }
 
-export async function getProsperityLevels() {
-  const prosperityLevels = await sql<ProsperityLevel[]>`
+export async function getProsperities() {
+  const prosperities = await sql<Prosperity[]>`
   SELECT * FROM prosperity_levels
   `;
-  return prosperityLevels;
+  return prosperities;
 }

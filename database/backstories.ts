@@ -3,10 +3,8 @@ import { sql } from './connect';
 export type Backstory = {
   id: number | null;
   classId: number;
-  originId: number;
-  firstNameId: number;
-  lastNameId: number;
-  backstory: string;
+  speciesId: number;
+  description: string;
   verified: boolean;
 };
 
@@ -19,10 +17,10 @@ export type SavedBackstory = {
 export type SavedBackstoryContent = {
   id: number;
   class: string;
-  origin: string;
+  species: string;
   firstName: string;
   lastName: string;
-  backstory: string;
+  description: string;
   verified: boolean;
 };
 
@@ -34,12 +32,12 @@ export async function getRandomBackstory() {
   return backstory[0];
 }
 
-export async function getBackstory(classId: string, originId: string) {
+export async function getBackstory(classId: string, speciesId: string) {
   const backstory = await sql<Backstory[]>`
   SELECT * FROM backstories
   WHERE
     backstories.class_id = ${classId} AND
-    backstories.origin_id = ${originId}
+    backstories.species_id = ${speciesId}
   ORDER BY RANDOM()
   LIMIT 1`;
   return backstory[0];
@@ -52,9 +50,9 @@ export async function createBackstory(
   if (!token) return undefined;
   const [savedBackstory] = await sql<SavedBackstory[]>`
     INSERT INTO backstories
-      (class_id, origin_id, first_name_id, last_name_id, backstory, verified)
+      (class_id, species_id, description, verified)
     VALUES
-      (${backstoryToCreate.classId}, ${backstoryToCreate.originId}, ${backstoryToCreate.firstNameId}, ${backstoryToCreate.lastNameId}, ${backstoryToCreate.backstory}, ${backstoryToCreate.verified})
+      (${backstoryToCreate.classId}, ${backstoryToCreate.speciesId}, ${backstoryToCreate.description}, ${backstoryToCreate.verified})
     RETURNING *
     `;
   return savedBackstory;
@@ -84,25 +82,25 @@ export async function getSavedBackstoryContentByUserIdAndValidSessionToken(
     SELECT
       saved_backstories.id AS id,
       classes.name AS class,
-      origins.name AS origin,
-      first_names.first_name AS first_name,
-      last_names.last_name AS last_name,
-      backstories.backstory AS backstory,
+      species.name AS species,
+      names.name AS first_name,
+      names.name AS last_name,
+      backstories.description AS backstory,
       backstories.verified AS verified
     FROM
       backstories,
       saved_backstories,
       classes,
-      origins,
+      species,
       first_names,
       last_names
     WHERE
       saved_backstories.user_id = ${id} AND
       saved_backstories.backstory_id = backstories.id AND
       backstories.class_id = classes.id AND
-      backstories.origin_id = origins.id AND
-      backstories.first_name_id = first_names.id AND
-      backstories.last_name_id = last_names.id
+      backstories.species_id = species.id AND
+      saved_backstories.first_name_id = names.id AND
+      saved_backstories.last_name_id = names.id
     `;
 
   return [savedBackstories];
