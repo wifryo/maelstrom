@@ -5,6 +5,7 @@ export type User = {
   username: string;
   passwordHash: string;
   credits: number;
+  admin: boolean;
 };
 
 export async function getUserByUsername(username: string) {
@@ -65,9 +66,9 @@ export async function createUser(
 ) {
   const [userWithoutPassword] = await sql<{ id: number; username: string }[]>`
   INSERT INTO users
-    (username, password_hash, credits)
+    (username, password_hash, credits, admin)
   VALUES
-    (${username}, ${password_hash}, ${credits})
+    (${username}, ${password_hash}, ${credits}, false)
   RETURNING
     id,
     username

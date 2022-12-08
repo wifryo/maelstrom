@@ -4,7 +4,7 @@ export type Settlement = {
   id: number | null;
   sizeId: number;
   prosperityId: number;
-  originId: number;
+  speciesId: number;
   description: string;
   verified: boolean;
 };
@@ -19,7 +19,7 @@ export type SavedSettlementContent = {
   id: number;
   size: string;
   prosperity: string;
-  origin: string;
+  species: string;
   description: string;
   verified: boolean;
 };
@@ -34,15 +34,15 @@ export async function getRandomSettlement() {
 
 export async function getSettlement(
   sizeId: string,
-  originId: string,
+  speciesId: string,
   prosperityId: string,
 ) {
   const settlement = await sql<Settlement[]>`
   SELECT * FROM settlements
   WHERE
     settlements.size_id = ${sizeId} AND
-    settlements.origin_id = ${originId} AND
-    settlements.prosperity_level_id = ${prosperityId}
+    settlements.species_id = ${speciesId} AND
+    settlements.prosperity_id = ${prosperityId}
   ORDER BY RANDOM()
   LIMIT 1`;
   return settlement[0];
@@ -55,9 +55,9 @@ export async function createSettlement(
   if (!token) return undefined;
   const [savedSettlement] = await sql<SavedSettlement[]>`
     INSERT INTO settlements
-      (size_id, prosperity_level_id, origin_id, description, verified)
+      (size_id, prosperity_id, species_id, description, verified)
     VALUES
-      (${settlementToCreate.sizeId}, ${settlementToCreate.prosperityId}, ${settlementToCreate.originId}, ${settlementToCreate.description}, ${settlementToCreate.verified})
+      (${settlementToCreate.sizeId}, ${settlementToCreate.prosperityId}, ${settlementToCreate.speciesId}, ${settlementToCreate.description}, ${settlementToCreate.verified})
     RETURNING *
     `;
   return savedSettlement;
@@ -87,22 +87,22 @@ export async function getSavedSettlementContentByUserIdAndValidSessionToken(
     SELECT
       saved_settlements.id AS id,
       sizes.name AS size,
-      prosperity_levels.name AS prosperity,
-      origins.name AS origin,
+      prosperities.name AS prosperity,
+      species.name AS species,
       settlements.description AS description,
       settlements.verified AS verified
     FROM
       settlements,
       saved_settlements,
-      origins,
+      species,
       sizes,
-      prosperity_levels
+      prosperities
     WHERE
       saved_settlements.user_id = ${id} AND
       saved_settlements.settlement_id = settlements.id AND
       settlements.size_id = sizes.id AND
-      settlements.prosperity_level_id = prosperity_levels.id AND
-      settlements.origin_id = origins.id
+      settlements.prosperity_id = prosperities.id AND
+      settlements.species_id = species.id
     `;
   return [savedSettlements];
 }
