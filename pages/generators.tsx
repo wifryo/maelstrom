@@ -32,7 +32,7 @@ import { addNamesToText } from '../utils/functions';
 
 type Props = {
   characterClasses: CharacterClass[];
-  origins: Species[];
+  species: Species[];
   sizes: Size[];
   prosperities: Prosperity[];
   userId: number;
@@ -106,7 +106,7 @@ export default function Generators(props: Props) {
       id: 1,
       name: 'Destitute',
     });
-  const [selectedSettlementOrigin, setSelectedSettlementOrigin] =
+  const [selectedSettlementSpecies, setSelectedSettlementSpecies] =
     useState<Species>({
       id: 1,
       name: 'Dragonborn',
@@ -349,31 +349,31 @@ export default function Generators(props: Props) {
               </FormControl>
 
               <FormControl sx={{ width: { xs: 300, lg: 200 } }}>
-                <InputLabel>Origin</InputLabel>
+                <InputLabel>Species</InputLabel>
                 <Select
-                  value={selectedBackstoryOrigin.id}
+                  value={selectedBackstorySpecies.id}
                   sx={{ mb: '0.5rem', mr: '0.5rem' }}
-                  label="Origin"
+                  label="Species"
                   onChange={(event) => {
-                    // Get ID of selected origin
-                    const originId = Number(event.target.value);
-                    // Use filter on origins object to get full origins object that corresponds to selected ID
-                    const selectedBackstoryOriginArray = props.origins.filter(
-                      (origin) => {
-                        return origin.id === originId;
+                    // Get ID of selected species
+                    const speciesId = Number(event.target.value);
+                    // Use filter on species object to get full species object that corresponds to selected ID
+                    const selectedBackstorySpeciesArray = props.species.filter(
+                      (species) => {
+                        return species.id === speciesId;
                       },
                     );
                     // Check exists
-                    if (selectedBackstoryOriginArray[0]) {
-                      setSelectedBackstoryOrigin(
-                        selectedBackstoryOriginArray[0],
+                    if (selectedBackstorySpeciesArray[0]) {
+                      setSelectedBackstorySpecies(
+                        selectedBackstorySpeciesArray[0],
                       );
                     }
                   }}
                 >
-                  {props.origins.map((origins: Origin) => (
-                    <MenuItem key={origins.id} value={origins.id}>
-                      {origins.name}
+                  {props.species.map((species: Species) => (
+                    <MenuItem key={species.id} value={species.id}>
+                      {species.name}
                     </MenuItem>
                   ))}
                 </Select>
@@ -413,15 +413,13 @@ export default function Generators(props: Props) {
                       // Construct prompt
                       setBackstoryError(false);
                       setBackstoryLoading(true);
-                      const backstoryPrompt = `${selectedBackstoryOrigin.name} ${selectedCharacterClass.name} named [firstName] [lastName]`;
+                      const backstoryPrompt = `${selectedBackstorySpecies.name} ${selectedCharacterClass.name} named [firstName] [lastName]`;
                       // Construct backstory object without backstory text
                       const incompleteBackstoryObject: Backstory = {
                         id: null,
                         classId: selectedCharacterClass.id,
-                        originId: selectedBackstoryOrigin.id,
-                        firstNameId: fullName.firstNameId,
-                        lastNameId: fullName.lastNameId,
-                        backstory: '',
+                        speciesId: selectedBackstorySpecies.id,
+                        description: '',
                         verified: false,
                       };
 
@@ -446,7 +444,7 @@ export default function Generators(props: Props) {
 
                       // Embed generated names into backstory text
                       const backstoryTextWithNames = await addNamesToText(
-                        backstoryObject.backstory,
+                        backstoryObject.description,
                         fullName.firstName,
                         fullName.lastName,
                       );
@@ -455,14 +453,14 @@ export default function Generators(props: Props) {
 
                       setBackstoryWithNames(backstoryTextWithNames);
                     } else {
-                      // Retrieve backstory by origin and class
+                      // Retrieve backstory by species and class
                       const response = await fetch('/api/backstories', {
                         method: 'POST',
                         headers: {
                           'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                          originId: selectedBackstoryOrigin.id,
+                          speciesId: selectedBackstorySpecies.id,
                           characterClassId: selectedCharacterClass.id,
                         }),
                       });
@@ -478,7 +476,7 @@ export default function Generators(props: Props) {
                       if (!error) {
                         setBackstory(retrievedBackstory);
                         const retrievedBackstoryWithNames = addNamesToText(
-                          retrievedBackstory.backstory,
+                          retrievedBackstory.description,
                           fullName.firstName,
                           fullName.lastName,
                         );
@@ -503,7 +501,7 @@ export default function Generators(props: Props) {
                   const retrievedBackstory = await response.json();
                   setBackstory(retrievedBackstory);
                   const retrievedBackstoryWithNames = addNamesToText(
-                    retrievedBackstory.backstory,
+                    retrievedBackstory.description,
                     fullName.firstName,
                     fullName.lastName,
                   );
@@ -586,60 +584,55 @@ export default function Generators(props: Props) {
                   sx={{ mb: '1rem', mr: '0.5rem' }}
                   label="Prosperity"
                   onChange={(event) => {
-                    // Get ID of selected prosperityLevel
-                    const prosperityLevelId = Number(event.target.value);
-                    // Use filter on prosperityLevels object to get full prosperityLevels object that corresponds to selected ID
-                    const selectedSettlementProsperityLevelArray =
-                      props.prosperityLevels.filter((prosperityLevel) => {
-                        return prosperityLevel.id === prosperityLevelId;
+                    // Get ID of selected prosperity
+                    const prosperityId = Number(event.target.value);
+                    // Use filter on prosperities object to get full prosperities object that corresponds to selected ID
+                    const selectedSettlementProsperityArray =
+                      props.prosperities.filter((prosperity) => {
+                        return prosperity.id === prosperityId;
                       });
                     // Check exists
-                    if (selectedSettlementProsperityLevelArray[0]) {
+                    if (selectedSettlementProsperityArray[0]) {
                       setSelectedSettlementProsperity(
-                        selectedSettlementProsperityLevelArray[0],
+                        selectedSettlementProsperityArray[0],
                       );
                     }
                   }}
                 >
-                  {props.prosperityLevels.map(
-                    (prosperityLevel: ProsperityLevel) => (
-                      <MenuItem
-                        key={prosperityLevel.id}
-                        value={prosperityLevel.id}
-                      >
-                        {prosperityLevel.name}
-                      </MenuItem>
-                    ),
-                  )}
+                  {props.prosperities.map((prosperity: Prosperity) => (
+                    <MenuItem key={prosperity.id} value={prosperity.id}>
+                      {prosperity.name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
 
               <FormControl sx={{ width: { xs: 300, md: 200, lg: 200 } }}>
-                <InputLabel>Origin</InputLabel>
+                <InputLabel>Species</InputLabel>
                 <Select
-                  value={selectedSettlementOrigin.id}
+                  value={selectedSettlementSpecies.id}
                   sx={{ mb: '1rem', mr: '0.5rem' }}
-                  label="Origin"
+                  label="Species"
                   onChange={(event) => {
-                    // Get ID of selected origin
-                    const originId = Number(event.target.value);
-                    // Use filter on origins object to get full origins object that corresponds to selected ID
-                    const selectedSettlementOriginArray = props.origins.filter(
-                      (origin) => {
-                        return origin.id === originId;
+                    // Get ID of selected species
+                    const speciesId = Number(event.target.value);
+                    // Use filter on species object to get full species object that corresponds to selected ID
+                    const selectedSettlementSpeciesArray = props.species.filter(
+                      (species) => {
+                        return species.id === speciesId;
                       },
                     );
                     // Check exists
-                    if (selectedSettlementOriginArray[0]) {
-                      setSelectedSettlementOrigin(
-                        selectedSettlementOriginArray[0],
+                    if (selectedSettlementSpeciesArray[0]) {
+                      setSelectedSettlementSpecies(
+                        selectedSettlementSpeciesArray[0],
                       );
                     }
                   }}
                 >
-                  {props.origins.map((origin: Origin) => (
-                    <MenuItem key={origin.id} value={origin.id}>
-                      {origin.name}
+                  {props.species.map((species: Species) => (
+                    <MenuItem key={species.id} value={species.id}>
+                      {species.name}
                     </MenuItem>
                   ))}
                 </Select>
@@ -706,13 +699,13 @@ export default function Generators(props: Props) {
                       // Construct prompt
                       setSettlementLoading(true);
                       setSettlementError(false);
-                      const settlementPrompt = `${selectedSettlementProsperity.name} ${selectedSettlementOrigin.name} ${selectedSettlementSize.name}`;
+                      const settlementPrompt = `${selectedSettlementProsperity.name} ${selectedSettlementSpecies.name} ${selectedSettlementSize.name}`;
                       // Construct settlement object without description
                       const incompleteSettlementObject: Settlement = {
                         id: null,
                         sizeId: selectedSettlementSize.id,
                         prosperityId: selectedSettlementProsperity.id,
-                        originId: selectedSettlementOrigin.id,
+                        speciesId: selectedSettlementSpecies.id,
                         description: '',
                         verified: false,
                       };
@@ -736,7 +729,7 @@ export default function Generators(props: Props) {
                       setSettlementLoading(false);
                       setSettlement(settlementObject);
                     } else {
-                      // Retrieve settlement by size/origin/prosperity
+                      // Retrieve settlement by size/species/prosperity
                       setSettlementError(false);
 
                       const response = await fetch('/api/settlements', {
@@ -746,7 +739,7 @@ export default function Generators(props: Props) {
                         },
                         body: JSON.stringify({
                           sizeId: selectedSettlementSize.id,
-                          originId: selectedSettlementOrigin.id,
+                          speciesId: selectedSettlementSpecies.id,
                           prosperityId: selectedSettlementProsperity.id,
                         }),
                       });
@@ -815,9 +808,9 @@ export async function getServerSideProps(
   context: GetServerSidePropsContext,
 ): Promise<GetServerSidePropsResult<Props>> {
   const characterClasses = await getCharacterClasses();
-  const origins = await getOrigins();
+  const species = await getSpecies();
   const sizes = await getSizes();
-  const prosperityLevels = await getProsperityLevels();
+  const prosperities = await getProsperities();
   const token = context.req.cookies.sessionToken;
   const user = token && (await getUserBySessionToken(token));
 
@@ -834,9 +827,9 @@ export async function getServerSideProps(
   return {
     props: {
       characterClasses: characterClasses,
-      origins: origins,
+      species: species,
       sizes: sizes,
-      prosperityLevels: prosperityLevels,
+      prosperities: prosperities,
       userId,
     },
   };
