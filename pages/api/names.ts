@@ -26,13 +26,16 @@ export default async function handler(
   if (request.method === 'GET') {
     const firstName = await getRandomFirstName();
     const lastName = await getRandomLastName();
-    const fullName: FullName = {
-      firstNameId: firstName?.id,
-      lastNameId: lastName?.id,
-      firstName: firstName?.firstName,
-      lastName: lastName?.lastName,
-    };
-    return response.status(200).json(fullName);
+    if (firstName && lastName) {
+      const fullName: FullName = {
+        firstNameId: firstName.id,
+        lastNameId: lastName.id,
+        firstName: firstName.name,
+        lastName: lastName.name,
+      };
+
+      return response.status(200).json(fullName);
+    }
   }
 
   return response.status(400).json({ message: 'Method Not Allowed' });

@@ -27,11 +27,11 @@ export async function getCharacterClasses() {
   return characterClasses;
 }
 
-export async function getOrigins() {
-  const origins = await sql<Species[]>`
-  SELECT * FROM origins
+export async function getSpecies() {
+  const species = await sql<Species[]>`
+  SELECT * FROM species
   `;
-  return origins;
+  return species;
 }
 
 export async function getSizes() {
@@ -43,7 +43,7 @@ export async function getSizes() {
 
 export async function getProsperities() {
   const prosperities = await sql<Prosperity[]>`
-  SELECT * FROM prosperity_levels
+  SELECT * FROM prosperities
   `;
   return prosperities;
 }

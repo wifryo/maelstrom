@@ -44,6 +44,7 @@ export async function getRandomLastName() {
   WHERE last_name = true
   ORDER BY RANDOM()
   LIMIT 1`;
+  console.log(lastName);
   return lastName[0];
 }
 
