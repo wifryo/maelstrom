@@ -19,9 +19,9 @@ import { Backstory } from '../database/backstories';
 import {
   CharacterClass,
   getCharacterClasses,
-  getOrigins,
   getProsperities,
   getSizes,
+  getSpecies,
   Prosperity,
   Size,
   Species,
