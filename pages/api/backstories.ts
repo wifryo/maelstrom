@@ -24,12 +24,12 @@ export default async function handler(
     return response.status(200).json(backstory);
   }
 
-  // POST returns backstory by origin/class
+  // POST returns backstory by species/class
   if (request.method === 'POST') {
-    if (request.body.characterClassId && request.body.originId) {
+    if (request.body.characterClassId && request.body.speciesId) {
       const retrievedBackstory = await getBackstory(
         request.body.characterClassId,
-        request.body.originId,
+        request.body.speciesId,
       );
       return response.status(200).json(retrievedBackstory);
     }

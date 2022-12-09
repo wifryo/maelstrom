@@ -1,6 +1,6 @@
 import { Backstory, SavedBackstoryContent } from './backstories';
 import { sql } from './connect';
-import { FirstName, LastName } from './names';
+import { Name } from './names';
 import { SavedSettlementContent, Settlement } from './settlements';
 
 export async function getAllBackstoriesByValidSessionToken(

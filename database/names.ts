@@ -44,7 +44,6 @@ export async function getRandomLastName() {
   WHERE last_name = true
   ORDER BY RANDOM()
   LIMIT 1`;
-  console.log(lastName);
   return lastName[0];
 }
 
@@ -68,20 +67,24 @@ export async function getSavedNamesByIdAndValidSessionToken(
   token: string | undefined,
 ) {
   if (!token) return undefined;
-  let fullSavedNames = await sql<FullSavedName[]>`
+  const fullSavedNames = await sql<FullSavedName[]>`
     SELECT
       saved_names.id AS id,
       names.id AS first_name_id,
       names.name AS first_name,
+      names.id AS last_name_id,
+    names.name AS last_name
     FROM
       names,
       saved_names
     WHERE
       saved_names.user_id = ${id} AND
       names.id = saved_names.first_name_id AND
-      names.first_name = true
+      names.first_name = true AND
+      names.id = saved_names.last_name_id AND
+    names.last_name = true
     `;
-  fullSavedNames = await sql<FullSavedName[]>`
+  /* fullSavedNames = await sql<FullSavedName[]>`
   SELECT
     saved_names.id AS id,
     names.id AS last_name_id,
@@ -93,7 +96,7 @@ export async function getSavedNamesByIdAndValidSessionToken(
     saved_names.user_id = ${id} AND
     names.id = saved_names.last_name_id AND
     names.last_name = true
-  `;
+  `; */
   return [fullSavedNames];
 }
 

@@ -24,16 +24,16 @@ export default async function handler(
     return response.status(200).json(settlement);
   }
 
-  // POST returns settlement by size/origin/prosperity
+  // POST returns settlement by size/species/prosperity
   if (request.method === 'POST') {
     if (
       request.body.sizeId &&
-      request.body.originId &&
+      request.body.speciesId &&
       request.body.prosperityId
     ) {
       const retrievedSettlement = await getSettlement(
         request.body.sizeId,
-        request.body.originId,
+        request.body.speciesId,
         request.body.prosperityId,
       );
       return response.status(200).json(retrievedSettlement);

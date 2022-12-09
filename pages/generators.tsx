@@ -817,7 +817,7 @@ export async function getServerSideProps(
   if (!user) {
     return {
       redirect: {
-        destination: '/login?returnTo=/profile',
+        destination: '/login?returnTo=/generators',
         permanent: false,
       },
     };
