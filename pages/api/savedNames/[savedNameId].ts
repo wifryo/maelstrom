@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { deleteSavedNameById } from '../../../database/savedNames';
+import { deleteSavedNameById } from '../../../database/names';
 import { getValidSessionByToken } from '../../../database/sessions';
 
 export default async function handler(

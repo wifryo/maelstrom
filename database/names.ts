@@ -1,3 +1,4 @@
+import { join } from 'path';
 import { sql } from './connect';
 
 export type Name = {
@@ -62,41 +63,46 @@ export async function createSavedNameById(
   return savedName;
 }
 
+export function merge(array1: any, array2: any) {
+  const array3 = [{}];
+  for (let i = 0; i < array1.length; i++) {
+    array3[i] = { ...array1[i], ...array2[i] };
+  }
+  return array3;
+}
+
 export async function getSavedNamesByIdAndValidSessionToken(
   id: number,
   token: string | undefined,
 ) {
   if (!token) return undefined;
-  const fullSavedNames = await sql<FullSavedName[]>`
-    SELECT
-      saved_names.id AS id,
-      names.id AS first_name_id,
-      names.name AS first_name,
-      names.id AS last_name_id,
-    names.name AS last_name
-    FROM
-      names,
-      saved_names
-    WHERE
+  const fullSavedFirstNames = await sql<FullSavedName[]>`
+  SELECT
+    saved_names.id AS id,
+    names.id AS first_name_id,
+    names.name AS first_name
+  FROM
+    saved_names
+  INNER JOIN
+    names ON (
       saved_names.user_id = ${id} AND
-      names.id = saved_names.first_name_id AND
-      names.first_name = true AND
-      names.id = saved_names.last_name_id AND
-    names.last_name = true
-    `;
-  /* fullSavedNames = await sql<FullSavedName[]>`
+      names.id = saved_names.first_name_id
+    )
+  `;
+  const fullSavedLastNames = await sql<FullSavedName[]>`
   SELECT
     saved_names.id AS id,
     names.id AS last_name_id,
-    names.name AS last_name,
+    names.name AS last_name
   FROM
-    names,
     saved_names
-  WHERE
-    saved_names.user_id = ${id} AND
-    names.id = saved_names.last_name_id AND
-    names.last_name = true
-  `; */
+  INNER JOIN
+    names ON (
+      saved_names.user_id = ${id} AND
+      names.id = saved_names.last_name_id
+    )
+  `;
+  const fullSavedNames = await merge(fullSavedFirstNames, fullSavedLastNames);
   return [fullSavedNames];
 }
 

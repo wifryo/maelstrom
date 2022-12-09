@@ -71,11 +71,11 @@ export default function UserProfile(props: Props) {
     const savedBackstories = await response.json();
     savedBackstories.forEach((backstory: SavedBackstoryContent) => {
       const backstoryWithNames = addNamesToText(
-        backstory.backstory,
+        backstory.description,
         backstory.firstName,
         backstory.lastName,
       );
-      backstory.backstory = backstoryWithNames;
+      backstory.description = backstoryWithNames;
     });
     setRetrievedSavedBackstories(savedBackstories);
   }
