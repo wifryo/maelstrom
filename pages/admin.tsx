@@ -12,14 +12,14 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment } from 'react';
 import {
   getAllBackstoriesByValidSessionToken,
   getAllNamesByValidSessionToken,
   getAllSettlementsByValidSessionToken,
 } from '../database/admin';
 import { Backstory, SavedBackstoryContent } from '../database/backstories';
-import { FullSavedName, Name } from '../database/names';
+import { Name } from '../database/names';
 import { SavedSettlementContent, Settlement } from '../database/settlements';
 import { getUserBySessionToken, User } from '../database/users';
 
@@ -230,7 +230,7 @@ export default function Admin(props: Props) {
                       sx={{ mt: { xs: '1rem', lg: 0 }, mb: 'auto' }}
                       justifyContent="center"
                     >
-                      <Button
+                      {/* <Button
                         variant="contained"
                         sx={{
                           mb: '0.5rem',
@@ -242,7 +242,7 @@ export default function Admin(props: Props) {
                         }
                       >
                         <DeleteOutlineIcon sx={{ mr: '0.5rem' }} /> Delete
-                      </Button>
+                      </Button> */}
                     </Grid>
                   </Grid>
                 </Fragment>
@@ -332,7 +332,7 @@ export default function Admin(props: Props) {
                       sx={{ mt: { xs: '1rem', lg: 0 }, mb: 'auto' }}
                       justifyContent="center"
                     >
-                      <Button
+                      {/* <Button
                         variant="contained"
                         sx={{
                           mb: '0.5rem',
@@ -344,7 +344,7 @@ export default function Admin(props: Props) {
                         }
                       >
                         <DeleteOutlineIcon sx={{ mr: '0.5rem' }} /> Delete
-                      </Button>
+                      </Button> */}
                     </Grid>
                   </Grid>
                 </Fragment>
