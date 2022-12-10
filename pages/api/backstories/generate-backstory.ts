@@ -76,7 +76,7 @@ export default async function handler(
         .json({ errors: [{ message: 'No session token passed' }] });
       return;
     }
-
+    console.log(request.body.prompt);
     const completion = await openai.createCompletion({
       model: 'text-davinci-002',
       prompt: generatePrompt(request.body.prompt),
@@ -87,12 +87,13 @@ export default async function handler(
       // Get backstory object (without backstory text or ID)
       const incompleteBackstoryObject = request.body.backstoryObject;
       // Add backstory text to object
-      incompleteBackstoryObject.backstory = completion.data.choices[0].text;
+      incompleteBackstoryObject.description = completion.data.choices[0].text;
       // Add entire object to database, and receive complete backstory object (with ID added)
       const backstoryObject = await createBackstory(
         incompleteBackstoryObject,
         request.cookies.sessionToken,
       );
+      console.log(backstoryObject);
       // Return backstory object to frontend
       response.status(200).json(backstoryObject);
     }

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { deleteSavedNameById } from '../../../database/savedNames';
+import { deleteSavedNameById } from '../../../database/names';
 import { getValidSessionByToken } from '../../../database/sessions';
 
 export default async function handler(
@@ -19,8 +19,6 @@ export default async function handler(
 
   if (request.method === 'DELETE') {
     const savedNameId = Number(request.query.savedNameId);
-    console.log('savednameID:');
-    console.log(savedNameId);
     const deletedSavedName = await deleteSavedNameById(
       savedNameId,
       request.cookies.sessionToken,

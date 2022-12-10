@@ -1,6 +1,6 @@
 import { Backstory, SavedBackstoryContent } from './backstories';
 import { sql } from './connect';
-import { FirstName, LastName } from './names';
+import { Name } from './names';
 import { SavedSettlementContent, Settlement } from './settlements';
 
 export async function getAllBackstoriesByValidSessionToken(
@@ -11,25 +11,20 @@ export async function getAllBackstoriesByValidSessionToken(
     SELECT * FROM backstories
     `;
   const backstoriesContent = await sql<SavedBackstoryContent[]>`
-   SELECT
+   SELECT DISTINCT
      backstories.id AS id,
      classes.name AS class,
-     origins.name AS origin,
-     first_names.first_name AS first_name,
-     last_names.last_name AS last_name,
-     backstories.backstory AS backstory,
+     species.name AS species,
+     backstories.description AS description,
      backstories.verified AS verified
    FROM
      backstories,
      classes,
-     origins,
-     first_names,
-     last_names
+     species,
+     names
    WHERE
      backstories.class_id = classes.id AND
-     backstories.origin_id = origins.id AND
-     backstories.first_name_id = first_names.id AND
-     backstories.last_name_id = last_names.id
+     backstories.species_id = species.id
    `;
   return {
     backstories: backstories,
@@ -41,16 +36,11 @@ export async function getAllNamesByValidSessionToken(
   token: string | undefined,
 ) {
   if (!token) return undefined;
-  const firstNames = await sql<FirstName[]>`
-    SELECT * FROM first_names
+  const names = await sql<Name[]>`
+    SELECT * FROM names
     `;
-  const lastNames = await sql<LastName[]>`
-    SELECT * FROM last_names
-    `;
-
   return {
-    firstNames: firstNames,
-    lastNames: lastNames,
+    names: names,
   };
 }
 
@@ -65,19 +55,19 @@ export async function getAllSettlementsByValidSessionToken(
   SELECT
     settlements.id AS id,
     sizes.name AS size,
-    prosperity_levels.name AS prosperity,
-    origins.name AS origin,
+    prosperities.name AS prosperity,
+    species.name AS species,
     settlements.description AS description,
     settlements.verified AS verified
   FROM
     settlements,
-    origins,
+    species,
     sizes,
-    prosperity_levels
+    prosperities
   WHERE
     settlements.size_id = sizes.id AND
-    settlements.prosperity_level_id = prosperity_levels.id AND
-    settlements.origin_id = origins.id
+    settlements.prosperity_id = prosperities.id AND
+    settlements.species_id = species.id
   `;
 
   return {

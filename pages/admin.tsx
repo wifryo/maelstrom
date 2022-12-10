@@ -12,14 +12,14 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment } from 'react';
 import {
   getAllBackstoriesByValidSessionToken,
   getAllNamesByValidSessionToken,
   getAllSettlementsByValidSessionToken,
 } from '../database/admin';
 import { Backstory, SavedBackstoryContent } from '../database/backstories';
-import { FirstName, FullSavedName, LastName } from '../database/names';
+import { Name } from '../database/names';
 import { SavedSettlementContent, Settlement } from '../database/settlements';
 import { getUserBySessionToken, User } from '../database/users';
 
@@ -103,14 +103,12 @@ export default function Admin(props: Props) {
               <Typography>First names</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              {props.allNames.firstNames.map((firstName: FirstName) => {
+              {props.allNames.names.map((name: Name) => {
                 return (
-                  <Fragment key={firstName.id}>
+                  <Fragment key={name.id}>
                     <Grid container>
                       <Grid item xs={12} lg={7.3}>
-                        <Typography variant="body2">
-                          {firstName.firstName}
-                        </Typography>
+                        <Typography variant="body2">{name.name}</Typography>
                       </Grid>
                       <Grid item xs={12} lg={0.2}>
                         <Divider
@@ -156,95 +154,22 @@ export default function Admin(props: Props) {
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Typography>First names migration</Typography>
+              <Typography>Names migration</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              {props.allNames.firstNames.map((firstName: FirstName) => {
+              {props.allNames.names.map((name: Name) => {
                 return (
-                  <Fragment key={firstName.id}>
+                  <Fragment key={name.id}>
                     <Box>
-                      {`{ first_name: '` +
-                        firstName.firstName +
-                        `', verified: true },`}
-                    </Box>
-                  </Fragment>
-                );
-              })}
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion sx={{ backgroundColor: '#F9E6C4', mb: '1px' }}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Last names</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              {props.allNames.lastNames.map((lastName: LastName) => {
-                return (
-                  <Fragment key={lastName.id}>
-                    <Grid container>
-                      <Grid item xs={12} lg={7.3}>
-                        <Typography variant="body2">
-                          {lastName.lastName}
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={12} lg={0.2}>
-                        <Divider
-                          orientation="vertical"
-                          color="#000"
-                          sx={{
-                            width: '1px',
-                            m: 'auto',
-                            display: { xs: 'none', lg: 'block' },
-                          }}
-                        />
-                      </Grid>
-                      <Grid
-                        container
-                        item
-                        xs={12}
-                        lg={4.5}
-                        sx={{ mt: { xs: '1rem', lg: 0 } }}
-                        justifyContent="center"
-                      >
-                        <Button
-                          variant="contained"
-                          sx={{
-                            mb: '0.5rem',
-                            mr: '0.5rem',
-                            width: 140,
-                          }}
-                          onClick={() => deleteSavedName(fullSavedName.id)}
-                        >
-                          <DeleteOutlineIcon sx={{ mr: '0.5rem' }} /> Delete
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </Fragment>
-                );
-              })}
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion sx={{ backgroundColor: '#F9E6C4', mb: '1px' }}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Last names migration</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              {props.allNames.lastNames.map((lastName: LastName) => {
-                return (
-                  <Fragment key={lastName.id}>
-                    <Box>
-                      {`{ last_name: '` +
-                        lastName.lastName +
-                        `', verified: true },`}
+                      {`{ name: '` +
+                        name.name +
+                        `', first_name: ` +
+                        name.firstName +
+                        `, first_name: ` +
+                        name.lastName +
+                        `, verified: ` +
+                        name.verified +
+                        ` },`}
                     </Box>
                   </Fragment>
                 );
@@ -276,12 +201,12 @@ export default function Admin(props: Props) {
                         >
                           <Typography>
                             {savedBackstoryContent.class}{' '}
-                            {savedBackstoryContent.origin} backstory
+                            {savedBackstoryContent.species} backstory
                           </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
                           <Typography variant="body2" align="justify" mr="1rem">
-                            {savedBackstoryContent.backstory}
+                            {savedBackstoryContent.description}
                           </Typography>
                         </AccordionDetails>
                       </Accordion>
@@ -305,7 +230,7 @@ export default function Admin(props: Props) {
                       sx={{ mt: { xs: '1rem', lg: 0 }, mb: 'auto' }}
                       justifyContent="center"
                     >
-                      <Button
+                      {/* <Button
                         variant="contained"
                         sx={{
                           mb: '0.5rem',
@@ -317,7 +242,7 @@ export default function Admin(props: Props) {
                         }
                       >
                         <DeleteOutlineIcon sx={{ mr: '0.5rem' }} /> Delete
-                      </Button>
+                      </Button> */}
                     </Grid>
                   </Grid>
                 </Fragment>
@@ -340,14 +265,10 @@ export default function Admin(props: Props) {
                     <Box>
                       {`{ class_id: ` +
                         backstory.classId +
-                        `, origin_id: ` +
-                        backstory.originId +
-                        `, first_name_id: ` +
-                        backstory.firstNameId +
-                        `, last_name_id: ` +
-                        backstory.lastNameId +
+                        `, species_id: ` +
+                        backstory.speciesId +
                         `, backstory: "` +
-                        backstory.backstory +
+                        backstory.description +
                         `", verified: ` +
                         backstory.verified +
                         `,},`}
@@ -381,7 +302,7 @@ export default function Admin(props: Props) {
                         >
                           <Typography>
                             {savedSettlementContent.prosperity}{' '}
-                            {savedSettlementContent.origin}{' '}
+                            {savedSettlementContent.species}{' '}
                             {savedSettlementContent.size}
                           </Typography>
                         </AccordionSummary>
@@ -411,7 +332,7 @@ export default function Admin(props: Props) {
                       sx={{ mt: { xs: '1rem', lg: 0 }, mb: 'auto' }}
                       justifyContent="center"
                     >
-                      <Button
+                      {/* <Button
                         variant="contained"
                         sx={{
                           mb: '0.5rem',
@@ -423,7 +344,7 @@ export default function Admin(props: Props) {
                         }
                       >
                         <DeleteOutlineIcon sx={{ mr: '0.5rem' }} /> Delete
-                      </Button>
+                      </Button> */}
                     </Grid>
                   </Grid>
                 </Fragment>
@@ -445,15 +366,15 @@ export default function Admin(props: Props) {
                   return (
                     <Fragment key={settlement.id}>
                       <Box>
-                        {`{ prosperity_level_id: ` +
+                        {`{ prosperity_id: ` +
                           settlement.prosperityId +
-                          `, origin_id: ` +
-                          settlement.originId +
+                          `, species_id: ` +
+                          settlement.speciesId +
                           `, size_id: ` +
                           settlement.sizeId +
                           `, description: "` +
                           settlement.description +
-                          `, verified: ` +
+                          `", verified: ` +
                           settlement.verified +
                           `,},`}
                       </Box>
@@ -484,7 +405,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
   }
-  if (user.id !== 24) {
+  if (user.id !== 1) {
     return {
       redirect: {
         destination: '/login?returnTo=/generators',

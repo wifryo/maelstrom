@@ -3,7 +3,7 @@ import {
   createSavedNameById,
   getSavedNamesByIdAndValidSessionToken,
   SavedName,
-} from '../../../../database/savedNames';
+} from '../../../../database/names';
 import { getValidSessionByToken } from '../../../../database/sessions';
 
 export default async function handler(

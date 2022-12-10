@@ -4,6 +4,7 @@ export async function up(sql) {
       id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
       username varchar(90) NOT NULL UNIQUE,
       password_hash varchar(70) NOT NULL UNIQUE,
+      admin boolean NOT NULL,
       credits integer NOT NULL
     )
   `;
