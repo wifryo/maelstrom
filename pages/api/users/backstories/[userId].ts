@@ -30,7 +30,6 @@ export default async function handler(
         userId,
         session.token,
       );
-
     if (!savedBackstories) {
       return response
         .status(404)
@@ -52,6 +51,8 @@ export default async function handler(
       id: null,
       userId: request.body?.userId,
       backstoryId: request.body?.backstoryId,
+      firstNameId: request.body?.firstNameId,
+      lastNameId: request.body?.lastNameId,
     };
 
     // Check all the information to create the saved backstory exists

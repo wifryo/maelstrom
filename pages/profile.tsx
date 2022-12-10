@@ -56,10 +56,10 @@ export default function UserProfile(props: Props) {
     {
       id: 0,
       class: '',
-      origin: '',
+      species: '',
       firstName: '',
       lastName: '',
-      backstory: '',
+      description: '',
       verified: false,
     },
   ]);
@@ -69,6 +69,7 @@ export default function UserProfile(props: Props) {
       method: 'GET',
     });
     const savedBackstories = await response.json();
+    console.log(savedBackstories);
     savedBackstories.forEach((backstory: SavedBackstoryContent) => {
       const backstoryWithNames = addNamesToText(
         backstory.description,
@@ -107,7 +108,7 @@ export default function UserProfile(props: Props) {
       id: 0,
       size: '',
       prosperity: '',
-      origin: '',
+      species: '',
       description: '',
       verified: false,
     },
@@ -275,12 +276,12 @@ export default function UserProfile(props: Props) {
                         >
                           <Typography>
                             {savedBackstoryContent.class}{' '}
-                            {savedBackstoryContent.origin} backstory
+                            {savedBackstoryContent.species} backstory
                           </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
                           <Typography variant="body2" align="justify" mr="1rem">
-                            {savedBackstoryContent.backstory}
+                            {savedBackstoryContent.description}
                           </Typography>
                         </AccordionDetails>
                       </Accordion>
@@ -350,7 +351,7 @@ export default function UserProfile(props: Props) {
                       >
                         <Typography>
                           {savedSettlementContent.prosperity}{' '}
-                          {savedSettlementContent.origin}{' '}
+                          {savedSettlementContent.species}{' '}
                           {savedSettlementContent.size}
                         </Typography>
                       </AccordionSummary>

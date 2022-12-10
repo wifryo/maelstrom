@@ -1,4 +1,5 @@
 import { sql } from './connect';
+import { mergeObjectArray } from './helpers';
 
 export type Backstory = {
   id: number | null;
@@ -12,6 +13,8 @@ export type SavedBackstory = {
   id: number | null;
   userId: number;
   backstoryId: number;
+  firstNameId: number;
+  lastNameId: number;
 };
 
 export type SavedBackstoryContent = {
@@ -65,9 +68,9 @@ export async function createSavedBackstoryById(
   if (!token) return undefined;
   const [savedBackstory] = await sql<SavedBackstory[]>`
     INSERT INTO saved_backstories
-      (user_id, backstory_id)
+      (user_id, backstory_id, first_name_id, last_name_id)
     VALUES
-      (${backstoryToSave.userId}, ${backstoryToSave.backstoryId})
+      (${backstoryToSave.userId}, ${backstoryToSave.backstoryId}, ${backstoryToSave.firstNameId}, ${backstoryToSave.lastNameId})
     RETURNING *
     `;
   return savedBackstory;
@@ -78,14 +81,24 @@ export async function getSavedBackstoryContentByUserIdAndValidSessionToken(
   token: string | undefined,
 ) {
   if (!token) return undefined;
-  const savedBackstories = await sql<SavedBackstoryContent[]>`
+  const savedBackstoryLastName = await sql<SavedBackstoryContent[]>`
+    SELECT
+      saved_backstories.id AS id,
+      names.name AS last_name
+    FROM
+      saved_backstories,
+      names
+    WHERE
+      saved_backstories.user_id = ${id} AND
+      saved_backstories.last_name_id = names.id
+    `;
+  const savedBackstoriesWithoutLastName = await sql<SavedBackstoryContent[]>`
     SELECT
       saved_backstories.id AS id,
       classes.name AS class,
       species.name AS species,
       names.name AS first_name,
-      names.name AS last_name,
-      backstories.description AS backstory,
+      backstories.description AS description,
       backstories.verified AS verified
     FROM
       backstories,
@@ -98,10 +111,12 @@ export async function getSavedBackstoryContentByUserIdAndValidSessionToken(
       saved_backstories.backstory_id = backstories.id AND
       backstories.class_id = classes.id AND
       backstories.species_id = species.id AND
-      saved_backstories.first_name_id = names.id AND
-      saved_backstories.last_name_id = names.id
+      saved_backstories.first_name_id = names.id
     `;
-
+  const savedBackstories = mergeObjectArray(
+    savedBackstoryLastName,
+    savedBackstoriesWithoutLastName,
+  );
   return [savedBackstories];
 }
 

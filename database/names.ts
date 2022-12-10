@@ -1,5 +1,5 @@
-import { join } from 'path';
 import { sql } from './connect';
+import { mergeObjectArray } from './helpers';
 
 export type Name = {
   id: number;
@@ -63,14 +63,6 @@ export async function createSavedNameById(
   return savedName;
 }
 
-export function merge(array1: any, array2: any) {
-  const array3 = [{}];
-  for (let i = 0; i < array1.length; i++) {
-    array3[i] = { ...array1[i], ...array2[i] };
-  }
-  return array3;
-}
-
 export async function getSavedNamesByIdAndValidSessionToken(
   id: number,
   token: string | undefined,
@@ -102,7 +94,10 @@ export async function getSavedNamesByIdAndValidSessionToken(
       names.id = saved_names.last_name_id
     )
   `;
-  const fullSavedNames = await merge(fullSavedFirstNames, fullSavedLastNames);
+  const fullSavedNames = await mergeObjectArray(
+    fullSavedFirstNames,
+    fullSavedLastNames,
+  );
   return [fullSavedNames];
 }
 

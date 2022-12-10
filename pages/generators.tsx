@@ -524,6 +524,8 @@ export default function Generators(props: Props) {
                     body: JSON.stringify({
                       userId: id,
                       backstoryId: backstory.id,
+                      firstNameId: fullName.firstNameId,
+                      lastNameId: fullName.lastNameId,
                     }),
                   });
                 }}
