@@ -34,6 +34,10 @@ export default function Home() {
           A curated collection of AI-powered text generators for use with
           tabletop RPGs.
         </Typography>
+        <Typography variant="body2">
+          Note: user accounts were wiped on 2022.12.10 due to ongoing
+          development
+        </Typography>
 
         <Box display="flex" mt="2rem">
           <Link href="/login" color="text.primary" mr="5px">
@@ -44,10 +48,6 @@ export default function Home() {
             <Typography variant="body2">register</Typography>
           </Link>
         </Box>
-        <Typography variant="body2">
-          Note: user accounts were wiped on 2022.12.10 due to ongoing
-          development
-        </Typography>
       </Box>
     </>
   );
