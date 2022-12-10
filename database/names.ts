@@ -4,8 +4,9 @@ import { mergeObjectArray } from './helpers';
 export type Name = {
   id: number;
   name: string;
-  first_name: boolean;
-  last_name: boolean;
+  firstName: boolean;
+  lastName: boolean;
+  verified: boolean;
 };
 
 export type FullName = {
