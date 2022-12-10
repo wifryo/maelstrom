@@ -19,8 +19,6 @@ export default async function handler(
 
   if (request.method === 'DELETE') {
     const savedNameId = Number(request.query.savedNameId);
-    console.log('savednameID:');
-    console.log(savedNameId);
     const deletedSavedName = await deleteSavedNameById(
       savedNameId,
       request.cookies.sessionToken,
