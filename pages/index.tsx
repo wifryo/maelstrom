@@ -35,7 +35,8 @@ export default function Home() {
           tabletop RPGs.
         </Typography>
         <Typography variant="body2">
-          Note: user accounts were wiped on 2022.12.10 due to database overhaul
+          Note: user accounts were wiped on 2022.12.10 due to ongoing
+          development
         </Typography>
 
         <Box display="flex" mt="2rem">
