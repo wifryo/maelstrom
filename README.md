@@ -9,7 +9,6 @@
 
 **Tapestry** is a full stack web application that generates prose to add life to, and provide inspiration for, anyone playing or running fantasy tabletop RPGs - primarily Dungeons & Dragons. The application uses OpenAI's GPT-3 text generator to generate original texts, and all generated texts are saved to a database, providing an ever-expanding library of material.
 
-Visit the live, deployed version of **tapestry** [here](https://tapestry-gen.fly.dev/)
 
  
 
@@ -50,14 +49,6 @@ Please note that these diagrams do not represent the final product, as improveme
 - [Jest](https://jestjs.io/)
 - [Playwright](https://playwright.dev/)
 - [Fly.io](https://fly.io/)
-
-## Future plans
-
-- More generators
-- Ability to approve quality generated texts & use them to further refine AI model
-- Ability to acquire more credits
-- Ability to choose a particular author's "voice"
-- Pronoun selection for backstory
 
 ## Setup instructions
 
